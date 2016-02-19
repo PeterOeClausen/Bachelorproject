@@ -1,0 +1,77 @@
+# Order is created on website and it is delivered to the customer
+"Order is created on the website" -->* 
+"Order is to be confirmed" -->* 
+"Order is confirmed" -->* 
+"Order is to be cooked" -->* 
+"Order is being cooked" -->* 
+"Order is waiting for delivery" -->* 
+"Order is being delivered" -->* 
+"Order has been delivered"
+
+# Excludes:
+"Order is created on the website" -->% "Order is created on the website"
+"Order is to be confirmed" -->% "Order is to be confirmed"
+"Order is confirmed" -->% "Order is confirmed"
+"Order is to be cooked" -->% "Order is to be cooked"
+"Order is being cooked" -->* "Order is being cooked"
+
+
+
+
+
+# Trying out groups:
+
+GROUP "Chef cooks order" {
+	"Order is to be cooked" -->* 
+	"Order is being cooked"
+
+	#Exludes
+	"Order is to be cooked" -->% "Order is to be cooked"
+	"Order is being cooked" -->% "Order is being cooked"
+}
+
+GROUP "Delivery guy delivers orders"{
+	"Order is waiting for delivery" -->*
+	"Order is being delivered" -->*
+	"Order has been delivered"
+
+	#Exludes
+	"Order is waiting for delivery" -->% "Order is waiting for delivery"
+	"Order is being delivered" -->% "Order is being delivered"
+	"Order has been delivered" -->% "Order has been delivered"
+}
+
+GROUP "Customer orders and eats food at the restaurant" {
+	#We have the following events:
+	"Order" "Serve" "Eat"
+
+	#The relation between these events are as following:
+	#Conditions
+	#We expect that we have to order before we can serve
+	"Order" -->* "Serve"
+
+	#We expect that we have to serve before we can eat
+	"Serve"-->* "Eat"
+
+
+	#Responses
+	#We expect that after we have ordered, the food is to be served
+	"Order"*--> "Serve"
+
+	#We expect that after we have served, the food is to be eaten
+	"Serve"*-->"Eat"
+
+
+	#Exclusions
+	#We expect after serving, that we should not serve again, before a new order is placed
+	"Serve" -->% "Serve"
+	#After eating we cannot eat again
+	"Eat" -->% "Eat"
+
+
+	#Inclusions
+	#We expect that after ordering, we can serve again
+	"Order" -->+ "Serve"
+	#After serving we can eat again
+	"Serve" -->+ "Eat"
+}
