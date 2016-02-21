@@ -1,0 +1,28 @@
+
+!"PendingWebOrder" *--> "ToBeCooked"
+ "ToBeCooked" -->% "PendingWebOrder"
+
+"DeleteOrder"
+
+GROUP "ChefCooksOrder" {
+ "ToBeCooked" *--> "Cooking"
+}
+
+"Cooking" *--> (ToBeServed ToBeDelivered)
+
+GROUP "Delivery" {
+"ToBeDelivered" *--> "BeingDelivered"
+}
+
+"ToBeServed" -->% "ToBeDelivered"
+ "ToBeDelivered" -->% "ToBeServed"
+
+GROUP "WaterServesOrder" {
+"ToBeServed" *--> "ServiceCustomer" *--> "CleanTable"
+}
+
+"CleanTable" *--> "Done"
+"BeingDelivered" *--> "Done"
+
+"Edit" *--> "BeingEdited" *--> "DoneEdit"
+"Edit" -->* "BeingEdited" -->* "DoneEdit"

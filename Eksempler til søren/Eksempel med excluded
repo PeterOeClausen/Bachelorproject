@@ -1,0 +1,41 @@
+
+!"PendingWebOrder" *--> %"ToBeCooked"
+"PendingWebOrder" -->+ "ToBeCooked"
+"PendingWebOrder" -->% "PendingWebOrder"
+
+"DeleteOrder"
+
+GROUP "ChefCooksOrder" {
+ "ToBeCooked" *--> %"Cooking"
+  "ToBeCooked" -->+ "Cooking"
+ "ToBeCooked" -->%  "ToBeCooked"
+"Cooking" -->% "Cooking"
+}
+
+"Cooking" *--> (%ToBeServed %ToBeDelivered)
+"Cooking" -->+ (ToBeServed ToBeDelivered)
+
+GROUP "Delivery" {
+"ToBeDelivered" *--> %"BeingDelivered"
+"ToBeDelivered" -->+ "BeingDelivered"
+"ToBeDelivered" -->% "ToBeDelivered"
+"BeingDelivered" -->% "BeingDelivered"
+}
+
+"ToBeServed" -->% "ToBeDelivered"
+ "ToBeDelivered" -->% "ToBeServed"
+
+
+GROUP "WaterServesOrder" {
+"ToBeServed" *--> %"ServiceCustomer" *--> %"CleanTable"
+"ToBeServed" -->+ "ServiceCustomer" -->+ "CleanTable"
+"ToBeServed" -->% "ToBeServed" 
+"ServiceCustomer" -->% "ServiceCustomer"
+"CleanTable" -->% "CleanTable"
+}
+
+"CleanTable" *--> "Done"
+"BeingDelivered" *--> "Done"
+
+"Edit" *--> "BeingEdited" *--> "DoneEdit"
+"Edit" -->* "BeingEdited" -->* "DoneEdit"
