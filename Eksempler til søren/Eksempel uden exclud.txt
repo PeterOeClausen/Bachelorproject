@@ -1,0 +1,69 @@
+# All events
+GROUP "Chef cooks order" {
+ "Cook order for delivery or pickup"
+"Cook order to eat in restaurant"
+}
+GROUP "Waiter confirms order" {
+%"Confirm web order" 
+}
+GROUP "Delivery" {
+"Deliver order"
+}
+GROUP "Take Away" {
+      "Picked up"
+}
+GROUP "Waiter serves order" {
+"Serve order to table"
+"Clean table"
+}
+
+"Order is created in the restaurant for take away"
+"Order is created in the restaurant to be served"
+"Order is created in the restaurant for delivery"
+
+"Order is created on the website for take away"
+"Order is created on the website for take away"
+"Order is created on the website for delivery"
+
+"Cooked"
+"Deny order"
+"Pay"
+
+#Edit events
+"Edit"
+"Add items to order"
+"Remove items from order"
+"Change to delivery"
+"Change to takeaway"
+"Delete order"
+
+
+#Relations
+"Cook order for delivery or pickup" -->% "Remove items from order"
+"Cook order to eat in restaurant"  -->% "Remove items from order"
+
+#Setup restaurant takeaway
+"Order is created in the restaurant for take away" -->% ( "Delivery" "Waiter serves order" "Cook order to eat in restaurant")
+
+
+#Setup web takeaway
+"Order is created on the website for take away" *--> "Confirm web order"
+"Order is created on the website for take away" -->% ( "Delivery" "Cook order to eat in restaurant" "Pay" )
+"Order is created on the website for take away" -->+ "Confirm web order"  
+
+#Responses
+"Confirm web order" *--> "Cook order for delivery or pickup"
+"Cook order for delivery or pickup" *--> "Cooked"
+"Cook order to eat in restaurant" *--> "Cooked"
+"Cooked" *--> ( "Serve order to table" "Deliver order" "Picked up" )
+"Serve order to table" *--> "Clean table"
+"Picked up" *--> "Done"
+"Clean table" *--> "Done"
+"Deliver order" *--> "Done"
+
+#Exclude
+"Serve order to table" -->% "Deliver order"
+ "Deliver order" -->% "Serve order to table"
+ "Cook order for delivery or pickup" -->% "Confirm web order"
+
+#Include
