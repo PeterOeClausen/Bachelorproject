@@ -1,10 +1,25 @@
 # All events
+"Cooked"
+"Deny order"
+"Pay"
+
+"Done"
+#Edit events
+"Edit"
+"Done edit"
+"Create additional order"
+"Remove items from order"
+"Change to delivery"
+"Change to takeaway"
+"Delete order"
+
+
 GROUP "Chef cooks order" {
- "Cook order for delivery or pickup"
+"Cook order for delivery or pickup"
 "Cook order to eat in restaurant"
 }
 GROUP "Waiter confirms order" {
-%"Confirm web order" 
+"Confirm web order" 
 }
 GROUP "Delivery" {
 "Deliver order"
@@ -16,54 +31,175 @@ GROUP "Waiter serves order" {
 "Serve order to table"
 "Clean table"
 }
-
+GROUP "Setup events" {
 "Order is created in the restaurant for take away"
-"Order is created in the restaurant to be served"
-"Order is created in the restaurant for delivery"
-
-"Order is created on the website for take away"
+"Order is created in the restaurant to be served" 
+"Order is created in the restaurant for delivery" 
 "Order is created on the website for take away"
 "Order is created on the website for delivery"
+}
 
-"Cooked"
+
+
+#Setup restaurant takeaway
+"Order is created in the restaurant for take away" -->% ( 
+"Delivery" 
 "Deny order"
-"Pay"
+"Waiter serves order"
+"Confirm web order"
+"Cook order to eat in restaurant"
+"Order is created in the restaurant for take away"
+"Order is created in the restaurant to be served" 
+"Order is created in the restaurant for delivery" 
+"Order is created on the website for take away"
+"Order is created on the website for delivery")
 
-#Edit events
+"Order is created in the restaurant for take away" *--> (
+"Cook order for delivery or pickup"
+"Delete order"
+Edit
+)
+
+
+#Setup restaurant for serving inhouse
+"Order is created in the restaurant to be served" -->% ( 
+"Confirm web order"
+"Delivery"
+"Deny order"
+"Picked up"
+"Cook order for delivery or pickup"
+"Order is created in the restaurant for take away"
+"Order is created in the restaurant to be served" 
+"Order is created in the restaurant for delivery" 
+"Order is created on the website for take away"
+"Order is created on the website for delivery" )
+
+"Order is created in the restaurant to be served" *--> (
+"Cook order to eat in restaurant"
+"Delete order"
+Edit
+)
+
+
+
+#Setup restaurant delivery
+"Order is created in the restaurant for delivery" -->% (
+"Confirm web order"
+"Waiter serves order"
+"Picked up"
+"Deny order"
+"Cook order to eat in restaurant"
+"Order is created in the restaurant for take away"
+"Order is created in the restaurant to be served" 
+"Order is created in the restaurant for delivery" 
+"Order is created on the website for take away"
+"Order is created on the website for delivery" )
+
+"Order is created in the restaurant for delivery" *--> (
+"Cook order for delivery or pickup"
+"Delete order"
+Edit
+)
+
+#Setup web takeaway
+"Order is created on the website for take away" -->% (
+"Waiter serves order"
+"Delivery" 
+"Cook order to eat in restaurant" 
+"Pay" 
+"Order is created in the restaurant for take away"
+"Order is created in the restaurant to be served" 
+"Order is created in the restaurant for delivery" 
+"Order is created on the website for take away"
+"Order is created on the website for delivery" )
+
+"Order is created on the website for take away" *--> (
+"Confirm web order"
+"Delete order"
+Edit
+"Deny order"
+)
+
+
+#Setup web delivery
+"Order is created on the website for delivery" -->% (
+"Waiter serves order"
+"Pay"
+"Cook order to eat in restaurant"
+"Picked up"
+"Order is created in the restaurant for take away"
+"Order is created in the restaurant to be served" 
+"Order is created in the restaurant for delivery" 
+"Order is created on the website for take away"
+"Order is created on the website for delivery"
+)
+
+"Order is created on the website for delivery" *--> (
+"Confirm web order"
+"Delete order"
 "Edit"
-"Add items to order"
+"Deny order"
+)
+
+#Condition
+
+"Cooked" -->* (
+"Deliver order" 
+"Picked up" 
+"Serve order to table"
+)
+"Serve order to table" -->* "Clean table"
+"Cook order for delivery or pickup" -->* "Cooked"
+"Cook order to eat in restaurant" -->* "Cooked"
+
+"Confirm web order" -->* (
+"Cook order for delivery or pickup"
+)
+"Pay" -->* "Picked up"
+
+#Responses
+"Edit" *--> (
+"Done edit"
+"Create additional order"
 "Remove items from order"
 "Change to delivery"
 "Change to takeaway"
-"Delete order"
-
-
-#Relations
-"Cook order for delivery or pickup" -->% "Remove items from order"
-"Cook order to eat in restaurant"  -->% "Remove items from order"
-
-#Setup restaurant takeaway
-"Order is created in the restaurant for take away" -->% ( "Delivery" "Waiter serves order" "Cook order to eat in restaurant")
-
-
-#Setup web takeaway
-"Order is created on the website for take away" *--> "Confirm web order"
-"Order is created on the website for take away" -->% ( "Delivery" "Cook order to eat in restaurant" "Pay" )
-"Order is created on the website for take away" -->+ "Confirm web order"  
-
-#Responses
+)
 "Confirm web order" *--> "Cook order for delivery or pickup"
 "Cook order for delivery or pickup" *--> "Cooked"
 "Cook order to eat in restaurant" *--> "Cooked"
 "Cooked" *--> ( "Serve order to table" "Deliver order" "Picked up" )
-"Serve order to table" *--> "Clean table"
+"Serve order to table" *--> (
+"Clean table"
+"Pay"
+)
 "Picked up" *--> "Done"
 "Clean table" *--> "Done"
-"Deliver order" *--> "Done"
+"Deliver order" *--> "Done1"
+
 
 #Exclude
-"Serve order to table" -->% "Deliver order"
- "Deliver order" -->% "Serve order to table"
- "Cook order for delivery or pickup" -->% "Confirm web order"
+"Done edit" -->% "Done edit"
+"Confirm web order" -->% "Deny order"
+"Edit" -->% (
+"Cook order for delivery or pickup"
+"Cook order to eat in restaurant"
+)
+"Done" -->% "Edit"
+ "Change to delivery" -->% ( 
+"Take Away" 
+"Waiter serves order" )
+"Change to takeaway" -->% ( 
+"Delivery" 
+"Waiter serves order" )
+"Cook order for delivery or pickup" -->% "Remove items from order"
+"Cook order to eat in restaurant"  -->% "Remove items from order"
 
 #Include
+"Edit" -->+ "Done edit"
+"Done edit" -->+ (
+"Cook order for delivery or pickup"
+"Cook order to eat in restaurant"
+)
+"Change to delivery" -->+ "Delivery"
+"Change to takeaway" -->+ "Take Away"
