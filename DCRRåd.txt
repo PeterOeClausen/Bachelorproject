@@ -1,0 +1,14 @@
+0 0 0 - not executed, not included, not pending
+0 0 1 - not executed, not included, pending
+0 1 0 - not executed, included, not pending
+0 1 1 - not executed, included, pending
+1 0 0 - executed, not included, not pending
+1 0 1 - executed, not included, pending
+1 1 0 - executed, included, not pending
+1 1 1 - executed, included, pending
+
+
+
+Hvorfor have en excluded - included (modsætninger), men ingen modsætninger til:
+Response - Unresponse/Unpending
+Execute - Unexecute/Undo

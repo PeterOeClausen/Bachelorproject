@@ -1,0 +1,97 @@
+# All events
+
+#First thing that happens is one of the following 5 entry points:
+!"Order is created in the restaurant for take away"
+!"Order is created in the restaurant to be served" 
+!"Order is created in the restaurant for delivery" 
+!"Order is created on the website for take away"
+!"Order is created on the website for delivery"
+
+"Confirm web order" 
+"Deny web order"
+"Pay"
+
+"Cook order for delivery or pickup"
+"Cook order to eat in restaurant"
+"Cooked"
+
+"Deliver order"
+
+"Picked up"
+
+"Serve order to table"
+"Clean table"
+
+#Edit events
+"Create additional order"
+"Remove items from order"
+"Change to delivery"
+"Change to takeaway"
+"Delete order"
+
+
+#Responses
+
+#After order is created for take away, we expect customer to pay, we then expect the chef to cook the order for pickup, and then for the customer to pick up the food
+"Order is created in the restaurant for take away" *--> 
+"Pay" *-->
+"Cook order for delivery or pickup" *--> 
+"Picked up"
+
+"Order is created in the restaurant to be served" *--> 
+("Cook order to eat in restaurant" "Pay") *--> 
+"Serve order to table" *-->
+"Clean table"
+
+
+#Conditions
+#Before we can serve the food for the customer we must first cook the food:
+"Cook order to eat in restaurant" -->*
+"Serve order to table"
+
+
+#Excludes
+#We need to exclude entry points after execution, so they are no longer pending: 1
+"Order is created in the restaurant for take away" -->% (
+"Order is created in the restaurant for take away"
+"Order is created in the restaurant to be served" 
+"Order is created in the restaurant for delivery" 
+"Order is created on the website for take away"
+"Order is created on the website for delivery")
+
+#We need to exclude entry points after execution, so they are no longer pending: 2
+"Order is created in the restaurant to be served" -->% (
+"Order is created in the restaurant for take away"
+"Order is created in the restaurant to be served" 
+"Order is created in the restaurant for delivery" 
+"Order is created on the website for take away"
+"Order is created on the website for delivery")
+
+#We need to exclude entry points after execution, so they are no longer pending: 3
+"Order is created in the restaurant for delivery" -->% (
+"Order is created in the restaurant for take away"
+"Order is created in the restaurant to be served" 
+"Order is created in the restaurant for delivery" 
+"Order is created on the website for take away"
+"Order is created on the website for delivery")
+
+#We need to exclude entry points after execution, so they are no longer pending: 4
+"Order is created on the website for take away" -->% (
+"Order is created in the restaurant for take away"
+"Order is created in the restaurant to be served" 
+"Order is created in the restaurant for delivery" 
+"Order is created on the website for take away"
+"Order is created on the website for delivery")
+
+#We need to exclude entry points after execution, so they are no longer pending: 5
+"Order is created on the website for delivery" -->% (
+"Order is created in the restaurant for take away"
+"Order is created in the restaurant to be served" 
+"Order is created in the restaurant for delivery" 
+"Order is created on the website for take away"
+"Order is created on the website for delivery")
+
+
+#When serving order in restaurant, the chef shall not cook the food for delivery:
+"Order is created in the restaurant to be served" -->% 
+"Cook order for delivery or pickup"
