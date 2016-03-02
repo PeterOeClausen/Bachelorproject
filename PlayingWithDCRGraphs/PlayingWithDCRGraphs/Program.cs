@@ -10,6 +10,7 @@ namespace PlayingWithDCRGraphs
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
