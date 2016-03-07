@@ -1,0 +1,21 @@
+﻿ny solution visual studio
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	new file:   DCRGraph Case Study/DCRGraph Case Study.sln
+#	new file:   DCRGraph Case Study/global.json
+#	new file:   DCRGraph Case Study/src/Web API/Controllers/ValuesController.cs
+#	new file:   DCRGraph Case Study/src/Web API/Project_Readme.html
+#	new file:   DCRGraph Case Study/src/Web API/Properties/PublishProfiles/WebAPI20160307021119 - Web Deploy-publish.ps1
+#	new file:   DCRGraph Case Study/src/Web API/Properties/launchSettings.json
+#	new file:   DCRGraph Case Study/src/Web API/Service References/Application Insights/ConnectedService.json
+#	new file:   DCRGraph Case Study/src/Web API/Startup.cs
+#	new file:   DCRGraph Case Study/src/Web API/Web API.xproj
+#	new file:   DCRGraph Case Study/src/Web API/appsettings.json
+#	new file:   DCRGraph Case Study/src/Web API/project.json
+#	new file:   DCRGraph Case Study/src/Web API/wwwroot/web.config
+#
+
