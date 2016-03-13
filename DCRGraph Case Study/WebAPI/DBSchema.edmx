@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Alias="Self" Namespace="DBSchema.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
+        <EntityContainer Name="DBSchemaTargetContainer">
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DBSchema" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="DBSchemaContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DCREvents" EntityType="DBSchema.DCREvent" />
+          <EntitySet Name="Roles" EntityType="DBSchema.Role" />
+          <EntitySet Name="EventRoles" EntityType="DBSchema.EventRole" />
+          <AssociationSet Name="EventRoleDCREvent" Association="DBSchema.EventRoleDCREvent">
+            <End Role="EventRole" EntitySet="EventRoles" />
+            <End Role="DCREvent" EntitySet="DCREvents" />
+          </AssociationSet>
+          <AssociationSet Name="EventRoleRole" Association="DBSchema.EventRoleRole">
+            <End Role="EventRole" EntitySet="EventRoles" />
+            <End Role="Role" EntitySet="Roles" />
+          </AssociationSet>
+          <EntitySet Name="EventGroups" EntityType="DBSchema.EventGroup" />
+          <EntitySet Name="Groups" EntityType="DBSchema.Group" />
+          <AssociationSet Name="GroupEventGroup" Association="DBSchema.GroupEventGroup">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="EventGroup" EntitySet="EventGroups" />
+          </AssociationSet>
+          <AssociationSet Name="DCREventEventGroup" Association="DBSchema.DCREventEventGroup">
+            <End Role="DCREvent" EntitySet="DCREvents" />
+            <End Role="EventGroup" EntitySet="EventGroups" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="DCREvent">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventId" Type="String" Nullable="false" />
+          <Property Name="Label" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="true" />
+          <Property Name="StatusMessageAfterExecution" Type="String" annotation:StoreGeneratedPattern="None" Nullable="true" />
+          <Property Name="Included" Type="Boolean" Nullable="false" />
+          <Property Name="Pending" Type="Boolean" Nullable="false" />
+          <Property Name="Executed" Type="Boolean" Nullable="false" />
+          <Property Name="Parent" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="EventRoles" Relationship="DBSchema.EventRoleDCREvent" FromRole="DCREvent" ToRole="EventRole" />
+          <NavigationProperty Name="EventGroups" Relationship="DBSchema.DCREventEventGroup" FromRole="DCREvent" ToRole="EventGroup" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="EventRoles" Relationship="DBSchema.EventRoleRole" FromRole="Role" ToRole="EventRole" />
+        </EntityType>
+        <EntityType Name="EventRole">
+          <Key>
+            <PropertyRef Name="DCREventId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <NavigationProperty Name="DCREvent" Relationship="DBSchema.EventRoleDCREvent" FromRole="EventRole" ToRole="DCREvent" />
+          <Property Name="DCREventId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="DBSchema.EventRoleRole" FromRole="EventRole" ToRole="Role" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="EventRoleDCREvent">
+          <End Type="DBSchema.EventRole" Role="EventRole" Multiplicity="*" />
+          <End Type="DBSchema.DCREvent" Role="DCREvent" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="DCREvent">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EventRole">
+              <PropertyRef Name="DCREventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EventRoleRole">
+          <End Type="DBSchema.EventRole" Role="EventRole" Multiplicity="*" />
+          <End Type="DBSchema.Role" Role="Role" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EventRole">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="EventGroup">
+          <Key>
+            <PropertyRef Name="GroupId" />
+            <PropertyRef Name="DCREventId" />
+          </Key>
+          <NavigationProperty Name="Group" Relationship="DBSchema.GroupEventGroup" FromRole="EventGroup" ToRole="Group" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DCREvent" Relationship="DBSchema.DCREventEventGroup" FromRole="EventGroup" ToRole="DCREvent" />
+          <Property Name="DCREventId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="EventGroups" Relationship="DBSchema.GroupEventGroup" FromRole="Group" ToRole="EventGroup" />
+        </EntityType>
+        <Association Name="GroupEventGroup">
+          <End Type="DBSchema.Group" Role="Group" Multiplicity="1" />
+          <End Type="DBSchema.EventGroup" Role="EventGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EventGroup">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DCREventEventGroup">
+          <End Type="DBSchema.DCREvent" Role="DCREvent" Multiplicity="1" />
+          <End Type="DBSchema.EventGroup" Role="EventGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DCREvent">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EventGroup">
+              <PropertyRef Name="DCREventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
+        <Alias Key="Model" Value="DBSchema" />
+        <Alias Key="Target" Value="DBSchema.Store" />
+        <EntityContainerMapping CdmEntityContainer="DBSchemaContainer" StorageEntityContainer="DBSchemaTargetContainer">
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
