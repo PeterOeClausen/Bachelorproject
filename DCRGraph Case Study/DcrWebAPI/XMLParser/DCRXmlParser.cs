@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using WebAPI;
-using WebAPI.XMLParser;
+using DcrWebAPI;
+using DcrWebAPI.XMLParser;
 
 namespace DcrWebAPI.XMLParser
 {
@@ -83,9 +83,22 @@ namespace DcrWebAPI.XMLParser
                     if (role.Value != "")
                     {
                         Container.Roles.Add(role.Value);
-                        Container.EventRoles.Add(new WebAPI.XMLParser.EventRole(role.Value, Event.EventId));
+                        Container.EventRoles.Add(new DcrWebAPI.XMLParser.EventRole(role.Value, Event.EventId));
                     }
                 }
+
+                //Assigning Groups:
+                var groups = _event.Descendants("group");
+                foreach (var group in groups)
+                {
+                    if (group.Value != "")
+                    {
+                        Container.Groups.Add(group.Value);
+                        Container.EventGroups.Add(new DcrWebAPI.XMLParser.EventGroup(group.Value, Event.EventId));
+                    }
+                }
+
+
 
 
 
