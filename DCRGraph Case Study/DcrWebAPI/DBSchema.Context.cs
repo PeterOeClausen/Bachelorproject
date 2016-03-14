@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebAPI
+namespace DcrWebAPI
 {
     using System;
     using System.Data.Entity;

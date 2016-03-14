@@ -763,7 +763,7 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
       return $this.click()
     }
 
-    var $items = $('[role=menu] li:not(.divider):visible a', $parent)
+    var $items = $('[RoleName=menu] li:not(.divider):visible a', $parent)
 
     if (!$items.length) return
 
@@ -835,7 +835,7 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     .on('click.bs.dropdown.data-api', clearMenus)
     .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
     .on('click.bs.dropdown.data-api'  , toggle, Dropdown.prototype.toggle)
-    .on('keydown.bs.dropdown.data-api', toggle + ', [role=menu]' , Dropdown.prototype.keydown)
+    .on('keydown.bs.dropdown.data-api', toggle + ', [RoleName=menu]' , Dropdown.prototype.keydown)
 
 }(window.jQuery);
 

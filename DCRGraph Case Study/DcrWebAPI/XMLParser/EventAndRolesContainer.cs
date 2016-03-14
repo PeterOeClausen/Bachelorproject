@@ -13,12 +13,30 @@ namespace DcrWebAPI.XMLParser
         public int GraphId { get; set; }
         public List<DCREvent> Events { get; set; }
         public HashSet<string> Roles { get; set; }
-        public List<EventRole> EventRoles  { get; set; }
+        public HashSet<string> Groups { get; set; }
+        public List<EventRole> EventRoles { get; set; }
+        public List<EventGroup> EventGroups { get; set; }
         public List<Constraint> Conditions { get; set; }
         public List<Constraint> Responses { get; set; }
         public List<Constraint> Exclusions { get; set; }
         public List<Constraint> Inclusions { get; set; }
         public List<Constraint> Milestones { get; set; }
+
+        public EventAndRolesContainer()
+        {
+            Events = new List<DCREvent>();
+            Roles = new HashSet<string>();
+            Groups = new HashSet<string>();
+            EventRoles = new List<EventRole>();
+            EventGroups = new List<EventGroup>();
+            Conditions = new List<Constraint>();
+            Responses = new List<Constraint>();
+            Exclusions = new List<Constraint>();
+            Inclusions = new List<Constraint>();
+            Milestones = new List<Constraint>();
+    }
+
+
 
 
 
@@ -28,13 +46,27 @@ namespace DcrWebAPI.XMLParser
 
     public class EventRole
     {
-        public EventRole(string role, string eventId)
+        public string RoleName { get; set; }
+        public string EventId { get; set; }
+
+        public EventRole(string roleName, string eventId)
         {
-            Role = role;
+            RoleName = roleName;
             EventId = eventId;
         }
-        public string Role { get; set; }
+
+    }
+
+    public class EventGroup
+    {
         public string EventId { get; set; }
+        public string GroupName { get; set; }
+
+        public EventGroup (string groupName, string eventId)
+        {
+            GroupName = groupName;
+            EventId = eventId;
+        }
     }
 
 }
