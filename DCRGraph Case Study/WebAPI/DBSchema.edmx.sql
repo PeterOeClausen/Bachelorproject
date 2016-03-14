@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 03/09/2016 15:37:42
+-- Date Created: 03/14/2016 16:16:34
 -- Generated from EDMX file: C:\Users\Archigo\Documents\GitHub\Bachelorproject\DCRGraph Case Study\WebAPI\DBSchema.edmx
 -- --------------------------------------------------
 
@@ -57,7 +57,7 @@ GO
 -- Creating table 'DCREvents'
 CREATE TABLE [dbo].[DCREvents] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [EventId] int  NOT NULL,
+    [EventId] nvarchar(max)  NOT NULL,
     [Label] nvarchar(max)  NOT NULL,
     [Description] nvarchar(max)  NULL,
     [StatusMessageAfterExecution] nvarchar(max)  NULL,
@@ -95,6 +95,13 @@ CREATE TABLE [dbo].[Groups] (
 );
 GO
 
+-- Creating table 'Includes'
+CREATE TABLE [dbo].[Includes] (
+    [ToDCREventId] int  NOT NULL,
+    [FromDCREventId] int  NOT NULL
+);
+GO
+
 -- --------------------------------------------------
 -- Creating all PRIMARY KEY constraints
 -- --------------------------------------------------
@@ -127,6 +134,12 @@ GO
 ALTER TABLE [dbo].[Groups]
 ADD CONSTRAINT [PK_Groups]
     PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [FromDCREventId], [ToDCREventId] in table 'Includes'
+ALTER TABLE [dbo].[Includes]
+ADD CONSTRAINT [PK_Includes]
+    PRIMARY KEY CLUSTERED ([FromDCREventId], [ToDCREventId] ASC);
 GO
 
 -- --------------------------------------------------
@@ -179,6 +192,30 @@ GO
 CREATE INDEX [IX_FK_DCREventEventGroup]
 ON [dbo].[EventGroups]
     ([DCREventId]);
+GO
+
+-- Creating foreign key on [ToDCREventId] in table 'Includes'
+ALTER TABLE [dbo].[Includes]
+ADD CONSTRAINT [FK_DCREventIncludes]
+    FOREIGN KEY ([ToDCREventId])
+    REFERENCES [dbo].[DCREvents]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_DCREventIncludes'
+CREATE INDEX [IX_FK_DCREventIncludes]
+ON [dbo].[Includes]
+    ([ToDCREventId]);
+GO
+
+-- Creating foreign key on [FromDCREventId] in table 'Includes'
+ALTER TABLE [dbo].[Includes]
+ADD CONSTRAINT [FK_DCREventIncludes1]
+    FOREIGN KEY ([FromDCREventId])
+    REFERENCES [dbo].[DCREvents]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
 -- --------------------------------------------------

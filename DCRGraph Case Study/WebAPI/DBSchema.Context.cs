@@ -30,5 +30,6 @@ namespace WebAPI
         public virtual DbSet<EventRole> EventRoles { get; set; }
         public virtual DbSet<EventGroup> EventGroups { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<Includes> Includes { get; set; }
     }
 }

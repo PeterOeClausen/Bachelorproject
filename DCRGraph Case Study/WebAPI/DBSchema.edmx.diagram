@@ -14,6 +14,9 @@
         <EntityTypeShape EntityType="DBSchema.Group" Width="1.5" PointX="5.375" PointY="1" />
         <AssociationConnector Association="DBSchema.GroupEventGroup" />
         <AssociationConnector Association="DBSchema.DCREventEventGroup" />
+        <EntityTypeShape EntityType="DBSchema.Includes" Width="1.5" PointX="5.875" PointY="6.75" />
+        <AssociationConnector Association="DBSchema.DCREventIncludes" />
+        <AssociationConnector Association="DBSchema.DCREventIncludes1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
