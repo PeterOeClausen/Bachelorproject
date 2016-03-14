@@ -19,6 +19,8 @@ namespace WebAPI
         {
             this.EventRoles = new HashSet<EventRole>();
             this.EventGroups = new HashSet<EventGroup>();
+            this.Includes = new HashSet<Includes>();
+            this.Includes1 = new HashSet<Includes>();
         }
     
         public int Id { get; set; }
@@ -35,5 +37,9 @@ namespace WebAPI
         public virtual ICollection<EventRole> EventRoles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EventGroup> EventGroups { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Includes> Includes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Includes> Includes1 { get; set; }
     }
 }
