@@ -95,6 +95,27 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Customer.cs">
+      <Link>Models\BusinessObjects\Customer.cs</Link>
+    </Compile>
+    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\DCRGraph.cs">
+      <Link>Models\BusinessObjects\DCRGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Event.cs">
+      <Link>Models\BusinessObjects\Event.cs</Link>
+    </Compile>
+    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Group.cs">
+      <Link>Models\BusinessObjects\Group.cs</Link>
+    </Compile>
+    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Item.cs">
+      <Link>Models\BusinessObjects\Item.cs</Link>
+    </Compile>
+    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Order.cs">
+      <Link>Models\BusinessObjects\Order.cs</Link>
+    </Compile>
+    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Role.cs">
+      <Link>Models\BusinessObjects\Role.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -146,8 +167,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
