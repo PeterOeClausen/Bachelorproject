@@ -30,5 +30,20 @@ namespace DcrWebAPI
         public virtual DbSet<EventRole> EventRoles { get; set; }
         public virtual DbSet<EventGroup> EventGroups { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<Includes> Includes { get; set; }
+        public virtual DbSet<Excludes> Excludes { get; set; }
+        public virtual DbSet<Conditions> Conditions { get; set; }
+        public virtual DbSet<Responses> Responses { get; set; }
+        public virtual DbSet<Milestones> Milestones { get; set; }
+        public virtual DbSet<Children> Children { get; set; }
+        public virtual DbSet<DCRGraph> DCRGraphs { get; set; }
+        public virtual DbSet<GraphEvent> GraphEvents { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<EventUIElemement> EventUIElemements { get; set; }
+        public virtual DbSet<IntegerSpecifyingUIElement> IntegerSpecifyingUIElements { get; set; }
     }
 }

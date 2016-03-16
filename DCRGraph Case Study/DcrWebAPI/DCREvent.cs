@@ -19,6 +19,20 @@ namespace DcrWebAPI
         {
             this.EventRoles = new HashSet<EventRole>();
             this.EventGroups = new HashSet<EventGroup>();
+            this.Includes = new HashSet<Includes>();
+            this.Includes1 = new HashSet<Includes>();
+            this.Excludes = new HashSet<Excludes>();
+            this.Excludes1 = new HashSet<Excludes>();
+            this.Conditions = new HashSet<Conditions>();
+            this.Conditions1 = new HashSet<Conditions>();
+            this.Responses = new HashSet<Responses>();
+            this.Responses1 = new HashSet<Responses>();
+            this.Milestones = new HashSet<Milestones>();
+            this.Milestones1 = new HashSet<Milestones>();
+            this.Children = new HashSet<Children>();
+            this.Children1 = new HashSet<Children>();
+            this.GraphEvents = new HashSet<GraphEvent>();
+            this.EventUIElemements = new HashSet<EventUIElemement>();
         }
     
         public int Id { get; set; }
@@ -35,5 +49,33 @@ namespace DcrWebAPI
         public virtual ICollection<EventRole> EventRoles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EventGroup> EventGroups { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Includes> Includes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Includes> Includes1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Excludes> Excludes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Excludes> Excludes1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Conditions> Conditions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Conditions> Conditions1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Responses> Responses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Responses> Responses1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Milestones> Milestones { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Milestones> Milestones1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Children> Children { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Children> Children1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GraphEvent> GraphEvents { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EventUIElemement> EventUIElemements { get; set; }
     }
 }
