@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Razor.Text;
 using System.Xml.Linq;
+using DcrWebAPI.Models.Parsing;
 using DcrWebAPI.XMLParser;
 
 namespace DcrWebAPI.Controllers
@@ -18,11 +19,7 @@ namespace DcrWebAPI.Controllers
             XDocument doc = XDocument.Load(await Request.Content.ReadAsStreamAsync());
             var parser = new DCRXmlParser();
             var eventsAndRoles = parser.Parse(doc.ToString());
-            Console.WriteLine(eventsAndRoles.Conditions.Count);
-
-
-            String saveLoc = @"C:\Users\Archigo\Desktop\test.xml";
-            doc.Save(saveLoc); Console.WriteLine(doc.ToString());
+            new Parsing(eventsAndRoles);
         }
 
         

@@ -4,16 +4,52 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="99a4d80206e8477db0dc461ec4bb83cc" Name="Diagram1" >
-        <EntityTypeShape EntityType="DBSchema.DCREvent" Width="1.5" PointX="0.625" PointY="5.25" />
-        <EntityTypeShape EntityType="DBSchema.Role" Width="1.5" PointX="2.625" PointY="0.5" />
-        <EntityTypeShape EntityType="DBSchema.EventRole" Width="1.5" PointX="1.5" PointY="2.75" />
+      <Diagram DiagramId="99a4d80206e8477db0dc461ec4bb83cc" Name="Diagram1" ZoomLevel="94" >
+        <EntityTypeShape EntityType="DBSchema.DCREvent" Width="1.5" PointX="11.625" PointY="6.125" />
+        <EntityTypeShape EntityType="DBSchema.Role" Width="1.5" PointX="13.625" PointY="1.375" />
+        <EntityTypeShape EntityType="DBSchema.EventRole" Width="1.5" PointX="12.5" PointY="3.625" />
         <AssociationConnector Association="DBSchema.EventRoleDCREvent" />
         <AssociationConnector Association="DBSchema.EventRoleRole" />
-        <EntityTypeShape EntityType="DBSchema.EventGroup" Width="1.5" PointX="4.375" PointY="3.25" />
-        <EntityTypeShape EntityType="DBSchema.Group" Width="1.5" PointX="5.375" PointY="1" />
+        <EntityTypeShape EntityType="DBSchema.EventGroup" Width="1.5" PointX="15.375" PointY="4.125" />
+        <EntityTypeShape EntityType="DBSchema.Group" Width="1.5" PointX="16.375" PointY="1.875" />
         <AssociationConnector Association="DBSchema.GroupEventGroup" />
         <AssociationConnector Association="DBSchema.DCREventEventGroup" />
+        <EntityTypeShape EntityType="DBSchema.Includes" Width="1.5" PointX="17.75" PointY="5.375" />
+        <AssociationConnector Association="DBSchema.DCREventEntity1" />
+        <AssociationConnector Association="DBSchema.DCREventIncludes" />
+        <EntityTypeShape EntityType="DBSchema.Excludes" Width="1.5" PointX="19.5" PointY="6.25" />
+        <AssociationConnector Association="DBSchema.DCREventExcludes" />
+        <AssociationConnector Association="DBSchema.DCREventExcludes1" />
+        <EntityTypeShape EntityType="DBSchema.Conditions" Width="1.5" PointX="17.5" PointY="7.75" />
+        <AssociationConnector Association="DBSchema.DCREventConditions" />
+        <AssociationConnector Association="DBSchema.DCREventConditions1" />
+        <EntityTypeShape EntityType="DBSchema.Responses" Width="1.5" PointX="20.125" PointY="8.75" />
+        <AssociationConnector Association="DBSchema.DCREventResponses" />
+        <AssociationConnector Association="DBSchema.DCREventResponses1" />
+        <EntityTypeShape EntityType="DBSchema.Milestones" Width="1.5" PointX="17.5" PointY="9.875" />
+        <AssociationConnector Association="DBSchema.DCREventMilestones" />
+        <AssociationConnector Association="DBSchema.DCREventMilestones1" />
+        <EntityTypeShape EntityType="DBSchema.Children" Width="1.5" PointX="20.125" PointY="11" />
+        <AssociationConnector Association="DBSchema.DCREventChildren" />
+        <AssociationConnector Association="DBSchema.DCREventChildren1" />
+        <EntityTypeShape EntityType="DBSchema.DCRGraph" Width="1.5" PointX="5.75" PointY="6.375" />
+        <EntityTypeShape EntityType="DBSchema.GraphEvent" Width="1.5" PointX="8.875" PointY="6.375" />
+        <AssociationConnector Association="DBSchema.DCRGraphGraphEvent" />
+        <AssociationConnector Association="DBSchema.DCREventGraphEvent" />
+        <EntityTypeShape EntityType="DBSchema.Order" Width="1.5" PointX="2.5" PointY="6.75" />
+        <EntityTypeShape EntityType="DBSchema.Customer" Width="1.5" PointX="6.125" PointY="9.125" />
+        <AssociationConnector Association="DBSchema.CustomerOrder" />
+        <EntityTypeShape EntityType="DBSchema.Item" Width="1.5" PointX="3.125" PointY="13.125" />
+        <EntityTypeShape EntityType="DBSchema.OrderDetail" Width="1.5" PointX="2.375" PointY="10.625" />
+        <AssociationConnector Association="DBSchema.OrderOrderDetail" />
+        <AssociationConnector Association="DBSchema.ItemOrderDetail" />
+        <EntityTypeShape EntityType="DBSchema.Category" Width="1.5" PointX="6.5" PointY="13.25" />
+        <EntityTypeShape EntityType="DBSchema.EventUIElemement" Width="1.5" PointX="11.625" PointY="13.625" />
+        <EntityTypeShape EntityType="DBSchema.IntegerSpecifyingUIElement" Width="1.5" PointX="14.75" PointY="13.625" />
+        <AssociationConnector Association="DBSchema.IntegerSpecifyingUIElementEventUIElemement" />
+        <AssociationConnector Association="DBSchema.DCREventEventUIElemement" />
+        <AssociationConnector Association="DBSchema.OrderDCRGraph" />
+        <AssociationConnector Association="DBSchema.CategoryItem" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
