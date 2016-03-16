@@ -19,11 +19,8 @@
     <EntitySet Name="Children" EntityType="DBSchema.Store.Children" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="DCRGraphs" EntityType="DBSchema.Store.DCRGraphs" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="GraphEvents" EntityType="DBSchema.Store.GraphEvents" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Orders" EntityType="DBSchema.Store.Orders" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Customers" EntityType="DBSchema.Store.Customers" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Items" EntityType="DBSchema.Store.Items" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="OrderDetails" EntityType="DBSchema.Store.OrderDetails" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Categories" EntityType="DBSchema.Store.Categories" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="EventUIElemements" EntityType="DBSchema.Store.EventUIElemements" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IntegerSpecifyingUIElements" EntityType="DBSchema.Store.IntegerSpecifyingUIElements" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="EventRoleDCREvent" Association="DBSchema.Store.EventRoleDCREvent">
@@ -98,25 +95,9 @@
       <End Role="DCREvent" EntitySet="DCREvents" />
       <End Role="GraphEvent" EntitySet="GraphEvents" />
     </AssociationSet>
-    <AssociationSet Name="CustomerOrder" Association="DBSchema.Store.CustomerOrder">
-      <End Role="Customer" EntitySet="Customers" />
-      <End Role="Order" EntitySet="Orders" />
-    </AssociationSet>
-    <AssociationSet Name="OrderDCRGraph" Association="DBSchema.Store.OrderDCRGraph">
-      <End Role="Order" EntitySet="Orders" />
-      <End Role="DCRGraph" EntitySet="DCRGraphs" />
-    </AssociationSet>
-    <AssociationSet Name="OrderOrderDetail" Association="DBSchema.Store.OrderOrderDetail">
-      <End Role="Order" EntitySet="Orders" />
-      <End Role="OrderDetail" EntitySet="OrderDetails" />
-    </AssociationSet>
     <AssociationSet Name="ItemOrderDetail" Association="DBSchema.Store.ItemOrderDetail">
       <End Role="Item" EntitySet="Items" />
       <End Role="OrderDetail" EntitySet="OrderDetails" />
-    </AssociationSet>
-    <AssociationSet Name="CategoryItem" Association="DBSchema.Store.CategoryItem">
-      <End Role="Category" EntitySet="Categories" />
-      <End Role="Item" EntitySet="Items" />
     </AssociationSet>
     <AssociationSet Name="IntegerSpecifyingUIElementEventUIElemement" Association="DBSchema.Store.IntegerSpecifyingUIElementEventUIElemement">
       <End Role="IntegerSpecifyingUIElement" EntitySet="IntegerSpecifyingUIElements" />
@@ -232,29 +213,6 @@
     <Property Name="DCRGraphId" Type="int" Nullable="false" />
     <Property Name="DCREventId" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="Orders">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="OrderDate" Type="datetime" Nullable="false" />
-    <Property Name="Table" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="Notes" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="CustomerId" Type="int" Nullable="false" />
-    <Property Name="DCRGraph_Id" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Customers">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="FirstAndMiddleName" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="LastName" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="Phone" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="StreetAndNumber" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="Zipcode" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="City" Type="nvarchar(max)" Nullable="true" />
-  </EntityType>
   <EntityType Name="Items">
     <Key>
       <PropertyRef Name="Id" />
@@ -272,13 +230,6 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="OrderId" Type="int" Nullable="false" />
     <Property Name="ItemId" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Categories">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="EventUIElemements">
     <Key>
@@ -511,42 +462,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="CustomerOrder">
-    <End Role="Customer" Type="DBSchema.Store.Customers" Multiplicity="1" />
-    <End Role="Order" Type="DBSchema.Store.Orders" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Customer">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Order">
-        <PropertyRef Name="CustomerId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="OrderDCRGraph">
-    <End Role="Order" Type="DBSchema.Store.Orders" Multiplicity="*" />
-    <End Role="DCRGraph" Type="DBSchema.Store.DCRGraphs" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="DCRGraph">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Order">
-        <PropertyRef Name="DCRGraph_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="OrderOrderDetail">
-    <End Role="Order" Type="DBSchema.Store.Orders" Multiplicity="1" />
-    <End Role="OrderDetail" Type="DBSchema.Store.OrderDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Order">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="OrderDetail">
-        <PropertyRef Name="OrderId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="ItemOrderDetail">
     <End Role="Item" Type="DBSchema.Store.Items" Multiplicity="1" />
     <End Role="OrderDetail" Type="DBSchema.Store.OrderDetails" Multiplicity="*" />
@@ -556,18 +471,6 @@
       </Principal>
       <Dependent Role="OrderDetail">
         <PropertyRef Name="ItemId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="CategoryItem">
-    <End Role="Category" Type="DBSchema.Store.Categories" Multiplicity="1" />
-    <End Role="Item" Type="DBSchema.Store.Items" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Category">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Item">
-        <PropertyRef Name="CategoryId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -685,23 +588,12 @@
             <End Role="DCREvent" EntitySet="DCREvents" />
             <End Role="GraphEvent" EntitySet="GraphEvents" />
           </AssociationSet>
-          <EntitySet Name="Orders" EntityType="DBSchema.Order" />
-          <EntitySet Name="Customers" EntityType="DBSchema.Customer" />
-          <AssociationSet Name="CustomerOrder" Association="DBSchema.CustomerOrder">
-            <End Role="Customer" EntitySet="Customers" />
-            <End Role="Order" EntitySet="Orders" />
-          </AssociationSet>
           <EntitySet Name="Items" EntityType="DBSchema.Item" />
           <EntitySet Name="OrderDetails" EntityType="DBSchema.OrderDetail" />
-          <AssociationSet Name="OrderOrderDetail" Association="DBSchema.OrderOrderDetail">
-            <End Role="Order" EntitySet="Orders" />
-            <End Role="OrderDetail" EntitySet="OrderDetails" />
-          </AssociationSet>
           <AssociationSet Name="ItemOrderDetail" Association="DBSchema.ItemOrderDetail">
             <End Role="Item" EntitySet="Items" />
             <End Role="OrderDetail" EntitySet="OrderDetails" />
           </AssociationSet>
-          <EntitySet Name="Categories" EntityType="DBSchema.Category" />
           <EntitySet Name="EventUIElemements" EntityType="DBSchema.EventUIElemement" />
           <EntitySet Name="IntegerSpecifyingUIElements" EntityType="DBSchema.IntegerSpecifyingUIElement" />
           <AssociationSet Name="IntegerSpecifyingUIElementEventUIElemement" Association="DBSchema.IntegerSpecifyingUIElementEventUIElemement">
@@ -711,14 +603,6 @@
           <AssociationSet Name="DCREventEventUIElemement" Association="DBSchema.DCREventEventUIElemement">
             <End Role="DCREvent" EntitySet="DCREvents" />
             <End Role="EventUIElemement" EntitySet="EventUIElemements" />
-          </AssociationSet>
-          <AssociationSet Name="OrderDCRGraph" Association="DBSchema.OrderDCRGraph">
-            <End Role="Order" EntitySet="Orders" />
-            <End Role="DCRGraph" EntitySet="DCRGraphs" />
-          </AssociationSet>
-          <AssociationSet Name="CategoryItem" Association="DBSchema.CategoryItem">
-            <End Role="Category" EntitySet="Categories" />
-            <End Role="Item" EntitySet="Items" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="DCREvent">
@@ -1044,8 +928,6 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="GraphEvents" Relationship="DBSchema.DCRGraphGraphEvent" FromRole="DCRGraph" ToRole="GraphEvent" />
-          <NavigationProperty Name="Order" Relationship="DBSchema.OrderDCRGraph" FromRole="DCRGraph" ToRole="Order" />
-          <Property Name="OrderId" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="GraphEvent">
           <Key>
@@ -1081,44 +963,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Order">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderDate" Type="DateTime" Nullable="false" />
-          <Property Name="Table" Type="String" Nullable="true" />
-          <Property Name="Notes" Type="String" Nullable="true" />
-          <NavigationProperty Name="Customer" Relationship="DBSchema.CustomerOrder" FromRole="Order" ToRole="Customer" />
-          <Property Name="CustomerId" Type="Int32" Nullable="true" />
-          <NavigationProperty Name="OrderDetails" Relationship="DBSchema.OrderOrderDetail" FromRole="Order" ToRole="OrderDetail" />
-          <NavigationProperty Name="DCRGraph" Relationship="DBSchema.OrderDCRGraph" FromRole="Order" ToRole="DCRGraph" />
-        </EntityType>
-        <EntityType Name="Customer">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstAndMiddleName" Type="String" Nullable="false" />
-          <Property Name="LastName" Type="String" Nullable="true" />
-          <Property Name="Phone" Type="String" Nullable="false" />
-          <Property Name="StreetAndNumber" Type="String" Nullable="true" />
-          <Property Name="Zipcode" Type="String" Nullable="true" />
-          <Property Name="City" Type="String" Nullable="true" />
-          <NavigationProperty Name="Orders" Relationship="DBSchema.CustomerOrder" FromRole="Customer" ToRole="Order" />
-        </EntityType>
-        <Association Name="CustomerOrder">
-          <End Type="DBSchema.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="DBSchema.Order" Role="Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Item">
           <Key>
             <PropertyRef Name="Id" />
@@ -1128,32 +972,16 @@
           <Property Name="Name" Type="String" Nullable="false" />
           <Property Name="Price" Type="String" Nullable="false" />
           <Property Name="Description" Type="String" Nullable="false" />
-          <Property Name="CategoryId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Category" Relationship="DBSchema.CategoryItem" FromRole="Item" ToRole="Category" />
-          <Property Name="CategoryName" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Order" Relationship="DBSchema.OrderOrderDetail" FromRole="OrderDetail" ToRole="Order" />
           <Property Name="OrderId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Item" Relationship="DBSchema.ItemOrderDetail" FromRole="OrderDetail" ToRole="Item" />
           <Property Name="ItemId" Type="Int32" Nullable="false" />
         </EntityType>
-        <Association Name="OrderOrderDetail">
-          <End Type="DBSchema.Order" Role="Order" Multiplicity="1" />
-          <End Type="DBSchema.OrderDetail" Role="OrderDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Order">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="OrderDetail">
-              <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="ItemOrderDetail">
           <End Type="DBSchema.Item" Role="Item" Multiplicity="1" />
           <End Type="DBSchema.OrderDetail" Role="OrderDetail" Multiplicity="*" />
@@ -1166,13 +994,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Category">
-          <Key>
-            <PropertyRef Name="Name" />
-          </Key>
-          <Property Name="Name" Type="String" Nullable="false" />
-          <NavigationProperty Name="Items" Relationship="DBSchema.CategoryItem" FromRole="Category" ToRole="Item" />
-        </EntityType>
         <EntityType Name="EventUIElemement">
           <Key>
             <PropertyRef Name="Id" />
@@ -1212,22 +1033,6 @@
             </Principal>
             <Dependent Role="EventUIElemement">
               <PropertyRef Name="DCREventId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="OrderDCRGraph">
-          <End Type="DBSchema.Order" Role="Order" Multiplicity="1" />
-          <End Type="DBSchema.DCRGraph" Role="DCRGraph" Multiplicity="1" />
-        </Association>
-        <Association Name="CategoryItem">
-          <End Type="DBSchema.Category" Role="Category" Multiplicity="1" />
-          <End Type="DBSchema.Item" Role="Item" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Category">
-              <PropertyRef Name="Name" />
-            </Principal>
-            <Dependent Role="Item">
-              <PropertyRef Name="CategoryName" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1346,30 +1151,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Orders">
-      <EntityTypeMapping TypeName="IsTypeOf(DBSchema.Order)">
-        <MappingFragment StoreEntitySet="Orders">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-          <ScalarProperty Name="Table" ColumnName="Table" />
-          <ScalarProperty Name="Notes" ColumnName="Notes" />
-          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Customers">
-      <EntityTypeMapping TypeName="IsTypeOf(DBSchema.Customer)">
-        <MappingFragment StoreEntitySet="Customers">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="FirstAndMiddleName" ColumnName="FirstAndMiddleName" />
-          <ScalarProperty Name="LastName" ColumnName="LastName" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="StreetAndNumber" ColumnName="StreetAndNumber" />
-          <ScalarProperty Name="Zipcode" ColumnName="Zipcode" />
-          <ScalarProperty Name="City" ColumnName="City" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Items">
       <EntityTypeMapping TypeName="IsTypeOf(DBSchema.Item)">
         <MappingFragment StoreEntitySet="Items">
@@ -1377,7 +1158,6 @@
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Price" ColumnName="Price" />
           <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1387,13 +1167,6 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="OrderId" ColumnName="OrderId" />
           <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Categories">
-      <EntityTypeMapping TypeName="IsTypeOf(DBSchema.Category)">
-        <MappingFragment StoreEntitySet="Categories">
-          <ScalarProperty Name="Name" ColumnName="Name" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

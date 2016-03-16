@@ -19,7 +19,7 @@ namespace DcrWebAPI.Controllers
             XDocument doc = XDocument.Load(await Request.Content.ReadAsStreamAsync());
             var parser = new DCRXmlParser();
             var eventsAndRoles = parser.Parse(doc.ToString());
-            new Parsing(eventsAndRoles);
+           // new Parsing(eventsAndRoles);
         }
 
         
