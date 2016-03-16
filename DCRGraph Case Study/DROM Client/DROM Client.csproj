@@ -95,33 +95,20 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Customer.cs">
-      <Link>Models\BusinessObjects\Customer.cs</Link>
-    </Compile>
-    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\DCRGraph.cs">
-      <Link>Models\BusinessObjects\DCRGraph.cs</Link>
-    </Compile>
-    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Event.cs">
-      <Link>Models\BusinessObjects\Event.cs</Link>
-    </Compile>
-    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Group.cs">
-      <Link>Models\BusinessObjects\Group.cs</Link>
-    </Compile>
-    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Item.cs">
-      <Link>Models\BusinessObjects\Item.cs</Link>
-    </Compile>
-    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Order.cs">
-      <Link>Models\BusinessObjects\Order.cs</Link>
-    </Compile>
-    <Compile Include="..\DcrWebAPI\Models\BusinessObjects\Role.cs">
-      <Link>Models\BusinessObjects\Role.cs</Link>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\BusinessObjects\Customer.cs" />
+    <Compile Include="Models\BusinessObjects\DCRGraph.cs" />
+    <Compile Include="Models\BusinessObjects\Event.cs" />
+    <Compile Include="Models\BusinessObjects\Group.cs" />
+    <Compile Include="Models\BusinessObjects\Item.cs" />
+    <Compile Include="Models\BusinessObjects\Order.cs" />
+    <Compile Include="Models\BusinessObjects\Role.cs" />
+    <Compile Include="Models\NewOrderData\NewOrderInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\OrderPageViewModel.cs" />

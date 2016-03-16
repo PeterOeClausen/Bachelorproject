@@ -9,23 +9,90 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
             <!--Top menu bar-->
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock Text="Views:" VerticalAlignment="Center"/>
                 <Button Content="Chef" />
                 <Button Content="Delivery" />
                 <Button Content="Manager" />
                 <Button Content="Waiter" />
                 <Button Content="Create new order" Margin="100,0,0,0" />
-                <Button Content="Log out" HorizontalAlignment="Right"/>
+                <Button Content="Log out" HorizontalAlignment="Right" Click="Logout_Click"/>    
             </StackPanel>
+            
             <!--Order view list-->
             <StackPanel>
                 <StackPanel.DataContext>
-                    <vm:OrderPageViewModel x:Name="OrderViewModel"/>
+                    <vm:OrderPageViewModel/>
                 </StackPanel.DataContext>
-                
+                <ListView ItemsSource="{Binding Orders}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <!--Order id:-->
+                                    <StackPanel BorderThickness="10">
+                                        <TextBlock Text="Order id:"/>
+                                        <TextBlock Text="{Binding Id, TargetNullValue='-1', FallbackValue='-2'}"/>
+                                    </StackPanel>
+                                    <!--Order date:-->
+                                    <StackPanel BorderThickness="10">
+                                        <TextBlock Text="Order date"/>
+                                        <TextBlock Text="{Binding OrderDate, FallbackValue='Binding failed', TargetNullValue='No orderdate found'}"/>
+                                    </StackPanel>
+                                    <!--Status:-->
+                                    <!--Delivery method:-->
+                                    <!--Customer name:-->
+                                    <StackPanel BorderThickness="10">
+                                        <TextBlock Text="Customer name:"/>
+                                        <TextBlock>
+                                            <Run Text="{Binding Customer.FirstAndMiddleNames}"/>
+                                            <Run Text=" "/>
+                                            <Run Text="{Binding Customer.LastName}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <!--Email:-->
+                                    <StackPanel BorderThickness="10">
+                                        <TextBlock Text="Email:"/>
+                                        <TextBlock Text="{Binding Customer.Email, TargetNullValue='No email entered'}"/>
+                                    </StackPanel>
+                                    <!--Phone:-->
+                                    <StackPanel BorderThickness="10">
+                                        <TextBlock Text="Phone: "/>
+                                        <TextBlock Text="{Binding Customer.Phone}"/>
+                                    </StackPanel>
+                                    <!--Address-->
+                                    <StackPanel BorderThickness="10">
+                                        <TextBlock Text="Address:"/>
+                                        <TextBlock Text="{Binding Customer.StreetAndNumber}"/>
+                                        <TextBlock>
+                                            <Run Text="{Binding Customer.ZipCode}"/>
+                                            <Run Text=", "/>
+                                            <Run Text="{Binding Customer.City}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <!--Notes-->
+                                    <StackPanel BorderThickness="10">
+                                        <TextBlock Text="Notes:"/>
+                                        <TextBlock Text="{Binding Notes, TargetNullValue=
+                                        'Target value', FallbackValue='FallBackValue'}"/>
+                                    </StackPanel>
+                                    <!--Edit button-->
+                                    <Button>
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal">
+                                                <SymbolIcon Symbol="Edit"/>
+                                                <TextBlock Text="Edit"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
+                                <TextBlock Text="Items on order:"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -26,5 +26,10 @@ namespace DROM_Client.Views
         {
             this.InitializeComponent();
         }
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(LoginPage));
+        }
     }
 }
