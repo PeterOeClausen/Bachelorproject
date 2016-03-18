@@ -1,0 +1,103 @@
+﻿<Page
+    x:Class="DROM_Client.Views.EditOrderPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DROM_Client.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:DROM_Client.ViewModels"
+    mc:Ignorable="d">
+    <Page.DataContext>
+        <vm:EditOrderPageViewModel/>
+    </Page.DataContext>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <!--Order Id:-->
+                <StackPanel>
+                    <TextBlock Text="Order Id"/>
+                    <TextBlock Text="{Binding OrderBeingEdited.Id}"/>
+                </StackPanel>
+                <!--Order date:-->
+                <StackPanel>
+                    <TextBlock Text="Order date:"/>
+                    <TextBlock Text="{Binding OrderBeingEdited.OrderDate, FallbackValue='N/A'}"/>
+                </StackPanel>
+                <!--Save button:-->
+                <Button Click="Save_Click">
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical">
+                            <SymbolIcon Symbol="Save"/>
+                            <TextBlock Text="Save"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <!--Cancel button:-->
+                <Button Click="Cancel_Click">
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical">
+                            <SymbolIcon Symbol="Cancel"/>
+                            <TextBlock Text="Cancel"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <!--Customer information:-->
+                <StackPanel>
+                    <TextBlock Text="Customer information:" FontWeight="Bold" Margin="0,20,0,0"/>
+                    <TextBlock Text="First name:"/>
+                    <TextBox Text="{Binding OrderBeingEdited.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" MinWidth="300" HorizontalAlignment="Left"/>
+                    <TextBlock Text="Last name:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingEdited.Customer.LastName, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBlock Text="Email:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingEdited.Customer.Email, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBlock Text="Phone:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingEdited.Customer.Phone, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBlock Text="Street:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingEdited.Customer.StreetAndNumber, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBlock Text="Zip:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingEdited.Customer.ZipCode, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBlock Text="City:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingEdited.Customer.City, Mode=TwoWay, FallbackValue='N/A'}"/>
+                </StackPanel>
+                <!--Items on order:-->
+                <StackPanel Padding="20,0,0,0" Background="Wheat">
+                    <TextBlock Text="Items on order:" Margin="0,20,0,0" FontWeight="Bold" />
+                    <!--Items list:-->
+                    <ListView ItemsSource="{Binding OrderBeingEdited.ItemsAndQuantity}" Background="AntiqueWhite">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Value}"/>
+                                    <TextBlock Text="x"/>
+                                    <TextBlock Text="{Binding Key.Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <!--Quantity Item form:-->
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel>
+                            <TextBlock Text="Quantity:"/>
+                            <TextBox />
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="Item:"/>
+                            <TextBox />
+                        </StackPanel>
+                        <Button Content="Add" Click="Add_Click"/>
+                        <Button Content="Delete" Click="Remove_Click"/>
+                    </StackPanel>
+                </StackPanel>
+                <!--Notes:-->
+                <StackPanel MinWidth="500" MaxWidth="500">
+                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingEdited.Notes, Mode=TwoWay}" TextWrapping="Wrap"/>
+                </StackPanel>
+                <!--Edit event buttons-->
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>
