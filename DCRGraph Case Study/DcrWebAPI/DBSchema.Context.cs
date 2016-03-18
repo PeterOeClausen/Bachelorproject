@@ -38,9 +38,11 @@ namespace DcrWebAPI
         public virtual DbSet<Children> Children { get; set; }
         public virtual DbSet<DCRGraph> DCRGraphs { get; set; }
         public virtual DbSet<GraphEvent> GraphEvents { get; set; }
-        public virtual DbSet<Item> Items { get; set; }
-        public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<EventUIElemement> EventUIElemements { get; set; }
         public virtual DbSet<IntegerSpecifyingUIElement> IntegerSpecifyingUIElements { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
     }
 }
