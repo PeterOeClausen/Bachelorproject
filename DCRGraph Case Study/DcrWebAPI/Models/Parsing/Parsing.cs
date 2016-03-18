@@ -10,7 +10,7 @@ namespace DcrWebAPI.Models.Parsing
 {
     class Parsing
     {
-
+        /*
         public Parsing(EventAndRolesContainer container, OrderInfo orderInfo)
         {
             using (var db = new DBSchemaContainer())
@@ -49,7 +49,7 @@ namespace DcrWebAPI.Models.Parsing
 
             }
         }
-
+    */
     }
-
+    
 }
