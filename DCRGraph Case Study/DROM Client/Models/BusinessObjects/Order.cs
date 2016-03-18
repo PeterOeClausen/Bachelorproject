@@ -14,5 +14,6 @@ namespace DROM_Client.Models.BusinessObjects
         public string Notes { get; set; }
         public DCRGraph DCRGraph { get; set; }
         public int Table { get; set; }
+        public string DeliveryMethod { get; set; }
     }
 }
