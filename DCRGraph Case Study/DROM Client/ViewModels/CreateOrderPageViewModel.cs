@@ -9,6 +9,11 @@ namespace DROM_Client.ViewModels
 {
     public class CreateOrderPageViewModel
     {
+        public bool Chef { get; set; }
+        public bool Delivery { get; set; }
+        public bool Manager { get; set; }
+        public bool Waiter { get; set; }
+
         public Order OrderBeingCreated { get; set; } = new Order()
         {
             Id = 2,

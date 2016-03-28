@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using DROM_Client.Models.BusinessObjects;
+using DROM_Client.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -45,11 +46,12 @@ namespace DROM_Client.Views
 
         private void Chef_Click(object sender, RoutedEventArgs e)
         {
-            var chefButton = (Button) sender;
-            //if(chefButton.Background.Equals(.LightGray))
-            //{
-
-            //}
+            var viewModel = ((Button) sender).DataContext as CreateOrderPageViewModel;
+            if (viewModel.Chef)
+            {
+                viewModel.Chef = false;
+            }
+            else viewModel.Chef = true;
         }
     }
 }

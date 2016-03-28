@@ -61,6 +61,7 @@ namespace ConsoleApplication1
                 catch (Exception ex)
                 {
                     //MessageBox.Show(ex.Message);
+
                     request.Abort();
                     return string.Empty;
                 }

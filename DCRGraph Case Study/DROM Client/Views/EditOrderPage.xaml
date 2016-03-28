@@ -13,6 +13,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
+            <TextBlock Text="Edit order" FontWeight="Bold" FontSize="30" />
             <StackPanel Orientation="Horizontal">
                 <!--Order Id:-->
                 <StackPanel>

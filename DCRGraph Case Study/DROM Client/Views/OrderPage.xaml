@@ -6,15 +6,23 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:DROM_Client.ViewModels"
+    xmlns:converters="using:DROM_Client.Converters"
     mc:Ignorable="d">
-
+    
+    <Page.Resources>
+        <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
+    </Page.Resources>
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel Orientation="Vertical" x:Name="PageStackPanel">
             <!--Top menu bar-->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel.DataContext>
+                    <vm:CreateOrderPageViewModel/>
+                </StackPanel.DataContext>
                 <TextBlock Text="Views:" VerticalAlignment="Center"/>
-                <Button Content="Chef" Click="Chef_Click" Background="LightGray"/>
-                <Button Content="Delivery" />
+                <Button Content="Chef" Click="Chef_Click" Background="{Binding Chef, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Red', Mode=TwoWay}" />
+                <Button Content="Delivery" Background="#428bca" />
                 <Button Content="Manager" />
                 <Button Content="Waiter" />
                 <Button Content="Create new order" Margin="100,0,0,0" Click="Create_New_Order_Click"/>
