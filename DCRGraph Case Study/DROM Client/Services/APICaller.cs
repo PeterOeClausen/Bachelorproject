@@ -11,14 +11,16 @@ namespace DROM_Client.Services
 {
     public class APICaller
     {
-        //public async Task<string> PostOrderAsync(NewOrderInfo newOrder)
-        //{
-        //    using (var client = new HttpClient())
-        //    {
-        //        client.BaseAddress = new Uri("http://localhost:57815/");
-        //        var content = new FormUrlEncodedContent(newOrder);
-        //        var response = await client.PostAsJson("api/parse", content);
-        //    }
-        //}
+        public async Task<string> PostOrderAsync(NewOrderInfo newOrder)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:57815/");
+                var response = await client.PutAsXmlAsync("api/parse", newOrder);
+                return response.StatusCode.ToString();
+                //var content = new FormUrlEncodedContent(newOrder);
+                //var response = await client.PostAsJson("api/parse", content);
+            }
+        }
     }
 }

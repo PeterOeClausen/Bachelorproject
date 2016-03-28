@@ -91,6 +91,8 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
+
+                        <Button Content="Send test post call" Click="Send_Test_Post_Call"/>
                     </StackPanel>
                     <!--Notes-->
                     <StackPanel>
