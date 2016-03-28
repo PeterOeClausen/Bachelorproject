@@ -26,7 +26,7 @@
                 </StackPanel>
                 <StackPanel>
                     <TextBlock Text="Delivery method:"/>
-                    <TextBlock Text="{Binding OrderBeingEdited.DeliveryMethod, FallbackValue='N/A'}"/>
+                    <TextBlock Text="{Binding OrderBeingEdited.OrderType, FallbackValue='N/A'}"/>
                 </StackPanel>
                 <!--Delivery method:-->
                 <!--Save button:-->

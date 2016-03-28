@@ -44,8 +44,8 @@
                                     <!--Status:-->
                                     <!--Delivery method:-->
                                     <StackPanel MinWidth="200">
-                                        <TextBlock Text="Delivery method:"/>
-                                        <TextBlock Text="{Binding DeliveryMethod, FallbackValue='Binding failed', TargetNullValue='No delivery method found'}"/>
+                                        <TextBlock Text="Order type:"/>
+                                        <TextBlock Text="{Binding OrderType, FallbackValue='Binding failed', TargetNullValue='No order type was found'}"/>
                                     </StackPanel>
                                     <!--Customer name:-->
                                     <StackPanel MinWidth="200">
