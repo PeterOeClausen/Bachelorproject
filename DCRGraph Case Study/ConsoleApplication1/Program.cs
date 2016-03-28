@@ -19,7 +19,7 @@ namespace ConsoleApplication1
         public static string SendXMLFile()
         {
             string xmlFilepath = @"C:/Bachelor2.xml";
-            string uri = @"http://localhost:64833/api/parse";
+            string uri = @"http://localhost:57815/api/parse";
             int timeout = 500;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
 

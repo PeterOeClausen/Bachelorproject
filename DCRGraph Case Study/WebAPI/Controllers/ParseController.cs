@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using DROM_Client.Models.NewOrderData;
+using Newtonsoft.Json;
 using WebAPI.Models.DBObjects;
 
 namespace WebAPI.Controllers
@@ -22,5 +24,11 @@ namespace WebAPI.Controllers
             }
         }
 
+        public void Post([FromBody] NewOrderInfo info)
+        {
+            var qwe = info;
+
+            Console.WriteLine(qwe.ToString());
+        }
     }
 }

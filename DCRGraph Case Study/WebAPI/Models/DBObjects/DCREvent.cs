@@ -12,13 +12,14 @@ namespace WebAPI.Models.DBObjects
         public DCREvent()
         {
             EventUIElemements = new HashSet<EventUIElemement>();
-            DCREvents1 = new HashSet<DCREvent>();
-            DCREvents = new HashSet<DCREvent>();
-            DCREvents11 = new HashSet<DCREvent>();
-            DCREvents2 = new HashSet<DCREvent>();
+            Includes = new HashSet<DCREvent>();
+            Excludes = new HashSet<DCREvent>();
+            Responses = new HashSet<DCREvent>();
+            MilestonesToMe = new HashSet<DCREvent>();
             Groups = new HashSet<Group>();
             Roles = new HashSet<Role>();
-            DCREvents12 = new HashSet<DCREvent>();
+            ConditionsToMe = new HashSet<DCREvent>();
+            /*
             DCREvents3 = new HashSet<DCREvent>();
             DCRGraphs = new HashSet<DCRGraph>();
             DCREvents13 = new HashSet<DCREvent>();
@@ -27,6 +28,7 @@ namespace WebAPI.Models.DBObjects
             DCREvents5 = new HashSet<DCREvent>();
             DCREvents15 = new HashSet<DCREvent>();
             DCREvents6 = new HashSet<DCREvent>();
+            */
         }
 
         public int Id { get; set; }
@@ -41,28 +43,32 @@ namespace WebAPI.Models.DBObjects
 
         public string StatusMessageAfterExecution { get; set; }
 
+        [Required]
         public bool Included { get; set; }
 
+        [Required]
         public bool Pending { get; set; }
 
+        [Required]
         public bool Executed { get; set; }
 
+        [Required]
         public bool Parent { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EventUIElemement> EventUIElemements { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents1 { get; set; }
+        public virtual ICollection<DCREvent> Includes { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents { get; set; }
+        public virtual ICollection<DCREvent> ConditionsToMe { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents11 { get; set; }
+        public virtual ICollection<DCREvent> MilestonesToMe { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents2 { get; set; }
+        public virtual ICollection<DCREvent> Responses { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Group> Groups { get; set; }
@@ -71,11 +77,11 @@ namespace WebAPI.Models.DBObjects
         public virtual ICollection<Role> Roles { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents12 { get; set; }
+        public virtual ICollection<DCREvent> Excludes { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents3 { get; set; }
-
+        public virtual ICollection<DCREvent> Children { get; set; }
+        /*
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DCRGraph> DCRGraphs { get; set; }
 
@@ -96,5 +102,6 @@ namespace WebAPI.Models.DBObjects
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DCREvent> DCREvents6 { get; set; }
+        */
     }
 }

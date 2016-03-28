@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using WebAPI.Models.DBObjects;
 
 namespace WebAPI.Migrations
@@ -28,6 +29,37 @@ namespace WebAPI.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+            context.Database.ExecuteSqlCommand("sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'");
+            context.Database.ExecuteSqlCommand("sp_MSForEachTable 'IF OBJECT_ID(''?'') NOT IN (ISNULL(OBJECT_ID(''[dbo].[__MigrationHistory]''),0)) DELETE FROM ?'");
+            context.Database.ExecuteSqlCommand("EXEC sp_MSForEachTable 'ALTER TABLE ? CHECK CONSTRAINT ALL'");
+
+
+
+            var roles = new List<Role>()
+            {
+                new Role(){ Name = "Manager"},
+                new Role(){ Name = "Cook"},
+                new Role() {Name = "Waiter"},
+                new Role() {Name = "Delivery"}
+            };
+
+            foreach (var r in roles)
+            {
+                context.Roles.AddOrUpdate(r);
+            }
+            
+
+            var groups = new List<Group>()
+            {
+                new Group() {Name = "only pedning"},
+                new Group() {Name = "Edit events"}
+            };
+
+            foreach (var g in groups)
+            {
+                context.Groups.AddOrUpdate(g);
+            }
+            
 
             var cat0 = new Category()
             {

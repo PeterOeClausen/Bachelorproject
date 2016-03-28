@@ -209,6 +209,7 @@
     <Compile Include="Models\DBObjects\Order.cs" />
     <Compile Include="Models\DBObjects\OrderDetail.cs" />
     <Compile Include="Models\DBObjects\Role.cs" />
+    <Compile Include="Models\Parsing\GraphObjects.cs" />
     <Compile Include="Models\Parsing\Parsing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XMLParser\Constraint.cs" />
@@ -265,7 +266,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -293,6 +293,8 @@
           <DevelopmentServerPort>62825</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57815/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:57815/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

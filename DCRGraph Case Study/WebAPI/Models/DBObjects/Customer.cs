@@ -22,11 +22,12 @@ namespace WebAPI.Models.DBObjects
 
         public string Email { get; set; }
 
-        public string Phone { get; set; }
+        [Required]
+        public int Phone { get; set; }
 
         public string StreetAndNumber { get; set; }
 
-        public string Zipcode { get; set; }
+        public int Zipcode { get; set; }
 
         public string City { get; set; }
 

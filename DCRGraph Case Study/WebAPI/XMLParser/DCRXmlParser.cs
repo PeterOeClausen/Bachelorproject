@@ -84,7 +84,7 @@ namespace WebAPI.XMLParser
                     if (role.Value != "")
                     {
                         Container.Roles.Add(role.Value);
-                        Container.EventRoles.Add(new DcrWebAPI.XMLParser.EventRole(role.Value, Event.EventId));
+                        Container.EventRoles.Add(new WebAPI.XMLParser.EventRole(role.Value, Event.EventId));
                     }
                 }
 
@@ -95,7 +95,7 @@ namespace WebAPI.XMLParser
                     if (group.Value != "")
                     {
                         Container.Groups.Add(group.Value);
-                        Container.EventGroups.Add(new DcrWebAPI.XMLParser.EventGroup(group.Value, Event.EventId));
+                        Container.EventGroups.Add(new WebAPI.XMLParser.EventGroup(group.Value, Event.EventId));
                     }
                 }
 

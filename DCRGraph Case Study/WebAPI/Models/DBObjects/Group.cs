@@ -14,7 +14,11 @@ namespace WebAPI.Models.DBObjects
             DCREvents = new HashSet<DCREvent>();
         }
 
+        [Key]
         public int Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DCREvent> DCREvents { get; set; }
