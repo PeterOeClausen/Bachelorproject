@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DROM_Client.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using DROM_Client.Models.NewOrderData;
+using DROM_Client.Models.BusinessObjects;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -45,6 +48,20 @@ namespace DROM_Client.Views
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private async void Send_Test_Post_Call(object sender, RoutedEventArgs e)
+        {
+            APICaller apiCaller = new APICaller();
+            await apiCaller.PostOrderAsync(new NewOrderInfo()
+            {
+                Table = "1",
+                Customer = new Customer()
+                {
+                    FirstAndMiddleNames = "Bob",
+                    LastName = "Bobson"
+                }
+            });
         }
     }
 }
