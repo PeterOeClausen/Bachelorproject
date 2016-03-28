@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using DcrWebAPI.XMLParser;
+using DROM_Client.Models.NewOrderData;
 
 namespace DcrWebAPI.Models.Parsing
 {
     class Parsing
     {
         /*
-        public Parsing(EventAndRolesContainer container, OrderInfo orderInfo)
+        public Parsing(EventAndRolesContainer container, NewOrderInfo orderInfo)
         {
             using (var db = new DBSchemaContainer())
             {

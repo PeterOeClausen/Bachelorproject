@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkflowDeployer.XMLParser
+namespace WebAPI.XMLParser
 {
     /// <summary>
     /// Class repressenting a relation or constraint, can be either Condition, Response, Milestone, Exclusion, Inclusion depending on context etc.

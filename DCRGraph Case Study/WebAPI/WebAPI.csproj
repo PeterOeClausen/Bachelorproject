@@ -9,7 +9,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{866B337D-BE18-49C6-9D21-EAF002769C2B}</ProjectGuid>
+    <ProjectGuid>{E33E7600-CAF9-4C5B-8969-75C3F6A4B7FF}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -61,6 +61,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -131,10 +132,32 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-    <Folder Include="Views\Parse\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\DROM Client\Models\BusinessObjects\Customer.cs">
+      <Link>Models\BusinessObjects\Customer.cs</Link>
+    </Compile>
+    <Compile Include="..\DROM Client\Models\BusinessObjects\DCRGraph.cs">
+      <Link>Models\BusinessObjects\DCRGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\DROM Client\Models\BusinessObjects\Event.cs">
+      <Link>Models\BusinessObjects\Event.cs</Link>
+    </Compile>
+    <Compile Include="..\DROM Client\Models\BusinessObjects\Group.cs">
+      <Link>Models\BusinessObjects\Group.cs</Link>
+    </Compile>
+    <Compile Include="..\DROM Client\Models\BusinessObjects\Item.cs">
+      <Link>Models\BusinessObjects\Item.cs</Link>
+    </Compile>
+    <Compile Include="..\DROM Client\Models\BusinessObjects\Order.cs">
+      <Link>Models\BusinessObjects\Order.cs</Link>
+    </Compile>
+    <Compile Include="..\DROM Client\Models\BusinessObjects\Role.cs">
+      <Link>Models\BusinessObjects\Role.cs</Link>
+    </Compile>
+    <Compile Include="..\DROM Client\Models\NewOrderData\NewOrderInfo.cs">
+      <Link>Models\NewOderData\NewOrderInfo.cs</Link>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -170,43 +193,24 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ParseController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="DBSchema.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DBSchema.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DBSchema.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DBSchema.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DBSchema.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DBSchema.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="DCREvent.cs">
-      <DependentUpon>DBSchema.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EventGroup.cs">
-      <DependentUpon>DBSchema.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EventRole.cs">
-      <DependentUpon>DBSchema.tt</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Group.cs">
-      <DependentUpon>DBSchema.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Includes.cs">
-      <DependentUpon>DBSchema.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\DBObjects\Category.cs" />
+    <Compile Include="Models\DBObjects\Customer.cs" />
+    <Compile Include="Models\DBObjects\Database.cs" />
+    <Compile Include="Models\DBObjects\DCREvent.cs" />
+    <Compile Include="Models\DBObjects\DCRGraph.cs" />
+    <Compile Include="Models\DBObjects\EventUIElemement.cs" />
+    <Compile Include="Models\DBObjects\Group.cs" />
+    <Compile Include="Models\DBObjects\IntegerSpecifyingUIElement.cs" />
+    <Compile Include="Models\DBObjects\Item.cs" />
+    <Compile Include="Models\DBObjects\Order.cs" />
+    <Compile Include="Models\DBObjects\OrderDetail.cs" />
+    <Compile Include="Models\DBObjects\Role.cs" />
+    <Compile Include="Models\Parsing\Parsing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Role.cs">
-      <DependentUpon>DBSchema.tt</DependentUpon>
-    </Compile>
     <Compile Include="XMLParser\Constraint.cs" />
     <Compile Include="XMLParser\DCRXmlParser.cs" />
     <Compile Include="XMLParser\EventAndRolesContainer.cs" />
@@ -215,17 +219,6 @@
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="DBSchema.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DBSchema.Context.cs</LastGenOutput>
-      <DependentUpon>DBSchema.edmx</DependentUpon>
-    </Content>
-    <Content Include="DBSchema.edmx.sql" />
-    <Content Include="DBSchema.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DBSchema.cs</LastGenOutput>
-      <DependentUpon>DBSchema.edmx</DependentUpon>
-    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -250,22 +243,13 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <EntityDeploy Include="DBSchema.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DBSchema.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="DBSchema.edmx.diagram">
-      <DependentUpon>DBSchema.edmx</DependentUpon>
-    </Content>
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -281,9 +265,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -308,7 +290,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>57815</DevelopmentServerPort>
+          <DevelopmentServerPort>62825</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57815/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+using DcrWebAPI.Models.DBObjects;
 using DcrWebAPI.XMLParser;
 
 namespace DcrWebAPI.XMLParser

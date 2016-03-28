@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 03/16/2016 11:14:32
+-- Date Created: 03/18/2016 13:00:13
 -- Generated from EDMX file: C:\Users\Archigo\Documents\GitHub\Bachelorproject\DCRGraph Case Study\DcrWebAPI\DBSchema.edmx
 -- --------------------------------------------------
 
@@ -17,11 +17,131 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[FK_EventRoleDCREvent]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[EventRoles] DROP CONSTRAINT [FK_EventRoleDCREvent];
+GO
+IF OBJECT_ID(N'[dbo].[FK_EventRoleRole]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[EventRoles] DROP CONSTRAINT [FK_EventRoleRole];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupEventGroup]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[EventGroups] DROP CONSTRAINT [FK_GroupEventGroup];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventEventGroup]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[EventGroups] DROP CONSTRAINT [FK_DCREventEventGroup];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventEntity1]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Includes] DROP CONSTRAINT [FK_DCREventEntity1];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventIncludes]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Includes] DROP CONSTRAINT [FK_DCREventIncludes];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventExcludes]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Excludes] DROP CONSTRAINT [FK_DCREventExcludes];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventExcludes1]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Excludes] DROP CONSTRAINT [FK_DCREventExcludes1];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventConditions]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Conditions] DROP CONSTRAINT [FK_DCREventConditions];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventConditions1]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Conditions] DROP CONSTRAINT [FK_DCREventConditions1];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventResponses]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Responses] DROP CONSTRAINT [FK_DCREventResponses];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventResponses1]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Responses] DROP CONSTRAINT [FK_DCREventResponses1];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventMilestones]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Milestones] DROP CONSTRAINT [FK_DCREventMilestones];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventMilestones1]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Milestones] DROP CONSTRAINT [FK_DCREventMilestones1];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventChildren]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Children] DROP CONSTRAINT [FK_DCREventChildren];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventChildren1]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Children] DROP CONSTRAINT [FK_DCREventChildren1];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCRGraphGraphEvent]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[GraphEvents] DROP CONSTRAINT [FK_DCRGraphGraphEvent];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventGraphEvent]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[GraphEvents] DROP CONSTRAINT [FK_DCREventGraphEvent];
+GO
+IF OBJECT_ID(N'[dbo].[FK_IntegerSpecifyingUIElementEventUIElemement]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[EventUIElemements] DROP CONSTRAINT [FK_IntegerSpecifyingUIElementEventUIElemement];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DCREventEventUIElemement]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[EventUIElemements] DROP CONSTRAINT [FK_DCREventEventUIElemement];
+GO
+IF OBJECT_ID(N'[dbo].[FK_OrderDCRGraph]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Orders] DROP CONSTRAINT [FK_OrderDCRGraph];
+GO
+IF OBJECT_ID(N'[dbo].[FK_CustomerOrder]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Orders] DROP CONSTRAINT [FK_CustomerOrder];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[DCREvents]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DCREvents];
+GO
+IF OBJECT_ID(N'[dbo].[Roles]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Roles];
+GO
+IF OBJECT_ID(N'[dbo].[EventRoles]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[EventRoles];
+GO
+IF OBJECT_ID(N'[dbo].[EventGroups]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[EventGroups];
+GO
+IF OBJECT_ID(N'[dbo].[Groups]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Groups];
+GO
+IF OBJECT_ID(N'[dbo].[Includes]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Includes];
+GO
+IF OBJECT_ID(N'[dbo].[Excludes]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Excludes];
+GO
+IF OBJECT_ID(N'[dbo].[Conditions]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Conditions];
+GO
+IF OBJECT_ID(N'[dbo].[Responses]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Responses];
+GO
+IF OBJECT_ID(N'[dbo].[Milestones]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Milestones];
+GO
+IF OBJECT_ID(N'[dbo].[Children]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Children];
+GO
+IF OBJECT_ID(N'[dbo].[DCRGraphs]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DCRGraphs];
+GO
+IF OBJECT_ID(N'[dbo].[GraphEvents]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[GraphEvents];
+GO
+IF OBJECT_ID(N'[dbo].[EventUIElemements]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[EventUIElemements];
+GO
+IF OBJECT_ID(N'[dbo].[IntegerSpecifyingUIElements]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IntegerSpecifyingUIElements];
+GO
+IF OBJECT_ID(N'[dbo].[Orders]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Orders];
+GO
+IF OBJECT_ID(N'[dbo].[Customers]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Customers];
+GO
+IF OBJECT_ID(N'[dbo].[Categories]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Categories];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -123,54 +243,6 @@ CREATE TABLE [dbo].[GraphEvents] (
 );
 GO
 
--- Creating table 'Orders'
-CREATE TABLE [dbo].[Orders] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [OrderDate] datetime  NOT NULL,
-    [Table] nvarchar(max)  NULL,
-    [Notes] nvarchar(max)  NULL,
-    [CustomerId] int  NOT NULL,
-    [DCRGraph_Id] int  NOT NULL
-);
-GO
-
--- Creating table 'Customers'
-CREATE TABLE [dbo].[Customers] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [FirstAndMiddleName] nvarchar(max)  NOT NULL,
-    [LastName] nvarchar(max)  NULL,
-    [Phone] nvarchar(max)  NOT NULL,
-    [StreetAndNumber] nvarchar(max)  NULL,
-    [Zipcode] nvarchar(max)  NULL,
-    [City] nvarchar(max)  NULL
-);
-GO
-
--- Creating table 'Items'
-CREATE TABLE [dbo].[Items] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
-    [Price] nvarchar(max)  NOT NULL,
-    [Description] nvarchar(max)  NOT NULL,
-    [CategoryId] int  NOT NULL
-);
-GO
-
--- Creating table 'OrderDetails'
-CREATE TABLE [dbo].[OrderDetails] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [OrderId] int  NOT NULL,
-    [ItemId] int  NOT NULL
-);
-GO
-
--- Creating table 'Categories'
-CREATE TABLE [dbo].[Categories] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL
-);
-GO
-
 -- Creating table 'EventUIElemements'
 CREATE TABLE [dbo].[EventUIElemements] (
     [Id] int IDENTITY(1,1) NOT NULL,
@@ -183,6 +255,37 @@ GO
 CREATE TABLE [dbo].[IntegerSpecifyingUIElements] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Integer] nvarchar(max)  NOT NULL
+);
+GO
+
+-- Creating table 'Orders'
+CREATE TABLE [dbo].[Orders] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [OrderDate] datetime  NOT NULL,
+    [Notes] nvarchar(max)  NOT NULL,
+    [Table] nvarchar(max)  NOT NULL,
+    [DCRGraph_Id] int  NOT NULL,
+    [Customer_Id] int  NULL
+);
+GO
+
+-- Creating table 'Customers'
+CREATE TABLE [dbo].[Customers] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [FirstName] nvarchar(max)  NULL,
+    [LastName] nvarchar(max)  NULL,
+    [Email] nvarchar(max)  NULL,
+    [Phone] nvarchar(max)  NULL,
+    [StreetAndNumber] nvarchar(max)  NULL,
+    [Zipcode] nvarchar(max)  NULL,
+    [City] nvarchar(max)  NULL
+);
+GO
+
+-- Creating table 'Categories'
+CREATE TABLE [dbo].[Categories] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Name] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -268,6 +371,18 @@ ADD CONSTRAINT [PK_GraphEvents]
     PRIMARY KEY CLUSTERED ([DCRGraphId], [DCREventId] ASC);
 GO
 
+-- Creating primary key on [Id] in table 'EventUIElemements'
+ALTER TABLE [dbo].[EventUIElemements]
+ADD CONSTRAINT [PK_EventUIElemements]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'IntegerSpecifyingUIElements'
+ALTER TABLE [dbo].[IntegerSpecifyingUIElements]
+ADD CONSTRAINT [PK_IntegerSpecifyingUIElements]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
 -- Creating primary key on [Id] in table 'Orders'
 ALTER TABLE [dbo].[Orders]
 ADD CONSTRAINT [PK_Orders]
@@ -280,33 +395,9 @@ ADD CONSTRAINT [PK_Customers]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Items'
-ALTER TABLE [dbo].[Items]
-ADD CONSTRAINT [PK_Items]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'OrderDetails'
-ALTER TABLE [dbo].[OrderDetails]
-ADD CONSTRAINT [PK_OrderDetails]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
 -- Creating primary key on [Id] in table 'Categories'
 ALTER TABLE [dbo].[Categories]
 ADD CONSTRAINT [PK_Categories]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'EventUIElemements'
-ALTER TABLE [dbo].[EventUIElemements]
-ADD CONSTRAINT [PK_EventUIElemements]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'IntegerSpecifyingUIElements'
-ALTER TABLE [dbo].[IntegerSpecifyingUIElements]
-ADD CONSTRAINT [PK_IntegerSpecifyingUIElements]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -530,81 +621,6 @@ ON [dbo].[GraphEvents]
     ([DCREventId]);
 GO
 
--- Creating foreign key on [CustomerId] in table 'Orders'
-ALTER TABLE [dbo].[Orders]
-ADD CONSTRAINT [FK_CustomerOrder]
-    FOREIGN KEY ([CustomerId])
-    REFERENCES [dbo].[Customers]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_CustomerOrder'
-CREATE INDEX [IX_FK_CustomerOrder]
-ON [dbo].[Orders]
-    ([CustomerId]);
-GO
-
--- Creating foreign key on [DCRGraph_Id] in table 'Orders'
-ALTER TABLE [dbo].[Orders]
-ADD CONSTRAINT [FK_OrderDCRGraph]
-    FOREIGN KEY ([DCRGraph_Id])
-    REFERENCES [dbo].[DCRGraphs]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_OrderDCRGraph'
-CREATE INDEX [IX_FK_OrderDCRGraph]
-ON [dbo].[Orders]
-    ([DCRGraph_Id]);
-GO
-
--- Creating foreign key on [OrderId] in table 'OrderDetails'
-ALTER TABLE [dbo].[OrderDetails]
-ADD CONSTRAINT [FK_OrderOrderDetail]
-    FOREIGN KEY ([OrderId])
-    REFERENCES [dbo].[Orders]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_OrderOrderDetail'
-CREATE INDEX [IX_FK_OrderOrderDetail]
-ON [dbo].[OrderDetails]
-    ([OrderId]);
-GO
-
--- Creating foreign key on [ItemId] in table 'OrderDetails'
-ALTER TABLE [dbo].[OrderDetails]
-ADD CONSTRAINT [FK_ItemOrderDetail]
-    FOREIGN KEY ([ItemId])
-    REFERENCES [dbo].[Items]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_ItemOrderDetail'
-CREATE INDEX [IX_FK_ItemOrderDetail]
-ON [dbo].[OrderDetails]
-    ([ItemId]);
-GO
-
--- Creating foreign key on [CategoryId] in table 'Items'
-ALTER TABLE [dbo].[Items]
-ADD CONSTRAINT [FK_CategoryItem]
-    FOREIGN KEY ([CategoryId])
-    REFERENCES [dbo].[Categories]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_CategoryItem'
-CREATE INDEX [IX_FK_CategoryItem]
-ON [dbo].[Items]
-    ([CategoryId]);
-GO
-
 -- Creating foreign key on [IntegerSpecifyingUIElementId] in table 'EventUIElemements'
 ALTER TABLE [dbo].[EventUIElemements]
 ADD CONSTRAINT [FK_IntegerSpecifyingUIElementEventUIElemement]
@@ -633,6 +649,36 @@ GO
 CREATE INDEX [IX_FK_DCREventEventUIElemement]
 ON [dbo].[EventUIElemements]
     ([DCREventId]);
+GO
+
+-- Creating foreign key on [DCRGraph_Id] in table 'Orders'
+ALTER TABLE [dbo].[Orders]
+ADD CONSTRAINT [FK_OrderDCRGraph]
+    FOREIGN KEY ([DCRGraph_Id])
+    REFERENCES [dbo].[DCRGraphs]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_OrderDCRGraph'
+CREATE INDEX [IX_FK_OrderDCRGraph]
+ON [dbo].[Orders]
+    ([DCRGraph_Id]);
+GO
+
+-- Creating foreign key on [Customer_Id] in table 'Orders'
+ALTER TABLE [dbo].[Orders]
+ADD CONSTRAINT [FK_CustomerOrder]
+    FOREIGN KEY ([Customer_Id])
+    REFERENCES [dbo].[Customers]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_CustomerOrder'
+CREATE INDEX [IX_FK_CustomerOrder]
+ON [dbo].[Orders]
+    ([Customer_Id]);
 GO
 
 -- --------------------------------------------------

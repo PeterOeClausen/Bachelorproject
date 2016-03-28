@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using WebAPI;
+using WebAPI.Models.DBObjects;
 using WebAPI.XMLParser;
 
-namespace WorkflowDeployer.XMLParser
+namespace WebAPI.XMLParser
 {
     /// <summary>
     /// The DCRXmlParser class contains one public method for parsing, and a lot of private methods for parsing internally
@@ -83,9 +84,22 @@ namespace WorkflowDeployer.XMLParser
                     if (role.Value != "")
                     {
                         Container.Roles.Add(role.Value);
-                        Container.EventRoles.Add(new WebAPI.XMLParser.EventRole(role.Value, Event.EventId));
+                        Container.EventRoles.Add(new DcrWebAPI.XMLParser.EventRole(role.Value, Event.EventId));
                     }
                 }
+
+                //Assigning Groups:
+                var groups = _event.Descendants("group");
+                foreach (var group in groups)
+                {
+                    if (group.Value != "")
+                    {
+                        Container.Groups.Add(group.Value);
+                        Container.EventGroups.Add(new DcrWebAPI.XMLParser.EventGroup(group.Value, Event.EventId));
+                    }
+                }
+
+
 
 
 
