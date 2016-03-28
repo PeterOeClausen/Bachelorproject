@@ -1,18 +1,23 @@
-﻿using System;
+﻿using DROM_Client.Models.BusinessObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DROM_Client.Models.BusinessObjects;
 
 namespace DROM_Client.ViewModels
 {
-    public class EditOrderPageViewModel
+    public class CreateOrderPageViewModel
     {
-        public Order OrderBeingEdited { get; set; } = new Order()
+        public bool Chef { get; set; }
+        public bool Delivery { get; set; }
+        public bool Manager { get; set; }
+        public bool Waiter { get; set; }
+
+        public Order OrderBeingCreated { get; set; } = new Order()
         {
             Id = 2,
-                ItemsAndQuantity = new Dictionary<Item, int>() {
+            ItemsAndQuantity = new Dictionary<Item, int>() {
                     {
                         new Item() {
                             Id = 3,
@@ -23,23 +28,23 @@ namespace DROM_Client.ViewModels
                         },2
                     }
                 },
-                Customer = new Customer()
-                {
-                    Id = 4,
-                    FirstAndMiddleNames = "Fjong",
-                    LastName = "Fjongson",
-                    Email = "Fjong@Fjongson.com",
-                    Phone = 22222222,
-                    StreetAndNumber = "Qwerty Road 66",
-                    ZipCode = 1234,
-                    City = "Amsterdam"
-                },
-                OrderDate = DateTime.Now,
-                Notes = "With extra ice please",
-                DCRGraph = new DCRGraph
-                {
-                    Id = 2,
-                    Events = new List<Event>() {
+            Customer = new Customer()
+            {
+                Id = 4,
+                FirstAndMiddleNames = "Fjong",
+                LastName = "Fjongson",
+                Email = "Fjong@Fjongson.com",
+                Phone = 22222222,
+                StreetAndNumber = "Qwerty Road 66",
+                ZipCode = 1234,
+                City = "Amsterdam"
+            },
+            OrderDate = DateTime.Now,
+            Notes = "With extra ice please",
+            DCRGraph = new DCRGraph
+            {
+                Id = 2,
+                Events = new List<Event>() {
                         new Event() {
                             Id = 1,
                             EventId = "Activity 1",
@@ -64,10 +69,9 @@ namespace DROM_Client.ViewModels
                             Parent = false
                         }
                     }
-                },
-                Table = 1,
-                OrderType = "To be served"
-            };
-
+            },
+            Table = 1,
+            OrderType = "To be served"
+        };
     }
 }

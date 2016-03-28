@@ -13,6 +13,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
+            <TextBlock Text="Edit order" FontWeight="Bold" FontSize="30" />
             <StackPanel Orientation="Horizontal">
                 <!--Order Id:-->
                 <StackPanel>
@@ -24,6 +25,11 @@
                     <TextBlock Text="Order date:"/>
                     <TextBlock Text="{Binding OrderBeingEdited.OrderDate, FallbackValue='N/A'}"/>
                 </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Delivery method:"/>
+                    <TextBlock Text="{Binding OrderBeingEdited.OrderType, FallbackValue='N/A'}"/>
+                </StackPanel>
+                <!--Delivery method:-->
                 <!--Save button:-->
                 <Button Click="Save_Click">
                     <Button.Content>
@@ -97,6 +103,7 @@
                     <TextBox Text="{Binding OrderBeingEdited.Notes, Mode=TwoWay}" TextWrapping="Wrap"/>
                 </StackPanel>
                 <!--Edit event buttons-->
+                <!--Not implemented yet-->
             </StackPanel>
         </StackPanel>
     </Grid>

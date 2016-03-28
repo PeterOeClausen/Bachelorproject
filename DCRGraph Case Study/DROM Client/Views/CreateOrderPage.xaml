@@ -1,0 +1,104 @@
+﻿<Page
+    x:Class="DROM_Client.Views.CreateOrderPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DROM_Client.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:DROM_Client.ViewModels"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:CreateOrderPageViewModel/>
+    </Page.DataContext>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel>
+            <TextBlock Text="Create new order" FontWeight="Bold" FontSize="30" />
+            <StackPanel Orientation="Horizontal">
+                <!--Customer information:-->
+                <StackPanel>
+                    <TextBlock Text="Customer information:" FontWeight="Bold" Margin="0,20,0,0"/>
+                    <TextBlock Text="First name:"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" MinWidth="300" HorizontalAlignment="Left"/>
+                    <TextBlock Text="Last name:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.LastName, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBlock Text="Email:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.Email, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBlock Text="Phone:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.Phone, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBlock Text="Street:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.StreetAndNumber, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBlock Text="Zip:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.ZipCode, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBlock Text="City:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.City, Mode=TwoWay, FallbackValue='N/A'}"/>
+                </StackPanel>
+                <!--Delivery method and items on order-->
+                <StackPanel Margin="20,20,0,0">
+                    <!--Delivery method-->
+                    <TextBlock Text="Delivery method:" FontWeight="Bold" />
+                    <ComboBox />
+                    <!--Items on order-->
+                    <StackPanel Background="Wheat">
+                        <TextBlock Text="Items on order:" Margin="0,20,0,0" FontWeight="Bold" />
+                        <!--Items list:-->
+                        <ListView ItemsSource="{Binding OrderBeingCreated.ItemsAndQuantity}" Background="AntiqueWhite">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Value}"/>
+                                        <TextBlock Text="x"/>
+                                        <TextBlock Text="{Binding Key.Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <!--Quantity Item form:-->
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="Quantity:"/>
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Item:"/>
+                                <TextBox />
+                            </StackPanel>
+                            <Button Content="Add" Click="Add_Click"/>
+                            <Button Content="Delete" Click="Remove_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                <!--Buttons and notes-->
+                <StackPanel Margin="20,20,0,0" MinWidth="500" MaxWidth="500">
+                    <!--Buttons-->
+                    <StackPanel Orientation="Horizontal">
+                        <!--Save button:-->
+                        <Button Click="Save_Click">
+                            <Button.Content>
+                                <StackPanel Orientation="Vertical">
+                                    <SymbolIcon Symbol="Save"/>
+                                    <TextBlock Text="Save"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <!--Cancel button:-->
+                        <Button Click="Cancel_Click">
+                            <Button.Content>
+                                <StackPanel Orientation="Vertical">
+                                    <SymbolIcon Symbol="Cancel"/>
+                                    <TextBlock Text="Cancel"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <!--Notes-->
+                    <StackPanel>
+                        <TextBlock Text="Notes:" FontWeight="Bold" Margin="0,20,0,0"/>
+                        <TextBox Text="{Binding OrderBeingCreated.Notes, Mode=TwoWay}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

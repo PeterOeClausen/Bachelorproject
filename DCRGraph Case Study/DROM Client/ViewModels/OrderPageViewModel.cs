@@ -57,7 +57,7 @@ namespace DROM_Client.ViewModels
                     Id = 1,
                     Events = new List<Event>() {
                         new Event() {
-                            Id = 1,                            
+                            Id = 1,
                             EventId = "Activity 1",
                             Label = "Confirm web order",
                             Description = "Execute to confirm",
@@ -81,7 +81,8 @@ namespace DROM_Client.ViewModels
                         }
                     }
                 },
-                Table = 0
+                Table = 0,
+                OrderType = "To be delivered"
             };
             #endregion Order1
 
@@ -134,7 +135,8 @@ namespace DROM_Client.ViewModels
                         }
                     }
                 },
-                Table = 1
+                Table = 1,
+                OrderType = "To be served"
             };
             #endregion Order2
 
@@ -187,7 +189,8 @@ namespace DROM_Client.ViewModels
                         }
                     }
                 },
-                Table = 1
+                Table = 1,
+                OrderType = "To be served"
             };
             #endregion Order3
 
