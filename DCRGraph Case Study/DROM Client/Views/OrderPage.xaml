@@ -13,11 +13,11 @@
             <!--Top menu bar-->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock Text="Views:" VerticalAlignment="Center"/>
-                <Button Content="Chef" />
+                <Button Content="Chef" Click="Chef_Click" Background="LightGray"/>
                 <Button Content="Delivery" />
                 <Button Content="Manager" />
                 <Button Content="Waiter" />
-                <Button Content="Create new order" Margin="100,0,0,0" />
+                <Button Content="Create new order" Margin="100,0,0,0" Click="Create_New_Order_Click"/>
                 <Button Content="Log out" HorizontalAlignment="Right" Click="Logout_Click" Margin="100,0,0,0"/>
             </StackPanel>
             <Line X1="0" X2="3840" Stroke="Black" HorizontalAlignment="Center"/>
@@ -43,6 +43,10 @@
                                     </StackPanel>
                                     <!--Status:-->
                                     <!--Delivery method:-->
+                                    <StackPanel MinWidth="200">
+                                        <TextBlock Text="Delivery method:"/>
+                                        <TextBlock Text="{Binding DeliveryMethod, FallbackValue='Binding failed', TargetNullValue='No delivery method found'}"/>
+                                    </StackPanel>
                                     <!--Customer name:-->
                                     <StackPanel MinWidth="200">
                                         <TextBlock Text="Customer name:"/>
@@ -91,7 +95,7 @@
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{Binding Value}"/>
-                                                        <TextBlock xml:space="preserve" Text=" x "/>
+                                                        <TextBlock xml:space="preserve" Text="x"/>
                                                         <TextBlock Text="{Binding Key.Name}"/>
                                                     </StackPanel>
                                                 </DataTemplate>

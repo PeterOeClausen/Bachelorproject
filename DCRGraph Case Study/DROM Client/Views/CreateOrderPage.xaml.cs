@@ -12,7 +12,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using DROM_Client.Models.BusinessObjects;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -21,35 +20,31 @@ namespace DROM_Client.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class OrderPage : Page
+    public sealed partial class CreateOrderPage : Page
     {
-        public OrderPage()
+        public CreateOrderPage()
         {
             this.InitializeComponent();
         }
 
-        private void Logout_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(LoginPage));
+            Frame.Navigate(typeof(OrderPage));
         }
 
-        private void Edit_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(EditOrderPage), ((Button) sender).Tag as Order);
+            Frame.Navigate(typeof(OrderPage));
         }
 
-        private void Create_New_Order_Click(object sender, RoutedEventArgs e)
+        private void Add_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(CreateOrderPage));
+            
         }
 
-        private void Chef_Click(object sender, RoutedEventArgs e)
+        private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            var chefButton = (Button) sender;
-            //if(chefButton.Background.Equals(.LightGray))
-            //{
-
-            //}
+            
         }
     }
 }

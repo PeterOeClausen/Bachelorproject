@@ -24,6 +24,11 @@
                     <TextBlock Text="Order date:"/>
                     <TextBlock Text="{Binding OrderBeingEdited.OrderDate, FallbackValue='N/A'}"/>
                 </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Delivery method:"/>
+                    <TextBlock Text="{Binding OrderBeingEdited.DeliveryMethod, FallbackValue='N/A'}"/>
+                </StackPanel>
+                <!--Delivery method:-->
                 <!--Save button:-->
                 <Button Click="Save_Click">
                     <Button.Content>
@@ -97,6 +102,7 @@
                     <TextBox Text="{Binding OrderBeingEdited.Notes, Mode=TwoWay}" TextWrapping="Wrap"/>
                 </StackPanel>
                 <!--Edit event buttons-->
+                <!--Not implemented yet-->
             </StackPanel>
         </StackPanel>
     </Grid>
