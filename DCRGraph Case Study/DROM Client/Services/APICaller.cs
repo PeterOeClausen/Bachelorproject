@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+
 
 namespace DROM_Client.Services
 {
@@ -16,7 +16,7 @@ namespace DROM_Client.Services
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost:57815/");
-                var response = await client.PutAsXmlAsync("api/parse", newOrder);
+                var response = await client.PostAsXmlAsync("api/parse", newOrder);
                 return response.StatusCode.ToString();
                 //var content = new FormUrlEncodedContent(newOrder);
                 //var response = await client.PostAsJson("api/parse", content);

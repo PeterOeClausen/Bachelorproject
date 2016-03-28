@@ -59,8 +59,33 @@ namespace DROM_Client.Views
                 Customer = new Customer()
                 {
                     FirstAndMiddleNames = "Bob",
-                    LastName = "Bobson"
-                }
+                    LastName = "Bobson",
+                    City = "TestCity",
+                    Email = "Test@mail.dk",
+                    Phone = 12121212,
+                    StreetAndNumber = "testgade 12",
+                    ZipCode = 2300
+                },
+                ItemsAndQuantity = new Dictionary<Item, int>()
+                {
+                    {new Item()
+                    {
+                        Name = "Cheese Burger",
+                        Price = 50,
+                        Category = "Burger",
+                        Description = "Burger with cheese"
+                    }, 2},
+                    {new Item()
+                    {
+                        Name = "Coca Cola",
+                        Price = 30,
+                        Category = "Drink",
+                        Description = "Coca Cola bottle 50cl"
+                    }, 4 }
+                },
+                Notes = "this is a very special and very testy order",
+                OrderType = "Delivery",
+                OrderDate = DateTime.Now
             });
         }
     }

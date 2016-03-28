@@ -50,7 +50,7 @@ namespace WebAPI.XMLParser
 
         private EventAndRolesContainer ParseNodes(XDocument doc)
         {
-            //Parsing constraints:
+            //Mapper constraints:
             var idOfIncludedEvents = (from includedEvent in doc.Descendants("included").Elements()
                                       select includedEvent.FirstAttribute.Value); //Think about checking for ID.
 

@@ -7,6 +7,8 @@ using System.Web.Http;
 using DROM_Client.Models.NewOrderData;
 using Newtonsoft.Json;
 using WebAPI.Models.DBObjects;
+using WebAPI.Models.Parsing;
+using WebAPI.XMLParser;
 
 namespace WebAPI.Controllers
 {
@@ -24,11 +26,28 @@ namespace WebAPI.Controllers
             }
         }
 
-        public void Post([FromBody] NewOrderInfo info)
+        public HttpResponseMessage Post([FromBody] NewOrderInfo info)
         {
-            var qwe = info;
 
-            Console.WriteLine(qwe.ToString());
+            try
+            {
+                var qwe = new Mapper(new DCRXmlParser().Parse(new Workflow1().Workflow), info);
+                return new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.NoContent
+                };
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.BadRequest
+                };
+                throw;
+            }
+            
+
+            
         }
     }
 }

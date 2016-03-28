@@ -210,11 +210,12 @@
     <Compile Include="Models\DBObjects\OrderDetail.cs" />
     <Compile Include="Models\DBObjects\Role.cs" />
     <Compile Include="Models\Parsing\GraphObjects.cs" />
-    <Compile Include="Models\Parsing\Parsing.cs" />
+    <Compile Include="Models\Parsing\Mapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XMLParser\Constraint.cs" />
     <Compile Include="XMLParser\DCRXmlParser.cs" />
     <Compile Include="XMLParser\EventAndRolesContainer.cs" />
+    <Compile Include="XMLParser\Workflow1.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

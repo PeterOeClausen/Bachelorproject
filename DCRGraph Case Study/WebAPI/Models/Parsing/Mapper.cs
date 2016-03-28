@@ -11,10 +11,10 @@ using System.Data.Entity;
 
 namespace WebAPI.Models.Parsing
 {
-    class Parsing
+    class Mapper
     {
         
-        public Parsing(EventAndRolesContainer container, NewOrderInfo orderInfo)
+        public Mapper(EventAndRolesContainer container, NewOrderInfo orderInfo)
         {
             using (var db = new WebAPI.Models.DBObjects.Database())
             {
@@ -31,10 +31,33 @@ namespace WebAPI.Models.Parsing
                         {
 
                             DCRGraph = graph,
-                            OrderDate = DateTime.Now,
+                            OrderDate = orderInfo.OrderDate,
                             Notes = orderInfo.Notes,
-                            Table = orderInfo.Table
+                            Table = orderInfo.Table,
+                            OrderDetails = new List<OrderDetail>()
                             };
+                        foreach (var iq in orderInfo.ItemsAndQuantity)
+                        {
+                            
+                            var item =
+                                db.Items
+                                    .FirstAsync(i => i.Name == iq.Key.Name).Result;
+                            if (item == null)
+                            {
+                                throw new Exception("Item '" + iq.Key.Name + "' did not exist in the database");
+                            }
+                            
+                            order.OrderDetails.Add(
+                                new OrderDetail()
+                                {
+                                    ItemId = item.Id,
+                                    Item = item,
+                                    Order = order
+                                });
+
+                        }
+                        
+                        
 
 
                         //Determine if there should be a customer on the order
@@ -138,7 +161,7 @@ namespace WebAPI.Models.Parsing
 
 
                         db.DCREvents.AddRange(container.Events);
-
+                        db.SaveChanges();
                         
 
                         scope.Complete();
