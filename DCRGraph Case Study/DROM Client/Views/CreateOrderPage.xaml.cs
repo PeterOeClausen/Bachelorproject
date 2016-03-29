@@ -32,6 +32,7 @@ namespace DROM_Client.Views
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+
             Frame.Navigate(typeof(OrderPage));
         }
 

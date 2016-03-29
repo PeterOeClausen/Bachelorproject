@@ -38,7 +38,11 @@
                 <StackPanel Margin="20,20,0,0">
                     <!--Delivery method-->
                     <TextBlock Text="Delivery method:" FontWeight="Bold" />
-                    <ComboBox />
+                    <ComboBox>
+                        <ComboBoxItem Content="For serving" />
+                        <ComboBoxItem Content="For pickup" />
+                        <ComboBoxItem Content="For delivery" />
+                    </ComboBox>
                     <!--Items on order-->
                     <StackPanel Background="Wheat">
                         <TextBlock Text="Items on order:" Margin="0,20,0,0" FontWeight="Bold" />

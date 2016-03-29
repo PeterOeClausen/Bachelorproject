@@ -46,12 +46,30 @@ namespace DROM_Client.Views
 
         private void Chef_Click(object sender, RoutedEventArgs e)
         {
-            var viewModel = ((Button) sender).DataContext as CreateOrderPageViewModel;
-            if (viewModel.Chef)
-            {
-                viewModel.Chef = false;
-            }
+            var viewModel = ((Button) sender).DataContext as OrderPageViewModel;
+            if (viewModel.Chef) viewModel.Chef = false;
             else viewModel.Chef = true;
+        }
+
+        private void Delivery_Click(object sender, RoutedEventArgs e)
+        {
+            var viewModel = ((Button)sender).DataContext as OrderPageViewModel;
+            if (viewModel.Delivery)viewModel.Delivery = false;
+            else viewModel.Delivery = true;
+        }
+
+        private void Manger_Click(object sender, RoutedEventArgs e)
+        {
+            var viewModel = ((Button)sender).DataContext as OrderPageViewModel;
+            if (viewModel.Manager) viewModel.Manager = false;
+            else viewModel.Manager = true;
+        }
+
+        private void Waiter_Click(object sender, RoutedEventArgs e)
+        {
+            var viewModel = ((Button)sender).DataContext as OrderPageViewModel;
+            if (viewModel.Waiter) viewModel.Waiter = false;
+            else viewModel.Waiter = true;
         }
     }
 }
