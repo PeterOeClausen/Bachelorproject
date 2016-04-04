@@ -66,22 +66,13 @@ namespace DROM_Client.Views
             switch ((DeliveryCombobox.SelectedItem as ComboBoxItem).Content as string) //Checks if all data is inserted
             {
                 case "For serving":
-                    if (!All_Information_Entered_For_Serving())
-                    {
-                        return;
-                    }
+                    if (!All_Information_Entered_For_Serving()) return;
                     break;
                 case "For pickup":
-                    if(!All_Information_Entered_For_Pickup())
-                    {
-                        return;
-                    }
+                    if(!All_Information_Entered_For_Pickup()) return;
                     break;
                 case "For delivery":
-                    if(!All_Information_Entered_For_Delivery())
-                    {
-                        return;
-                    }
+                    if(!All_Information_Entered_For_Delivery()) return;
                     break;
             }
             viewModel.SaveOrder();
@@ -146,16 +137,19 @@ namespace DROM_Client.Views
             else if (!int.TryParse(Phone_Text_Box.Text, out phoneNumber))
             {
                 CreateAndShowMessageDialog("Please enter a valid phone number (use integers only).");
+                return false;
             }
             else if (phoneNumber == 0)
             {
                 CreateAndShowMessageDialog("Sorry, but the phone number cannot be '0'");
+                return false;
             }
             else if (Street_And_Number_Text_Box.Text == "")
             {
                 CreateAndShowMessageDialog("Please enter the customer's street and number");
+                return false;
             }
-
+            
 
             
             return true;

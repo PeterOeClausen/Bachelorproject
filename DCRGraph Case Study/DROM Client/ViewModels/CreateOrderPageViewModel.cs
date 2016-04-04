@@ -19,6 +19,7 @@ namespace DROM_Client.ViewModels
         public CreateOrderPageViewModel()
         {
             this._APICaller = new APICaller();
+            getItems();
             ItemCollection = new ObservableCollection<Item>()
             {
                 new Item
@@ -39,6 +40,11 @@ namespace DROM_Client.ViewModels
                 }
             };
             //Change to get items from APICaller.
+        }
+
+        private async void getItems()
+        {
+            List<Item> items = await _APICaller.GetItems();
         }
         
         public UINewOrderInfo OrderBeingCreated { get; set; } = new UINewOrderInfo() //Just bindable data for design

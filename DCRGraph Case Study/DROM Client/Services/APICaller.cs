@@ -97,7 +97,7 @@ namespace DROM_Client.Services
                 try
                 {
                     client.BaseAddress = new Uri("http://localhost:57815/");
-                    var response = await client.GetAsync("api/order", new CancellationToken());
+                    var response = await client.GetAsync("api/order/getitem", new CancellationToken());
                     var itemsReceived = await response.Content.ReadAsAsync<List<Item>>();
                     response.EnsureSuccessStatusCode();
 
@@ -110,6 +110,7 @@ namespace DROM_Client.Services
                     throw;
                 }
             }
+            return items;
         }
     }
 }
