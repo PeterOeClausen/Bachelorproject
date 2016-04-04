@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WebAPI.Models.DBObjects;
 
@@ -11,7 +12,7 @@ namespace WebAPI.Controllers
     public class OrderController : ApiController
     {
         // GET api/<controller>
-        public List<Item> GetItems()
+        public HttpResponseMessage GetItems()
         {
 
             using (var db = new Database())
@@ -22,8 +23,9 @@ namespace WebAPI.Controllers
                 {
                     itemList.Add(i);
                 }
+                return Request.CreateResponse(HttpStatusCode.OK, itemList);
 
-                return itemList;
+             
             }
         }
 
