@@ -34,14 +34,16 @@ namespace WebAPI.Models.Parsing
                             OrderDate = orderInfo.OrderDate,
                             Notes = orderInfo.Notes,
                             Table = orderInfo.Table,
-                            OrderDetails = new List<OrderDetail>()
+                            OrderDetails = new List<OrderDetail>(),
+                            OrderType = orderInfo.OrderType
+                            
                             };
                         foreach (var iq in orderInfo.ItemsAndQuantity)
                         {
                             
                             var item =
                                 db.Items
-                                    .FirstAsync(i => i.Name == iq.Key.Name).Result;
+                                    .FirstOrDefaultAsync(i => i.Name == iq.Key.Name).Result;
                             if (item == null)
                             {
                                 throw new Exception("Item '" + iq.Key.Name + "' did not exist in the database");
@@ -66,69 +68,96 @@ namespace WebAPI.Models.Parsing
                         {
                             var customer =
                                 db.Customers
-                                    .FirstAsync(c => c.Phone == orderInfo.Customer.Phone).Result;
+                                    .FirstOrDefaultAsync(c => c.Phone == orderInfo.Customer.Phone).Result;
 
 
 
                             if (customer == null)
                             {
+                                if(orderInfo.Customer.Phone == 0) throw new Exception("Missing phone number on customer - Mapper.cs");
                                 customer = new Customer()
                                 {
-                                    City = orderInfo.Customer.City,
-                                    Email = orderInfo.Customer.Email,
-                                    FirstName = orderInfo.Customer.FirstAndMiddleNames,
-                                    LastName = orderInfo.Customer.LastName,
+                                    City = orderInfo.Customer.City ?? "n/a",
+                                    Email = orderInfo.Customer.Email ?? "n/a",
+                                    FirstName = orderInfo.Customer.FirstAndMiddleNames ?? "n/a",
+                                    LastName = orderInfo.Customer.LastName ?? "n/a",
                                     Phone = orderInfo.Customer.Phone,
-                                    StreetAndNumber = orderInfo.Customer.StreetAndNumber,
-                                    Zipcode = orderInfo.Customer.ZipCode,
+                                    StreetAndNumber = orderInfo.Customer.StreetAndNumber ?? "n/a",
+                                    Zipcode = orderInfo.Customer.ZipCode
                                     
 
                                 };
+                                
                                 customer.Orders = new HashSet<Order>();
                                 customer.Orders.Add(order);
                             }
                             order.Customer = customer;
 
                         }
-                        
+                        db.Orders.Add(order);
+                        db.SaveChanges();
 
-                        
 
-                        //put roles on events
-                        foreach (var i in container.EventRoles)
-                        {
 
-                            
-                            var role = db.Roles.FirstAsync(x => x.Name.Equals(i.RoleName)).Result;
-                            container.Events.Find(x => x.EventId.Equals(i.EventId)).Roles.Add(role);
 
-                        }
+                        /*
+                        var adAgency = context.Companies.Single(c => c.AgencyType == AgencyType.Advertising);
+                        var adClients = context.Companies.Where(c => c.City.StartsWith("B") && c.AgencyType == AgencyType.NotSet).ToList();
+                        adAgency.Clients = adClients;
+
+                        var digitalAgency = context.Companies.Single(c => c.AgencyType == AgencyType.Digital);
+                        var digiClients = context.Companies.Where(c => c.City.StartsWith("L") && c.AgencyType == AgencyType.NotSet).ToList();
+                        digitalAgency.Clients = digiClients;
+
+                        var prAgency = context.Companies.Single(c => c.AgencyType == AgencyType.PR);
+                        var client = context.Companies.Single(c => c.CompanyName == "Black");
+                        prAgency.Clients.Add(client);
+                        */
 
                         //put groups on events
                         foreach (var i in container.EventGroups)
                         {
 
 
-                            var group = db.Groups.FirstAsync(x => x.Name.Equals(i.GroupName)).Result;
+                            var group = db.Groups.FirstOrDefaultAsync(x => x.Name.Equals(i.GroupName)).Result;
                             container.Events.Find(x => x.EventId.Equals(i.EventId)).Groups.Add(group);
+
 
                         }
 
+                        
+                        //put roles on events
+                        foreach (var i in container.EventRoles)
+                        {
+
+                            var role = db.Roles.FirstOrDefaultAsync(x => x.Name.Equals(i.RoleName)).Result;
+                            container.Events.Find(x => x.EventId.Equals(i.EventId)).Roles.Add(role);
+
+
+                        }
+                        
+                        
                         //put inclusions on events
                         foreach (var i in container.Inclusions)
                         {
 
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).Includes.Add(
-                                container.Events.Find(x => x.EventId.Equals(i.toNodeId)));
-                            
-                        }
+                            var fromEvent = container.Events.Find(x => x.EventId.Equals(i.fromNodeId));
+                            var toEvent = container.Events.Find(x => x.EventId.Equals(i.toNodeId));
 
+                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).IncludeFrom.Add(toEvent);
+                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).IncludeTo.Add(fromEvent);
+
+                        }
+                        
                         //put exclusions on events
                         foreach (var i in container.Exclusions)
                         {
 
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).Includes.Add(
-                                container.Events.Find(x => x.EventId.Equals(i.toNodeId)));
+                            var fromEvent = container.Events.Find(x => x.EventId.Equals(i.fromNodeId));
+                            var toEvent = container.Events.Find(x => x.EventId.Equals(i.toNodeId));
+
+                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ExcludeFrom.Add(toEvent);
+                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ExcludeTo.Add(fromEvent);
 
                         }
 
@@ -136,8 +165,11 @@ namespace WebAPI.Models.Parsing
                         foreach (var i in container.Responses)
                         {
 
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).Includes.Add(
-                                container.Events.Find(x => x.EventId.Equals(i.toNodeId)));
+                            var fromEvent = container.Events.Find(x => x.EventId.Equals(i.fromNodeId));
+                            var toEvent = container.Events.Find(x => x.EventId.Equals(i.toNodeId));
+
+                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ResponseFrom.Add(toEvent);
+                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ResponseTo.Add(fromEvent);
 
                         }
 
@@ -145,8 +177,11 @@ namespace WebAPI.Models.Parsing
                         foreach (var i in container.Conditions)
                         {
 
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).Includes.Add(
-                                container.Events.Find(x => x.EventId.Equals(i.toNodeId)));
+                            var fromEvent = container.Events.Find(x => x.EventId.Equals(i.fromNodeId));
+                            var toEvent = container.Events.Find(x => x.EventId.Equals(i.toNodeId));
+
+                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ConditionReverseFrom.Add(toEvent);
+                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ConditionReverseTo.Add(fromEvent);
 
                         }
 
@@ -154,19 +189,25 @@ namespace WebAPI.Models.Parsing
                         foreach (var i in container.Milestones)
                         {
 
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).Includes.Add(
-                                container.Events.Find(x => x.EventId.Equals(i.toNodeId)));
+                            var fromEvent = container.Events.Find(x => x.EventId.Equals(i.fromNodeId));
+                            var toEvent = container.Events.Find(x => x.EventId.Equals(i.toNodeId));
+
+                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).MilestoneReverseFrom.Add(toEvent);
+                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).MilestoneReverseTo.Add(fromEvent);
 
                         }
+                        
 
-
-                        db.DCREvents.AddRange(container.Events);
+                        foreach (var e in container.Events)
+                        {
+                            db.Entry(e).State = EntityState.Modified;
+                        }
                         db.SaveChanges();
                         
 
                         scope.Complete();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
 
                         

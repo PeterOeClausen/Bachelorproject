@@ -27,7 +27,7 @@ namespace WebAPI.Models.DBObjects
 
         public string StreetAndNumber { get; set; }
 
-        public int Zipcode { get; set; }
+        public int? Zipcode { get; set; }
 
         public string City { get; set; }
 

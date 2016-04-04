@@ -51,7 +51,7 @@ namespace WebAPI.Migrations
 
             var groups = new List<Group>()
             {
-                new Group() {Name = "only pedning"},
+                new Group() {Name = "only pending"},
                 new Group() {Name = "Edit events"}
             };
 

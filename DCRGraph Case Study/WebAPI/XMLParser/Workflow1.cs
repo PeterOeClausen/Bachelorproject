@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +9,25 @@ namespace WebAPI.XMLParser
 {
     class Workflow1
     {
-        public string Workflow =
-            @"<dcrgraph title='Bachelor 2' dataTypesStatus='hide' filterLevel='4' zoomLevel='-4'>
+
+        public string getflow()
+        {
+            string xmlFilepath = @"C:/Bachelor2.xml";
+            String line;
+            StringBuilder sb = new StringBuilder();
+            using (StreamReader sr = new StreamReader(xmlFilepath))
+            {
+                
+                while ((line = sr.ReadLine()) != null)
+                {
+                    sb.AppendLine(line);
+                }
+            }
+            return line;
+        }
+
+        public String Workflow =
+@"<dcrgraph title='Bachelor 2' dataTypesStatus='hide' filterLevel='4' zoomLevel='-4'>
     <specification>
         <resources>
             <events>

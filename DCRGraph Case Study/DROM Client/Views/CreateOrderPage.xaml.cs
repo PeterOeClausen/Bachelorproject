@@ -70,17 +70,11 @@ namespace DROM_Client.Views
                 {
                     {new Item()
                     {
-                        Name = "Cheese Burger",
-                        Price = 50,
-                        Category = "Burger",
-                        Description = "Burger with cheese"
+                        Name = "Lone Star"
                     }, 2},
                     {new Item()
                     {
-                        Name = "Coca Cola",
-                        Price = 30,
-                        Category = "Drink",
-                        Description = "Coca Cola bottle 50cl"
+                        Name = "Cola"
                     }, 4 }
                 },
                 Notes = "this is a very special and very testy order",

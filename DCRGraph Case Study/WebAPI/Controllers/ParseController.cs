@@ -15,28 +15,21 @@ namespace WebAPI.Controllers
     public class ParseController : ApiController
     {
 
-        public string Get()
-        {
-
-            using (var db = new Database())
-            {
-                var items = db.Items.Count();
-
-                return "" + items;
-            }
-        }
+        
 
         public HttpResponseMessage Post([FromBody] NewOrderInfo info)
         {
 
-            try
-            {
-                var qwe = new Mapper(new DCRXmlParser().Parse(new Workflow1().Workflow), info);
+            
+
+            //try
+            //{
+                var qwe = new Mapper(new DCRXmlParser().Parse(Properties.Resources.Bachelor2), info);
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.NoContent
                 };
-            }
+            /*}
             catch (Exception ex)
             {
                 return new HttpResponseMessage()
@@ -44,7 +37,7 @@ namespace WebAPI.Controllers
                     StatusCode = HttpStatusCode.BadRequest
                 };
                 throw;
-            }
+            }*/
             
 
             

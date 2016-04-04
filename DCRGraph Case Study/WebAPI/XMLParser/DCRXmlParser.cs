@@ -74,7 +74,7 @@ namespace WebAPI.XMLParser
 
                 //Assigning Name:
                 Event.Label = (from labelMapping in doc.Descendants("labelMapping")
-                                    where labelMapping.Attribute("eventId").Value.Equals(Event.Id)
+                                    where labelMapping.Attribute("eventId").Value.Equals(Event.EventId)
                                     select labelMapping.Attribute("labelId").Value).FirstOrDefault();
 
                 //Assigning Roles:
