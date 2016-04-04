@@ -6,19 +6,25 @@ namespace WebAPI.Models.DBObjects
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class DCREvent
+    public class DCREvent
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        
         public DCREvent()
         {
             EventUIElemements = new HashSet<EventUIElemement>();
-            Includes = new HashSet<DCREvent>();
-            Excludes = new HashSet<DCREvent>();
-            Responses = new HashSet<DCREvent>();
-            MilestonesToMe = new HashSet<DCREvent>();
+
             Groups = new HashSet<Group>();
             Roles = new HashSet<Role>();
-            ConditionsToMe = new HashSet<DCREvent>();
+            this.IncludeFrom = new HashSet<DCREvent>();
+            this.IncludeTo = new HashSet<DCREvent>();
+            this.ExcludeFrom = new HashSet<DCREvent>();
+            this.ExcludeTo = new HashSet<DCREvent>();
+            this.ResponseFrom = new HashSet<DCREvent>();
+            this.ResponseTo = new HashSet<DCREvent>();
+            this.MilestoneReverseFrom = new HashSet<DCREvent>();
+            this.MilestoneReverseTo = new HashSet<DCREvent>();
+            this.ConditionReverseFrom = new HashSet<DCREvent>();
+            this.ConditionReverseTo = new HashSet<DCREvent>();
             /*
             DCREvents3 = new HashSet<DCREvent>();
             DCRGraphs = new HashSet<DCRGraph>();
@@ -30,6 +36,26 @@ namespace WebAPI.Models.DBObjects
             DCREvents6 = new HashSet<DCREvent>();
             */
         }
+
+        public ICollection<DCREvent> ConditionReverseTo { get; set; }
+               
+        public ICollection<DCREvent> ConditionReverseFrom { get; set; }
+               
+        public ICollection<DCREvent> MilestoneReverseTo { get; set; }
+               
+        public ICollection<DCREvent> MilestoneReverseFrom { get; set; }
+               
+        public ICollection<DCREvent> ResponseTo { get; set; }
+               
+        public ICollection<DCREvent> ResponseFrom { get; set; }
+               
+        public ICollection<DCREvent> ExcludeTo { get; set; }
+               
+        public ICollection<DCREvent> ExcludeFrom { get; set; }
+
+        public ICollection<DCREvent> IncludeFrom { get; set; }
+         
+        public ICollection<DCREvent> IncludeTo { get; set; }
 
         public int Id { get; set; }
 
@@ -55,53 +81,9 @@ namespace WebAPI.Models.DBObjects
         [Required]
         public bool Parent { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+      
         public virtual ICollection<EventUIElemement> EventUIElemements { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> Includes { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> ConditionsToMe { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> MilestonesToMe { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> Responses { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Group> Groups { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Role> Roles { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> Excludes { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> Children { get; set; }
-        /*
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCRGraph> DCRGraphs { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents13 { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents4 { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents14 { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents5 { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents15 { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DCREvent> DCREvents6 { get; set; }
-        */
     }
 }

@@ -10,10 +10,10 @@ namespace DROM_Client.Models.NewOrderData
     public class NewOrderInfo
     {
         public Dictionary<Item, int> ItemsAndQuantity { get; set; }
-        public string OrderType { get; set; } //Either "For Serving", "For Delivery", "For Pickup"
-        public Customer Customer { get; set; } //Null if Serving, Phone if pickup, All if delivery
-        public DateTime OrderDate { get; set; } //Client side sets this
+        public string OrderType { get; set; } //Either "Serving", "Delivery", "Pickup"
+        public Customer Customer { get; set; } //Null if Serving, otherwise all info.
+        public DateTime OrderDate { get; set; } //DateTime.now in client
         public string Notes { get; set; }
-        public string Table { get; set; } // -1 if order is for pickup or delivery
+        public string Table { get; set; } 
     }
 }

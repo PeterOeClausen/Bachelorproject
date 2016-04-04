@@ -224,8 +224,27 @@ namespace DROM_Client.Views
                 Customer = new Customer()
                 {
                     FirstAndMiddleNames = "Bob",
-                    LastName = "Bobson"
-                }
+                    LastName = "Bobson",
+                    City = "TestCity",
+                    Email = "Test@mail.dk",
+                    Phone = 12121212,
+                    StreetAndNumber = "testgade 12",
+                    ZipCode = 2300
+                },
+                ItemsAndQuantity = new Dictionary<Item, int>()
+                {
+                    {new Item()
+                    {
+                        Name = "Lone Star"
+                    }, 2},
+                    {new Item()
+                    {
+                        Name = "Cola"
+                    }, 4 }
+                },
+                Notes = "this is a very special and very testy order",
+                OrderType = "Delivery",
+                OrderDate = DateTime.Now
             });
         }
     }

@@ -7,28 +7,40 @@ using System.Web.Http;
 using DROM_Client.Models.NewOrderData;
 using Newtonsoft.Json;
 using WebAPI.Models.DBObjects;
+using WebAPI.Models.Parsing;
+using WebAPI.XMLParser;
 
 namespace WebAPI.Controllers
 {
     public class ParseController : ApiController
     {
 
-        public string Get()
+        
+
+        public HttpResponseMessage Post([FromBody] NewOrderInfo info)
         {
 
-            using (var db = new Database())
+            
+
+            //try
+            //{
+                var qwe = new Mapper(new DCRXmlParser().Parse(Properties.Resources.Bachelor2), info);
+                return new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.NoContent
+                };
+            /*}
+            catch (Exception ex)
             {
-                var items = db.Items.Count();
+                return new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.BadRequest
+                };
+                throw;
+            }*/
+            
 
-                return "" + items;
-            }
-        }
-
-        public void Post([FromBody] NewOrderInfo info)
-        {
-            var qwe = info;
-
-            Console.WriteLine(qwe.ToString());
+            
         }
     }
 }

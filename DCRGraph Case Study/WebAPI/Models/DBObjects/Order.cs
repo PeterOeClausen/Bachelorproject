@@ -25,9 +25,7 @@ namespace WebAPI.Models.DBObjects
         public string Table { get; set; }
 
         [Required]
-        public string DeliveryMethod { get; set; }
-
-        public int DCRGraph_Id { get; set; }
+        public string OrderType { get; set; }
 
         public int? Customer_Id { get; set; }
 
