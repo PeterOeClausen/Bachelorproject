@@ -74,7 +74,7 @@ namespace DROM_Client.Services
 
         public async Task<List<Item>> GetItems() //Needs to be called only one time.
         {
-            return new List<Item> {
+            var items = new List<Item> {
                 new Item
                 {
                     Name = "Cola"
@@ -92,6 +92,24 @@ namespace DROM_Client.Services
                     Name = "Burger"
                 }
             };
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = new Uri("http://localhost:57815/");
+                    var response = await client.GetAsync("api/order", new CancellationToken());
+                    var itemsReceived = await response.Content.ReadAsAsync<List<Item>>();
+                    response.EnsureSuccessStatusCode();
+
+                    //foreach(Item item in itemsReceived)
+                    //var content = new FormUrlEncodedContent(newOrder);
+                    //var response = await client.PostAsJson("api/parse", content);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
         }
     }
 }
