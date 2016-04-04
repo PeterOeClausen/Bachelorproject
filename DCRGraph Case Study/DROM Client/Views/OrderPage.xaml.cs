@@ -44,6 +44,7 @@ namespace DROM_Client.Views
             Frame.Navigate(typeof(CreateOrderPage));
         }
 
+        #region View selection buttons
         private void Chef_Click(object sender, RoutedEventArgs e)
         {
             var viewModel = ((Button) sender).DataContext as OrderPageViewModel;
@@ -70,6 +71,14 @@ namespace DROM_Client.Views
             var viewModel = ((Button)sender).DataContext as OrderPageViewModel;
             if (viewModel.Waiter) viewModel.Waiter = false;
             else viewModel.Waiter = true;
+        }
+        #endregion
+
+        private void Execute_Event_Click(object sender, RoutedEventArgs e)
+        {
+            var EventToExecute = ((Button)sender).Tag as Event;
+            var ViewModel = DataContext as OrderPageViewModel;
+            ViewModel.ExecuteEvent(EventToExecute);
         }
     }
 }

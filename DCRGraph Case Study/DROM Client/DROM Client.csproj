@@ -110,6 +110,7 @@
     <Compile Include="Models\BusinessObjects\Order.cs" />
     <Compile Include="Models\BusinessObjects\Role.cs" />
     <Compile Include="Models\NewOrderData\NewOrderInfo.cs" />
+    <Compile Include="Models\ObjectsOptimizedForUI\UINewOrderInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\APICaller.cs" />
     <Compile Include="ViewModels\CreateOrderPageViewModel.cs" />

@@ -20,34 +20,37 @@
                 <StackPanel>
                     <TextBlock Text="Customer information:" FontWeight="Bold" Margin="0,20,0,0"/>
                     <TextBlock Text="First name:"/>
-                    <TextBox Text="{Binding OrderBeingCreated.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" MinWidth="300" HorizontalAlignment="Left"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" MinWidth="300" HorizontalAlignment="Left" x:Name="First_Name_Text_Box"/>
                     <TextBlock Text="Last name:" Margin="0,20,0,0"/>
-                    <TextBox Text="{Binding OrderBeingCreated.Customer.LastName, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.LastName, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Last_Name_Text_Box"/>
                     <TextBlock Text="Email:" Margin="0,20,0,0"/>
-                    <TextBox Text="{Binding OrderBeingCreated.Customer.Email, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.Email, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Email_Text_Box"/>
                     <TextBlock Text="Phone:" Margin="0,20,0,0"/>
-                    <TextBox Text="{Binding OrderBeingCreated.Customer.Phone, Mode=TwoWay, FallbackValue='N/A'}"/>
-                    <TextBlock Text="Street:" Margin="0,20,0,0"/>
-                    <TextBox Text="{Binding OrderBeingCreated.Customer.StreetAndNumber, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.Phone, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Phone_Text_Box"/>
+                    <TextBlock Text="Street and number:" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.StreetAndNumber, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Street_And_Number_Text_Box"/>
                     <TextBlock Text="Zip:" Margin="0,20,0,0"/>
-                    <TextBox Text="{Binding OrderBeingCreated.Customer.ZipCode, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.ZipCode, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Zip_Text_Box"/>
                     <TextBlock Text="City:" Margin="0,20,0,0"/>
-                    <TextBox Text="{Binding OrderBeingCreated.Customer.City, Mode=TwoWay, FallbackValue='N/A'}"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Customer.City, Mode=TwoWay, FallbackValue='N/A'}" x:Name="City_Text_Box"/>
                 </StackPanel>
-                <!--Delivery method and items on order-->
+                <!--Delivery method, table number and items on order-->
                 <StackPanel Margin="20,20,0,0">
                     <!--Delivery method-->
                     <TextBlock Text="Delivery method:" FontWeight="Bold" />
-                    <ComboBox>
+                    <ComboBox x:Name="DeliveryCombobox">
                         <ComboBoxItem Content="For serving" />
                         <ComboBoxItem Content="For pickup" />
                         <ComboBoxItem Content="For delivery" />
                     </ComboBox>
+                    <!--Table number-->
+                    <TextBlock Text="Table number:" FontWeight="Bold"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Table}" x:Name="Table_Number_Text_Box"/>
                     <!--Items on order-->
                     <StackPanel Background="Wheat">
                         <TextBlock Text="Items on order:" Margin="0,20,0,0" FontWeight="Bold" />
                         <!--Items list:-->
-                        <ListView ItemsSource="{Binding OrderBeingCreated.ItemsAndQuantity}" Background="AntiqueWhite">
+                        <ListView ItemsSource="{Binding OrderBeingCreated.ItemsAndQuantity}" Background="AntiqueWhite" x:Name="Items_On_Order_List_View">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -62,14 +65,20 @@
                         <StackPanel Orientation="Horizontal">
                             <StackPanel>
                                 <TextBlock Text="Quantity:"/>
-                                <TextBox />
+                                <TextBox x:Name="Quantity_Box"/>
                             </StackPanel>
                             <StackPanel>
                                 <TextBlock Text="Item:"/>
-                                <TextBox />
+                                <ComboBox ItemsSource="{Binding ItemCollection}" x:Name="Item_Box" >
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </StackPanel>
                             <Button Content="Add" Click="Add_Click"/>
-                            <Button Content="Delete" Click="Remove_Click"/>
+                            <Button Content="Remove" Click="Remove_Click"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

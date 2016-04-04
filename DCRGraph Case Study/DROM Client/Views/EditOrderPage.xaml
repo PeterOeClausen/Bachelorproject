@@ -14,22 +14,28 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
             <TextBlock Text="Edit order" FontWeight="Bold" FontSize="30" />
+            <!--Top bar-->
             <StackPanel Orientation="Horizontal">
                 <!--Order Id:-->
-                <StackPanel>
+                <StackPanel MinWidth="100">
                     <TextBlock Text="Order Id"/>
                     <TextBlock Text="{Binding OrderBeingEdited.Id}"/>
                 </StackPanel>
                 <!--Order date:-->
-                <StackPanel>
+                <StackPanel MinWidth="200">
                     <TextBlock Text="Order date:"/>
                     <TextBlock Text="{Binding OrderBeingEdited.OrderDate, FallbackValue='N/A'}"/>
                 </StackPanel>
-                <StackPanel>
-                    <TextBlock Text="Delivery method:"/>
+                <!--Delivery method:-->
+                <StackPanel MinWidth="150">
+                    <TextBlock Text="Order type:"/>
                     <TextBlock Text="{Binding OrderBeingEdited.OrderType, FallbackValue='N/A'}"/>
                 </StackPanel>
-                <!--Delivery method:-->
+                <!--Table number:-->
+                <StackPanel MinWidth="130">
+                    <TextBlock Text="Table number:" FontWeight="Bold"/>
+                    <TextBox Text="{Binding OrderBeingEdited.Table, FallbackValue='N/A'}"/>
+                </StackPanel>
                 <!--Save button:-->
                 <Button Click="Save_Click">
                     <Button.Content>
@@ -49,6 +55,7 @@
                     </Button.Content>
                 </Button>
             </StackPanel>
+            <!--Below top bar-->
             <StackPanel Orientation="Horizontal">
                 <!--Customer information:-->
                 <StackPanel>
@@ -69,7 +76,7 @@
                     <TextBox Text="{Binding OrderBeingEdited.Customer.City, Mode=TwoWay, FallbackValue='N/A'}"/>
                 </StackPanel>
                 <!--Items on order:-->
-                <StackPanel Padding="20,0,0,0" Background="Wheat">
+                <StackPanel Padding="20,0,20,0" Background="Wheat">
                     <TextBlock Text="Items on order:" Margin="0,20,0,0" FontWeight="Bold" />
                     <!--Items list:-->
                     <ListView ItemsSource="{Binding OrderBeingEdited.ItemsAndQuantity}" Background="AntiqueWhite">
@@ -98,11 +105,23 @@
                     </StackPanel>
                 </StackPanel>
                 <!--Notes:-->
-                <StackPanel MinWidth="500" MaxWidth="500">
+                <StackPanel MinWidth="500" MaxWidth="500" Padding="20,0,20,0">
                     <TextBlock Text="Notes:" FontWeight="Bold" Margin="0,20,0,0"/>
                     <TextBox Text="{Binding OrderBeingEdited.Notes, Mode=TwoWay}" TextWrapping="Wrap"/>
                 </StackPanel>
                 <!--Edit event buttons-->
+                <StackPanel MinWidth="500" MaxWidth="500" Padding="20,0,20,0">
+                    <TextBlock Text="Edit events to execute:" FontWeight="Bold" Margin="0,20,0,0"/>
+                    <ListView ItemsSource="{Binding OrderBeingEdited.DCRGraph.Events}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Button Content="{Binding Label}" Click="Edit_Event_Execute_Click"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
                 <!--Not implemented yet-->
             </StackPanel>
         </StackPanel>

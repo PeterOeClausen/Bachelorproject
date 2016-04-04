@@ -4,14 +4,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DROM_Client.Models.NewOrderData;
+using DROM_Client.Services;
+using DROM_Client.Models.ObjectsOptimizedForUI;
+using System.Collections.ObjectModel;
 
 namespace DROM_Client.ViewModels
 {
     public class CreateOrderPageViewModel
     {
-        public Order OrderBeingCreated { get; set; } = new Order()
+        private APICaller _APICaller { get; set; }
+        public ObservableCollection<Item> ItemCollection {get; set;}
+
+        public CreateOrderPageViewModel()
         {
-            Id = 2,
+            this._APICaller = new APICaller();
+            ItemCollection = new ObservableCollection<Item>()
+            {
+                new Item
+                {
+                    Name = "Cola"
+                },
+                new Item
+                {
+                    Name = "Sprite"
+                },
+                new Item
+                {
+                    Name = "Pizza"
+                },
+                new Item
+                {
+                    Name = "Burger"
+                }
+            };
+            //Change to get items from APICaller.
+        }
+        
+        public UINewOrderInfo OrderBeingCreated { get; set; } = new UINewOrderInfo() //Just bindable data for design
+        {
+            //Id = 2,
             ItemsAndQuantity = new Dictionary<Item, int>() {
                     {
                         new Item() {
@@ -36,37 +68,55 @@ namespace DROM_Client.ViewModels
             },
             OrderDate = DateTime.Now,
             Notes = "With extra ice please",
-            DCRGraph = new DCRGraph
-            {
-                Id = 2,
-                Events = new List<Event>() {
-                        new Event() {
-                            Id = 1,
-                            EventId = "Activity 1",
-                            Label = "Cook order for serving",
-                            Description = "Execute to confirm cooking",
-                            StatusMessageAfterExecution = "Order is ready to be served",
-                            Included = true, Pending = true, Executed = false,
-                            Roles = new List<Role> {
-                                new Role() {
-                                    Id = 1,
-                                    Name = "Chef"
-                                }
-                            },
-                            Groups = new List<Group>
-                            {
-                                new Group()
-                                {
-                                    Id = 1,
-                                    Name = "only pending"
-                                }
-                            },
-                            Parent = false
-                        }
-                    }
-            },
-            Table = 1,
-            OrderType = "To be served"
+            Table = "1",
+            OrderType = "To be served"            
         };
+
+        /// <summary>
+        /// RemoveItem takes a key item specified in OrderBeingCreated.ItemsAndQuatity and copies all values from old dictionary into a new dictionary, and replaces the reference.
+        /// Note: This causes PropertyChanged update in UI.
+        /// </summary>
+        /// <param name="key"></param>
+        internal void RemoveItem(Item key)
+        {
+            Dictionary<Item, int> replacementDictionary = new Dictionary<Item, int>();
+            foreach (KeyValuePair<Item, int> entry in OrderBeingCreated.ItemsAndQuantity)
+            {
+                if (entry.Key.Equals(key))  continue;
+                else replacementDictionary.Add(entry.Key, entry.Value);
+            }
+            OrderBeingCreated.ItemsAndQuantity = replacementDictionary;
+        }
+
+        /// <summary>
+        /// AddQuantityAndItem takes an int quantity and an Item (this needs to exist on webserver), copies all values from old dictionary into a new dictionary, adds the new item, and replaces the refference.
+        /// Note: This causes PropertyChanged update in UI.
+        /// </summary>
+        /// <param name="quantity"></param>
+        /// <param name="item"></param>
+        internal void AddQuantityAndItem(int quantity, Item item)
+        {
+            Dictionary<Item, int> replacementDictionary = new Dictionary<Item, int>();
+            foreach (KeyValuePair<Item, int> entry in OrderBeingCreated.ItemsAndQuantity)
+            {
+                replacementDictionary.Add(entry.Key, entry.Value);
+            }
+            replacementDictionary.Add(item, quantity);
+            OrderBeingCreated.ItemsAndQuantity = replacementDictionary;
+        }
+
+        internal void SaveOrder()
+        {
+            NewOrderInfo createdOrder = new NewOrderInfo()
+            {
+                ItemsAndQuantity = OrderBeingCreated.ItemsAndQuantity,
+                OrderType = OrderBeingCreated.OrderType,
+                Customer = OrderBeingCreated.Customer,
+                OrderDate = OrderBeingCreated.OrderDate,
+                Notes = OrderBeingCreated.Notes,
+                Table = OrderBeingCreated.Table
+            };
+            //_APICaller.PostOrderAsync(newOrderInfo);
+        }
     }
 }

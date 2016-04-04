@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using DROM_Client.Models.BusinessObjects;
 using System.Collections.ObjectModel;
 using DROM_Client.Models.BusinessObjects;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using DROM_Client.Services;
 
 namespace DROM_Client.ViewModels
 {
     public class OrderPageViewModel : INotifyPropertyChanged
-    {       
+    {
+        private APICaller _APICaller { get; set; }
+
         public bool Chef
         {
             get { return _chef; }
@@ -62,6 +64,8 @@ namespace DROM_Client.ViewModels
 
         public OrderPageViewModel()
         {
+            _APICaller = new APICaller();
+
             #region items
             Item tempItem = new Item() {
                 Id = 1,
@@ -160,9 +164,9 @@ namespace DROM_Client.ViewModels
                         new Event() {
                             Id = 1,
                             EventId = "Activity 1",
-                            Label = "Cook order for serving",
-                            Description = "Execute to confirm cooking",
-                            StatusMessageAfterExecution = "Order is ready to be served",
+                            Label = "Cook order to eat in restaurant",
+                            Description = "Execute and begin cooking order for eating in restaurant",
+                            StatusMessageAfterExecution = "Order is being cooked",
                             Included = true, Pending = true, Executed = false,
                             Roles = new List<Role> {
                                 new Role() {
@@ -178,7 +182,30 @@ namespace DROM_Client.ViewModels
                                     Name = "only pending"
                                 }
                             },
-                            Parent = false,
+                            Parent = false
+                        },
+                        new Event() {
+                            Id = 2,
+                            EventId = "Activity 2",
+                            Label = "Pay",
+                            Description = "Execute after customer has paid",
+                            StatusMessageAfterExecution = "Order has been paid",
+                            Included = true, Pending = true, Executed = false,
+                            Roles = new List<Role> {
+                                new Role() {
+                                    Id = 1,
+                                    Name = "Waiter"
+                                }
+                            },
+                            Groups = new List<Group>
+                            {
+                                new Group()
+                                {
+                                    Id = 1,
+                                    Name = "only pending"
+                                }
+                            },
+                            Parent = false
                         }
                     }
                 },
@@ -244,6 +271,11 @@ namespace DROM_Client.ViewModels
             Orders.Add(order);
             Orders.Add(order2);
             Orders.Add(order3);
+        }
+
+        public async void ExecuteEvent(Event eventToExecute)
+        {
+            await _APICaller.PostExecuteEvent(eventToExecute);
         }
     }
 }
