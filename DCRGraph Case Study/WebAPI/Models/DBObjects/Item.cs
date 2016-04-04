@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace WebAPI.Models.DBObjects
 {
     using System;
@@ -5,7 +7,6 @@ namespace WebAPI.Models.DBObjects
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
-
     public partial class Item
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
