@@ -22,7 +22,7 @@ namespace WebAPI.Models.DBObjects
         public string Notes { get; set; }
 
        
-        public string Table { get; set; }
+        public int Table { get; set; }
 
         [Required]
         public string OrderType { get; set; }

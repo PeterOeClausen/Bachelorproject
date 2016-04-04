@@ -196,7 +196,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\DBMethods\Getters.cs" />
+    <Compile Include="Models\DBMethods\DbInteractions.cs" />
     <Compile Include="Models\DBObjects\Category.cs" />
     <Compile Include="Models\DBObjects\Customer.cs" />
     <Compile Include="Models\DBObjects\Database.cs" />

@@ -109,10 +109,8 @@ namespace DROM_Client.ViewModels
                     Events = new List<Event>() {
                         new Event() {
                             Id = 1,
-                            EventId = "Activity 1",
                             Label = "Confirm web order",
                             Description = "Execute to confirm",
-                            StatusMessageAfterExecution = "Web order confirmed",
                             Included = true, Pending = true, Executed = false,
                             Roles = new List<Role> {
                                 new Role() {
@@ -127,8 +125,7 @@ namespace DROM_Client.ViewModels
                                     Id = 1,
                                     Name = "only pending"
                                 }
-                            },
-                            Parent = false,
+                            }
                         }
                     }
                 },
@@ -163,10 +160,8 @@ namespace DROM_Client.ViewModels
                     Events = new List<Event>() {
                         new Event() {
                             Id = 1,
-                            EventId = "Activity 1",
                             Label = "Cook order to eat in restaurant",
                             Description = "Execute and begin cooking order for eating in restaurant",
-                            StatusMessageAfterExecution = "Order is being cooked",
                             Included = true, Pending = true, Executed = false,
                             Roles = new List<Role> {
                                 new Role() {
@@ -181,15 +176,12 @@ namespace DROM_Client.ViewModels
                                     Id = 1,
                                     Name = "only pending"
                                 }
-                            },
-                            Parent = false
+                            }
                         },
                         new Event() {
                             Id = 2,
-                            EventId = "Activity 2",
                             Label = "Pay",
                             Description = "Execute after customer has paid",
-                            StatusMessageAfterExecution = "Order has been paid",
                             Included = true, Pending = true, Executed = false,
                             Roles = new List<Role> {
                                 new Role() {
@@ -204,8 +196,7 @@ namespace DROM_Client.ViewModels
                                     Id = 1,
                                     Name = "only pending"
                                 }
-                            },
-                            Parent = false
+                            }
                         }
                     }
                 },
@@ -240,10 +231,8 @@ namespace DROM_Client.ViewModels
                     Events = new List<Event>() {
                         new Event() {
                             Id = 1,
-                            EventId = "Activity 1",
                             Label = "Cook order for serving",
                             Description = "Execute to confirm cooking",
-                            StatusMessageAfterExecution = "Order is ready to be served",
                             Included = true, Pending = true, Executed = false,
                             Roles = new List<Role> {
                                 new Role() {
@@ -258,8 +247,7 @@ namespace DROM_Client.ViewModels
                                     Id = 1,
                                     Name = "only pending"
                                 }
-                            },
-                            Parent = false,
+                            }
                         }
                     }
                 },
