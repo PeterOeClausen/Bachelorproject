@@ -129,6 +129,29 @@ namespace DROM_Client.ViewModels
                                 }
                             },
                             Parent = false,
+                        },
+                        new Event()
+                        {
+                            Id = 2,
+                            EventId = "Activity 2",
+                            Label = "Change to takeaway",
+                            Included = true, Pending = true, Executed = false,
+                            Roles = new List<Role>
+                            {
+                                new Role
+                                {
+                                    Id = 1,
+                                    Name = "Waiter"
+                                }
+                            },
+                            Groups = new List<Group>
+                            {
+                                new Group
+                                {
+                                    Id = 2,
+                                    Name = "Edit events"
+                                }
+                            }
                         }
                     }
                 },

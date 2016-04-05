@@ -19,7 +19,7 @@ namespace DROM_Client.ViewModels
         public CreateOrderPageViewModel()
         {
             this._APICaller = new APICaller();
-            getItems();
+            //getItems();
             ItemCollection = new ObservableCollection<Item>()
             {
                 new Item

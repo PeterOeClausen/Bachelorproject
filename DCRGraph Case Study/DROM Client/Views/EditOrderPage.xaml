@@ -79,7 +79,7 @@
                 <StackPanel Padding="20,0,20,0" Background="Wheat">
                     <TextBlock Text="Items on order:" Margin="0,20,0,0" FontWeight="Bold" />
                     <!--Items list:-->
-                    <ListView ItemsSource="{Binding OrderBeingEdited.ItemsAndQuantity}" Background="AntiqueWhite">
+                    <ListView ItemsSource="{Binding OrderBeingEdited.ItemsAndQuantity}" Background="AntiqueWhite" x:Name="Items_On_Order_List_View">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -94,11 +94,17 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel>
                             <TextBlock Text="Quantity:"/>
-                            <TextBox />
+                            <TextBox x:Name="Quantity_Box"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="Item:"/>
-                            <TextBox />
+                            <ComboBox ItemsSource="{Binding ItemCollection}" x:Name="Item_Box" >
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </StackPanel>
                         <Button Content="Add" Click="Add_Click"/>
                         <Button Content="Delete" Click="Remove_Click"/>
