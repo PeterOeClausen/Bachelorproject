@@ -61,226 +61,36 @@ namespace DROM_Client.ViewModels
         #endregion
 
         public ObservableCollection<Order> Orders { get; set; } = new ObservableCollection<Order>();
+        public List<Order> OrdersFromWebAPI { get; set; }
 
         public OrderPageViewModel()
         {
             _APICaller = new APICaller();
+            _getOrders();
 
-            #region items
-            Item tempItem = new Item() {
-                Id = 1,
-                Name = "Chiliburger",
-                Price = 69.9,
-                Category = "Burger",
-                Description = "Chiliburger med pommes frites"
-            };
+        }
 
-            Item tempItem2 = new Item()
-            {
-                Id = 2,
-                Name = "Cola",
-                Price = 69.9,
-                Category = "Drink",
-                Description = "Cola"
-            };
-            #endregion items
+        private async void _getOrders()
+        {
+            OrdersFromWebAPI = await _APICaller.GetOrders();
+        }
 
-            #region Order1
-            Order order = new Order()
-            {
-                Id = 1,
-                ItemsAndQuantity = new Dictionary<Item, int>() {
-                    { tempItem,1}
-                },
-                Customer = new Customer() {
-                    Id = 1,
-                    FirstAndMiddleNames = "John",
-                    LastName = "Doe",
-                    Email = "John@Doe.com",
-                    Phone = 88888888,
-                    StreetAndNumber = "Rued Langaardsvej 7",
-                    ZipCode = 2300,
-                    City = "København S"
-                },
-                OrderDate = DateTime.Now,
-                Notes = "Minus tomatoes please",
-                DCRGraph = new DCRGraph {
-                    Id = 1,
-                    Events = new List<Event>() {
-                        new Event() {
-                            Id = 1,
-                            Label = "Confirm web order",
-                            Description = "Execute to confirm",
-                            Included = true, Pending = true, Executed = false,
-                            Roles = new List<Role> {
-                                new Role() {
-                                    Id = 1,
-                                    Name = "Waiter"
-                                }
-                            },
-                            Groups = new List<Group>
-                            {
-                                new Group()
-                                {
-                                    Id = 1,
-                                    Name = "only pending"
-                                }
-                            },
-                        },
-                        new Event()
-                        {
-                            Id = 2,
-                            Label = "Change to takeaway",
-                            Included = true, Pending = true, Executed = false,
-                            Roles = new List<Role>
-                            {
-                                new Role
-                                {
-                                    Id = 1,
-                                    Name = "Waiter"
-                                }
-                            },
-                            Groups = new List<Group>
-                            {
-                                new Group
-                                {
-                                    Id = 2,
-                                    Name = "Edit events"
-                                }
-                            }
-                        }
-                    }
-                },
-                Table = 0,
-                OrderType = "To be delivered"
-            };
-            #endregion Order1
+        private void _filterData()
+        {
+            //var query = from Order o in OrdersFromWebAPI
+            //            where from Event e in o.DCRGraph.Events
+            //                  where from Group g in e.Groups
+            //                        where g.Name == "only Pending"
+            //                        select o;
 
-            #region Order2
-            Order order2 = new Order()
-            {
-                Id = 2,
-                ItemsAndQuantity = new Dictionary<Item, int>() {
-                    { tempItem2,2}
-                },
-                Customer = new Customer()
-                {
-                    Id = 2,
-                    FirstAndMiddleNames = "Alice",
-                    LastName = "Allen",
-                    Email = "Alice@Allen.com",
-                    Phone = 77777777,
-                    StreetAndNumber = "Langaardsvej Rued 7",
-                    ZipCode = 2300,
-                    City = "København S"
-                },
-                OrderDate = DateTime.Now,
-                Notes = "Minus ice please",
-                DCRGraph = new DCRGraph
-                {
-                    Id = 2,
-                    Events = new List<Event>() {
-                        new Event() {
-                            Id = 1,
-                            Label = "Cook order to eat in restaurant",
-                            Description = "Execute and begin cooking order for eating in restaurant",
-                            Included = true, Pending = true, Executed = false,
-                            Roles = new List<Role> {
-                                new Role() {
-                                    Id = 1,
-                                    Name = "Chef"
-                                }
-                            },
-                            Groups = new List<Group>
-                            {
-                                new Group()
-                                {
-                                    Id = 1,
-                                    Name = "only pending"
-                                }
-                            }
-                        },
-                        new Event() {
-                            Id = 2,
-                            Label = "Pay",
-                            Description = "Execute after customer has paid",
-                            Included = true, Pending = true, Executed = false,
-                            Roles = new List<Role> {
-                                new Role() {
-                                    Id = 1,
-                                    Name = "Waiter"
-                                }
-                            },
-                            Groups = new List<Group>
-                            {
-                                new Group()
-                                {
-                                    Id = 1,
-                                    Name = "only pending"
-                                }
-                            }
-                        }
-                    }
-                },
-                Table = 1,
-                OrderType = "To be served"
-            };
-            #endregion Order2
 
-            #region Order3
-            Order order3 = new Order()
-            {
-                Id = 2,
-                ItemsAndQuantity = new Dictionary<Item, int>() {
-                    { tempItem2,2}
-                },
-                Customer = new Customer()
-                {
-                    Id = 2,
-                    FirstAndMiddleNames = "Peter Øvergård",
-                    LastName = "Clausen",
-                    Email = "PeterOeClausen@gmail.com",
-                    Phone = 77777777,
-                    StreetAndNumber = "Langaardsvej Rued 7",
-                    ZipCode = 2300,
-                    City = "København S"
-                },
-                OrderDate = DateTime.Now,
-                Notes = "Blablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablabla",
-                DCRGraph = new DCRGraph
-                {
-                    Id = 2,
-                    Events = new List<Event>() {
-                        new Event() {
-                            Id = 1,
-                            Label = "Cook order for serving",
-                            Description = "Execute to confirm cooking",
-                            Included = true, Pending = true, Executed = false,
-                            Roles = new List<Role> {
-                                new Role() {
-                                    Id = 1,
-                                    Name = "Chef"
-                                }
-                            },
-                            Groups = new List<Group>
-                            {
-                                new Group()
-                                {
-                                    Id = 1,
-                                    Name = "only pending"
-                                }
-                            }
-                        }
-                    }
-                },
-                Table = 1,
-                OrderType = "To be served"
-            };
-            #endregion Order3
-
-            Orders.Add(order);
-            Orders.Add(order2);
-            Orders.Add(order3);
+            //foreach (Order o in OrdersFromWebAPI)
+            //{
+            //    foreach(Event e in o.DCRGraph.Events)
+            //    {
+                    
+            //    }
+            //}
         }
 
         public async void ExecuteEvent(Event eventToExecute)

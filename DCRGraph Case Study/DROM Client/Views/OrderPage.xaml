@@ -125,7 +125,8 @@
                                     <!--Execute events button-->
                                     <StackPanel>
                                         <TextBlock Text="Events to execute:"/>
-                                        <ListView ItemsSource="{Binding DCRGraph.Events}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                                        <ListView ItemsSource="{Binding DCRGraph.Events}" 
+                                                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
                                             <ListView.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel Orientation="Horizontal"/>
@@ -134,7 +135,10 @@
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel>
-                                                        <Button Content="{Binding Label}" ToolTipService.ToolTip="{Binding Description, FallbackValue='No tooltip available'}" Click="Execute_Event_Click" Tag="{Binding Mode=OneWay}"/>
+                                                        <Button Content="{Binding Label}" 
+                                                                ToolTipService.ToolTip="{Binding Description, FallbackValue='No tooltip available'}" 
+                                                                Click="Execute_Event_Click" 
+                                                                Tag="{Binding Mode=OneWay}"/>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>

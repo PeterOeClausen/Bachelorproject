@@ -6,10 +6,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:DROM_Client.ViewModels"
+    xmlns:converters="using:DROM_Client.Converters"
     mc:Ignorable="d">
     <Page.DataContext>
         <vm:EditOrderPageViewModel/>
     </Page.DataContext>
+
+    <Page.Resources>
+        <converters:EditEventGroupNameToVisibilityConverter x:Key="EditEventGroupNameToVisibilityConverter"/>
+    </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
@@ -121,8 +126,8 @@
                     <ListView ItemsSource="{Binding OrderBeingEdited.DCRGraph.Events}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel>
-                                    <Button Content="{Binding Label}" Click="Edit_Event_Execute_Click"/>
+                                <StackPanel Visibility="{Binding Groups, Converter={StaticResource EditEventGroupNameToVisibilityConverter}}">
+                                    <Button Content="{Binding Label}" Click="Edit_Event_Execute_Click"/> <!--Visibility="{Binding Groups, Converter={StaticResource EditEventGroupNameToVisibilityConverter}}"-->
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
