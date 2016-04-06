@@ -23,11 +23,11 @@ namespace WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, new DbInteractions().GetItems().Result);
         }
 
-        [Route("api/order/orders")]
+        [Route("api/order/ordersWithSortedEvents")]
         [HttpGet]
         public HttpResponseMessage GetOrders()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, new DbInteractions().GetOrders().Result);
+            return Request.CreateResponse(HttpStatusCode.OK, new DbInteractions().GetOrdersWithSortedEvents().Result);
         }
 
         [Route("api/order/UpdateOrder")]
@@ -37,19 +37,14 @@ namespace WebAPI.Controllers
             return Request.CreateResponse(new DbInteractions().UpdateOrder(order));
         }
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
+        [Route("api/order/executeevent")]
+        [HttpPut]
+        public HttpStatusCode ExecuteEvent(Event e)
         {
+            return new DbInteractions().ExecuteEvent(e.Id).Result;
+            
         }
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
 
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
-        }
     }
 }

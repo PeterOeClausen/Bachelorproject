@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using DROM_Client.Models.BusinessObjects;
@@ -34,7 +35,7 @@ namespace WebAPI.Models.DBMethods
             }
         }
 
-        public async Task<List<DROM_Client.Models.BusinessObjects.Order>> GetOrders()
+        public async Task<List<DROM_Client.Models.BusinessObjects.Order>> GetOrdersWithSortedEvents()
         {
             using (var db = new Database())
             {
@@ -83,38 +84,48 @@ namespace WebAPI.Models.DBMethods
                     //convert events and attach them to the graph
                     foreach (var dcrEvent in o.DCRGraph.DCREvents)
                     {
-                        var businessEvent = new Event()
+                        if (dcrEvent.Included == true) // only add included events
                         {
-                            Id = dcrEvent.Id,
-                            Description = dcrEvent.Description ?? "",
-                            Executed = dcrEvent.Executed,
-                            Included = dcrEvent.Included,
-                            Label = dcrEvent.Label,
-                            Pending = dcrEvent.Pending,
-                            Roles = null
-                        };
+                            foreach (var g in dcrEvent.Groups)
+                            {
+                                if ((dcrEvent.Pending == true || g.Name == "Edit Events")) // we only want to give pending events and edit events
+                                {
+                                    var businessEvent = new Event
+                                    {
+                                        Id = dcrEvent.Id,
+                                        Description = dcrEvent.Description ?? "",
+                                        Executed = dcrEvent.Executed,
+                                        Included = dcrEvent.Included,
+                                        Label = dcrEvent.Label,
+                                        Pending = dcrEvent.Pending,
+                                        Roles = null,
+                                        Groups = new List<DROM_Client.Models.BusinessObjects.Group>()
+                                    };
 
-                        //get groups onto the event
-                        businessEvent.Groups = new List<DROM_Client.Models.BusinessObjects.Group>();
-                        foreach (var g in dcrEvent.Groups)
-                        {
-                            var group = new DROM_Client.Models.BusinessObjects.Group();
-                            group.Id = g.Id;
-                            group.Name = g.Name;
-                            businessEvent.Groups.Add(group);
+                                    //get groups onto the event
+                                    foreach (var groupList in dcrEvent.Groups)
+                                    {
+                                        var group = new DROM_Client.Models.BusinessObjects.Group();
+                                        group.Id = groupList.Id;
+                                        group.Name = groupList.Name;
+                                        businessEvent.Groups.Add(group);
+                                    }
+
+                                    //get roles onto the event
+                                    businessEvent.Roles = new List<DROM_Client.Models.BusinessObjects.Role>();
+                                    foreach (var r in dcrEvent.Roles)
+                                    {
+                                        var role = new DROM_Client.Models.BusinessObjects.Role();
+                                        role.Id = r.Id;
+                                        role.Name = r.Name;
+                                        businessEvent.Roles.Add(role);
+                                    }
+
+                                    order.DCRGraph.Events.Add(businessEvent);
+                                }
+                            }
                         }
 
-                        //get roles onto the event
-                        businessEvent.Roles = new List<DROM_Client.Models.BusinessObjects.Role>();
-                        foreach (var r in dcrEvent.Roles)
-                        {
-                            var role = new DROM_Client.Models.BusinessObjects.Role();
-                            role.Id = r.Id;
-                            role.Name = r.Name;
-                            businessEvent.Roles.Add(role);
-                        }
-
-                        order.DCRGraph.Events.Add(businessEvent);
                     }
 
                     //put items and quantity on the order
@@ -174,5 +185,15 @@ namespace WebAPI.Models.DBMethods
                 return HttpStatusCode.OK;
             }
         }
+
+        public async Task<HttpStatusCode> ExecuteEvent(int id)
+        {
+            using (var db = new Database())
+            {
+                var eventToBeExecuted = await db.DCREvents.FindAsync(id);
+                //var qwe = db.DCRGraphs.FindAsync(eventToBeExecuted.)
+                return HttpStatusCode.OK;
+            }
+        } 
     }
 }
