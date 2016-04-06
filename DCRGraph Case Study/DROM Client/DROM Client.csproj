@@ -99,6 +99,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToColorConverter.cs" />
+    <Compile Include="Converters\EditEventGroupNameToVisibilityConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -110,7 +111,9 @@
     <Compile Include="Models\BusinessObjects\Order.cs" />
     <Compile Include="Models\BusinessObjects\Role.cs" />
     <Compile Include="Models\NewOrderData\NewOrderInfo.cs" />
+    <Compile Include="Models\ObjectsOptimizedForUI\UIDCRGraph.cs" />
     <Compile Include="Models\ObjectsOptimizedForUI\UINewOrderInfo.cs" />
+    <Compile Include="Models\ObjectsOptimizedForUI\UIOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\APICaller.cs" />
     <Compile Include="ViewModels\CreateOrderPageViewModel.cs" />

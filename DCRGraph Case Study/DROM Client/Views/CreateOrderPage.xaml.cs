@@ -109,6 +109,7 @@ namespace DROM_Client.Views
         private bool All_Information_Entered_For_Delivery()
         {
             int phoneNumber;
+            int zip;
             if (First_Name_Text_Box.Text == "")
             {
                 CreateAndShowMessageDialog("Please enter the customer's first name.");
@@ -131,7 +132,7 @@ namespace DROM_Client.Views
             }
             else if (Phone_Text_Box.Text == "")
             {
-                CreateAndShowMessageDialog("Please enter the customer's phone number");
+                CreateAndShowMessageDialog("Please enter the customer's phone number.");
                 return false;
             }
             else if (!int.TryParse(Phone_Text_Box.Text, out phoneNumber))
@@ -141,19 +142,33 @@ namespace DROM_Client.Views
             }
             else if (phoneNumber == 0)
             {
-                CreateAndShowMessageDialog("Sorry, but the phone number cannot be '0'");
+                CreateAndShowMessageDialog("Sorry, but the phone number cannot be '0'.");
                 return false;
             }
             else if (Street_And_Number_Text_Box.Text == "")
             {
-                CreateAndShowMessageDialog("Please enter the customer's street and number");
+                CreateAndShowMessageDialog("Please enter the customer's street and number.");
                 return false;
             }
-            
-
-            
+            else if (Zip_Text_Box.Text == "")
+            {
+                CreateAndShowMessageDialog("Please enter the customer's zip code.");
+                return false;
+            }
+            else if (!int.TryParse(Zip_Text_Box.Text, out zip))
+            {
+                CreateAndShowMessageDialog("Please enter a valid zip code (integers only).");
+                return false;
+            }
+            else if (City_Text_Box.Text == "")
+            {
+                CreateAndShowMessageDialog("Please enter the customer's city.");
+                return false;
+            }
             return true;
         }
+
+        #endregion
 
         private async void CreateAndShowMessageDialog(string message)
         {
@@ -161,9 +176,7 @@ namespace DROM_Client.Views
             messageDialog.CancelCommandIndex = 0;
             await messageDialog.ShowAsync();
         }
-
-        #endregion
-
+        
         private void Save_Popup_No(IUICommand command)
         {
             //Do nothing
@@ -194,7 +207,6 @@ namespace DROM_Client.Views
 
         private async void Remove_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: Make sure something is selected
             if(this.Items_On_Order_List_View.SelectedItems.Count == 1)
             {
                 var selected = (KeyValuePair<Item, int>) this.Items_On_Order_List_View.SelectedItem;
@@ -204,8 +216,7 @@ namespace DROM_Client.Views
             }
             else
             {
-                var messageDialog = new MessageDialog("You need to select one and only one item from the list above.");
-                await messageDialog.ShowAsync();
+                CreateAndShowMessageDialog("You need to select one and only one item from the list above.");
             }
         }
 

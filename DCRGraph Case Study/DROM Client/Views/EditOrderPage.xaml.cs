@@ -14,6 +14,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using DROM_Client.Models.BusinessObjects;
 using DROM_Client.ViewModels;
+using Windows.UI.Popups;
+using DROM_Client.Models.ObjectsOptimizedForUI;
+using System.Collections.ObjectModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -34,11 +37,31 @@ namespace DROM_Client.Views
             base.OnNavigatedTo(e);
 
             var viewModel = this.DataContext as EditOrderPageViewModel;
-            viewModel.OrderBeingEdited = e.Parameter as Order;
+            Order orderReceived = e.Parameter as Order;
+            viewModel.OrderBeingEdited = new UIOrder
+            {
+                Id = orderReceived.Id,
+                Customer = orderReceived.Customer,
+                OrderDate = orderReceived.OrderDate,
+                Notes = orderReceived.Notes,
+                DCRGraph = new UIDCRGraph { Events = new ObservableCollection<Event>()},
+                ItemsAndQuantity = new Dictionary<Item, int>(),
+                Table = orderReceived.Table,
+                OrderType = orderReceived.OrderType,
+            };
+
+            foreach (Event evnt in orderReceived.DCRGraph.Events) viewModel.OrderBeingEdited.DCRGraph.Events.Add(evnt);
+
+            foreach (KeyValuePair<Item, int> entry in orderReceived.ItemsAndQuantity)
+            {
+                viewModel.OrderBeingEdited.ItemsAndQuantity.Add(entry.Key, entry.Value);
+            }
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            var viewModel = this.DataContext as EditOrderPageViewModel;
+            viewModel.SaveOrder();
             Frame.Navigate(typeof(OrderPage));
         }
 
@@ -49,12 +72,40 @@ namespace DROM_Client.Views
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
+            string quanAsString = this.Quantity_Box.Text;
+            int quanAsInt;
+            if (int.TryParse(quanAsString, out quanAsInt))
+            {
+                var NewItem = this.Item_Box.SelectedItem as Item;
+                var viewModel = this.DataContext as EditOrderPageViewModel;
+                viewModel.AddQuantityAndItem(quanAsInt, NewItem);
+            }
+            else
+            {
+                CreateAndShowMessageDialog("Quantity needs to be an integer value.");
+            }
+        }
 
+        private async void CreateAndShowMessageDialog(string message)
+        {
+            var messageDialog = new MessageDialog(message);
+            messageDialog.CancelCommandIndex = 0;
+            await messageDialog.ShowAsync();
         }
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
+            if (this.Items_On_Order_List_View.SelectedItems.Count == 1)
+            {
+                var selected = (KeyValuePair<Item, int>)this.Items_On_Order_List_View.SelectedItem;
 
+                var viewModel = this.DataContext as EditOrderPageViewModel;
+                viewModel.RemoveItem(selected.Key);
+            }
+            else
+            {
+                CreateAndShowMessageDialog("You need to select one and only one item from the list above.");
+            }
         }
 
         private void Edit_Event_Execute_Click(object sender, RoutedEventArgs e)
