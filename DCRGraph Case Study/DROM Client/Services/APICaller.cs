@@ -32,11 +32,9 @@ namespace DROM_Client.Services
             {
                 try
                 {
-
-                
-                client.BaseAddress = BaseAddress;
-                var response = await client.PostAsXmlAsync("api/parse", newOrder, new CancellationToken());
-                return response.StatusCode.ToString();
+                    client.BaseAddress = BaseAddress;
+                    var response = await client.PostAsXmlAsync("api/parse", newOrder, new CancellationToken());
+                    return response.StatusCode.ToString();
                     //var content = new FormUrlEncodedContent(newOrder);
                     //var response = await client.PostAsJson("api/parse", content);
                 }
@@ -54,8 +52,6 @@ namespace DROM_Client.Services
             {
                 try
                 {
-
-
                     client.BaseAddress = BaseAddress;
                     var response = await client.PutAsXmlAsync("api/order/updateorder", updatedOrder, new CancellationToken());
                     return response.StatusCode.ToString();
@@ -334,41 +330,42 @@ namespace DROM_Client.Services
             }
         }
 
-        public async Task<List<Item>> GetItems() //Needs to be called only one time.
+        public List<Item> GetItems() //Needs to be called only one time.
         {
-            var items = new List<Item> {
-                new Item
-                {
-                    Name = "Cola"
-                },
-                new Item
-                {
-                    Name = "Sprite"
-                },
-                new Item
-                {
-                    Name = "Pizza"
-                },
-                new Item
-                {
-                    Name = "Burger"
-                }
-            };
+            //var items = new List<Item> {
+            //    new Item
+            //    {
+            //        Name = "Cola"
+            //    },
+            //    new Item
+            //    {
+            //        Name = "Sprite"
+            //    },
+            //    new Item
+            //    {
+            //        Name = "Pizza"
+            //    },
+            //    new Item
+            //    {
+            //        Name = "Burger"
+            //    }
+            //};
             using (var client = new HttpClient())
             {
                 try
                 {
                     client.BaseAddress = BaseAddress;
-                    var response = await client.GetAsync("api/order/items", new CancellationToken());
-                    var itemsReceived = await response.Content.ReadAsAsync<List<Item>>();
+                    var response = client.GetAsync("api/order/items", new CancellationToken()).Result;
+                    var itemsReceived = response.Content.ReadAsAsync<List<Item>>().Result;
                     response.EnsureSuccessStatusCode();
+                    return itemsReceived;
+
                 }
                 catch (Exception ex)
                 {
                     throw;
                 }
             }
-            return items;
         }
     }
 }

@@ -71,6 +71,7 @@ namespace WebAPI.Models.DBMethods
                             LastName = o.Customer.LastName
 
                         };
+                        order.Customer = customer;
                     }
                     else order.Customer = new DROM_Client.Models.BusinessObjects.Customer();
 
@@ -198,7 +199,6 @@ namespace WebAPI.Models.DBMethods
             using (var db = new Database())
             {
                 var eventToBeExecuted = await db.DCREvents.FindAsync(id);
-                var dcrGraph = db.DCRGraphs.FindAsync(eventToBeExecuted.DCRGraphId);
                 //preconditions:
                 //the event must be included
                 if (eventToBeExecuted.Included == false) return HttpStatusCode.InternalServerError;
@@ -217,27 +217,38 @@ namespace WebAPI.Models.DBMethods
 
                 //Preconditions have succeded!
                 //Setup postconditions:
-
+                
                 
                 foreach (var e in eventToBeExecuted.ExcludeTo)
                 {
                     //exclude related events
                     e.Included = false;
+                    db.DCREvents.Attach(e);
+                    db.Entry(e).State = EntityState.Modified;
                 }
 
                 foreach (var e in eventToBeExecuted.IncludeTo)
                 {
                     //Include related events
                     e.Included = true;
+                    db.DCREvents.Attach(e);
+                    db.Entry(e).State = EntityState.Modified;
                 }
 
                 foreach (var e in eventToBeExecuted.ResponseTo)
                 {
                     //set related events pending
                     e.Pending = true;
+                    db.DCREvents.Attach(e);
+                    db.Entry(e).State = EntityState.Modified;
                 }
 
-               
+                eventToBeExecuted.Pending = false;
+                eventToBeExecuted.Executed = true;
+
+                db.Entry(eventToBeExecuted).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+
 
 
                 return HttpStatusCode.OK;

@@ -18,33 +18,41 @@ namespace DROM_Client.ViewModels
 
         public CreateOrderPageViewModel()
         {
+            ItemCollection = new ObservableCollection<Item>();
             this._APICaller = new APICaller();
-            //getItems();
-            ItemCollection = new ObservableCollection<Item>()
+            List<Item> items = _APICaller.GetItems();
+            foreach (Item i in items)
             {
-                new Item
-                {
-                    Name = "Cola"
-                },
-                new Item
-                {
-                    Name = "Sprite"
-                },
-                new Item
-                {
-                    Name = "Pizza"
-                },
-                new Item
-                {
-                    Name = "Burger"
-                }
-            };
+                ItemCollection.Add(i);
+            }
+            //getItems();
+
+            //ItemCollection = new ObservableCollection<Item>()
+            //{
+            //    new Item
+            //    {
+            //        Name = "Cola"
+            //    },
+            //    new Item
+            //    {
+            //        Name = "Sprite"
+            //    },
+            //    new Item
+            //    {
+            //        Name = "Pizza"
+            //    },
+            //    new Item
+            //    {
+            //        Name = "Burger"
+            //    }
+            //};
+
             //Change to get items from APICaller.
         }
 
         private async void getItems()
         {
-            List<Item> items = await _APICaller.GetItems();
+            List<Item> items = _APICaller.GetItems();
         }
         
         public UINewOrderInfo OrderBeingCreated { get; set; } = new UINewOrderInfo() //Just bindable data for design
@@ -111,7 +119,7 @@ namespace DROM_Client.ViewModels
             OrderBeingCreated.ItemsAndQuantity = replacementDictionary;
         }
 
-        internal void SaveOrder()
+        internal async void SaveOrder()
         {
             NewOrderInfo createdOrder = new NewOrderInfo()
             {
@@ -122,7 +130,7 @@ namespace DROM_Client.ViewModels
                 Notes = OrderBeingCreated.Notes,
                 Table = OrderBeingCreated.Table
             };
-            //_APICaller.PostOrderAsync(newOrderInfo);
+            await _APICaller.PostOrderAsync(createdOrder);
         }
     }
 }
