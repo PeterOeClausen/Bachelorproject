@@ -198,7 +198,14 @@ namespace WebAPI.Models.DBMethods
         {
             using (var db = new Database())
             {
-                var eventToBeExecuted = await db.DCREvents.FindAsync(id);
+                var eventToBeExecuted = await db.DCREvents
+                    .Where(e => e.Id == id)
+                    .Include(e => e.ConditionReverseTo)
+                    .Include(e => e.ExcludeTo)
+                    .Include(e => e.IncludeTo)
+                    .Include(e => e.MilestoneReverseTo)
+                    .Include(e => e.ResponseTo)
+                    .FirstOrDefaultAsync();
                 //preconditions:
                 //the event must be included
                 if (eventToBeExecuted.Included == false) return HttpStatusCode.InternalServerError;
@@ -253,6 +260,19 @@ namespace WebAPI.Models.DBMethods
 
                 return HttpStatusCode.OK;
             }
-        } 
+        }
+        /*
+        public async Task<List<string>> DeliveryTypes(int type)
+        {
+            using (var db = new Database() )
+            {
+                switch (type)
+                {
+                    case 1:
+                        return await db.DCREvents.FindAsync(slec)
+                }
+            }
+        }
+        */
     }
 }

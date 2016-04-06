@@ -8,6 +8,7 @@ using WebAPI.XMLParser;
 using DROM_Client.Models.NewOrderData;
 using WebAPI.Models.DBObjects;
 using System.Data.Entity;
+using WebAPI.Models.DBMethods;
 
 namespace WebAPI.Models.Parsing
 {
@@ -44,7 +45,7 @@ namespace WebAPI.Models.Parsing
                             var item =
                                 db.Items
                                     .FirstOrDefaultAsync(i => i.Name == iq.Key.Name).Result;
-                            if (item == null)
+                            if (!item.Equals(item.Name))
                             {
                                 throw new Exception("Item '" + iq.Key.Name + "' did not exist in the database");
                             }
@@ -210,6 +211,8 @@ namespace WebAPI.Models.Parsing
                         
 
                         scope.Complete();
+                        
+                        
                     }
                     catch (Exception ex)
                     {
