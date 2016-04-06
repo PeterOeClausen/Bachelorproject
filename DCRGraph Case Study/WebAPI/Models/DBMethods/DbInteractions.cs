@@ -129,20 +129,27 @@ namespace WebAPI.Models.DBMethods
                     }
 
                     //put items and quantity on the order
-                    var itemsAndQuantity = new Dictionary<DROM_Client.Models.BusinessObjects.Item, int>();
+                    var itemsAndQuantity = new List<DROM_Client.Models.BusinessObjects.ItemQuantity>();
                     foreach (var od in o.OrderDetails)
                     {
-                        var item = new DROM_Client.Models.BusinessObjects.Item()
+                        var itemQuantity = new ItemQuantity()
                         {
-                            Id = od.Item.Id,
-                            Category = od.Item.Category.Name,
-                            Name = od.Item.Name,
-                            Description = od.Item.Description,
-                            Price = od.Item.Price
+                            Item = new DROM_Client.Models.BusinessObjects.Item()
+                            {
+                                Id = od.Item.Id,
+                                Category = od.Item.Category.Name,
+                                Name = od.Item.Name,
+                                Description = od.Item.Description,
+                                Price = od.Item.Price
 
-                        };
+                            },
+                            Quantity = od.Quantity
 
-                        itemsAndQuantity.Add(item, od.Quantity);
+                    };
+                        
+
+
+                        itemsAndQuantity.Add(itemQuantity);
                     }
                     order.ItemsAndQuantity = itemsAndQuantity;
 

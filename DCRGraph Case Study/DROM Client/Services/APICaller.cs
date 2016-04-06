@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using DROM_Client.Models.BusinessObjects;
-using Windows.UI.ViewManagement;
 
 namespace DROM_Client.Services
 {
@@ -317,6 +316,9 @@ namespace DROM_Client.Services
                     client.BaseAddress = BaseAddress;
                     var response = await client.GetAsync("api/order/ordersWithSortedEvents", new CancellationToken());
                     var ordersReceived = await response.Content.ReadAsAsync<List<Order>>();
+
+                   // var settings = new JsonSerializerSettings { Converters = new JsonConverter[] { new DictionaryConverter() } };
+                   // var ordersReceived = JsonConvert.DeserializeObject<List<Order>>(jsonOrdersReceived, settings);
                     response.EnsureSuccessStatusCode();
                     return ordersReceived;
                 }

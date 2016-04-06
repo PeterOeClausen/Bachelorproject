@@ -54,7 +54,8 @@ namespace WebAPI.Models.Parsing
                                 {
                                     ItemId = item.Id,
                                     Item = item,
-                                    Order = order
+                                    Order = order,
+                                    Quantity = iq.Value
                                 });
 
                         }

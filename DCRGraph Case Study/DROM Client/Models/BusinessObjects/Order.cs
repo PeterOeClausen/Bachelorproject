@@ -8,7 +8,7 @@ namespace DROM_Client.Models.BusinessObjects
     public class Order
     {
         public int Id { get; set; }
-        public Dictionary<Item,int> ItemsAndQuantity { get; set; }
+        public List<ItemQuantity> ItemsAndQuantity { get; set; }
         public Customer Customer { get; set; }
         public DateTime OrderDate { get; set; }
         public string Notes { get; set; }

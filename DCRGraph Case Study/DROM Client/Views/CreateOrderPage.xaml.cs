@@ -241,11 +241,13 @@ namespace DROM_Client.Views
                     {new Item()
                     {
                         Name = "Lone Star"
-                    }, 2},
+                    },
+                        2 },
                     {new Item()
                     {
                         Name = "Cola"
-                    }, 4 }
+                    },
+                        4 }
                 },
                 Notes = "this is a very special and very testy order",
                 OrderType = "Delivery",

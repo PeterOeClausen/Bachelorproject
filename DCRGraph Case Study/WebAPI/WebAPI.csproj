@@ -147,6 +147,9 @@
     <Compile Include="..\DROM Client\Models\BusinessObjects\Item.cs">
       <Link>Models\BusinessObjects\Item.cs</Link>
     </Compile>
+    <Compile Include="..\DROM Client\Models\BusinessObjects\ItemQuantity.cs">
+      <Link>Models\BusinessObjects\ItemQuantity.cs</Link>
+    </Compile>
     <Compile Include="..\DROM Client\Models\BusinessObjects\Order.cs">
       <Link>Models\BusinessObjects\Order.cs</Link>
     </Compile>

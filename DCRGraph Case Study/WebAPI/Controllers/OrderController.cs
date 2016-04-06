@@ -18,30 +18,34 @@ namespace WebAPI.Controllers
     {
         [Route("api/order/items")]
         [HttpGet]
-        public HttpResponseMessage GetItems()
+        public async Task<HttpResponseMessage> GetItems()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, new DbInteractions().GetItems().Result);
+            return Request.CreateResponse(HttpStatusCode.OK, await new DbInteractions().GetItems());
         }
 
         [Route("api/order/ordersWithSortedEvents")]
         [HttpGet]
-        public HttpResponseMessage GetOrders()
+        public async Task<HttpResponseMessage> GetOrders()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, new DbInteractions().GetOrdersWithSortedEvents().Result);
+            //var orders = await new DbInteractions().GetOrdersWithSortedEvents();
+            //var json = JsonConvert.SerializeObject(orders);
+            //var des = JsonConvert.DeserializeObject<List<DROM_Client.Models.BusinessObjects.Order>>(json);
+            return Request.CreateResponse(HttpStatusCode.OK, await new DbInteractions().GetOrdersWithSortedEvents());
         }
 
         [Route("api/order/UpdateOrder")]
         [HttpPut]
-        public HttpResponseMessage UpdateOrder(DROM_Client.Models.BusinessObjects.Order order)
+        public async Task<HttpResponseMessage> UpdateOrder(DROM_Client.Models.BusinessObjects.Order order)
         {
             return Request.CreateResponse(new DbInteractions().UpdateOrder(order));
         }
 
         [Route("api/order/executeEvent")]
         [HttpPut]
-        public HttpResponseMessage ExecuteEvent(Event e)
+        public async Task<HttpResponseMessage> ExecuteEvent(Event e)
         {
-            return Request.CreateResponse(new DbInteractions().ExecuteEvent(e.Id).Result);
+            
+            return Request.CreateResponse(await new DbInteractions().ExecuteEvent(e.Id));
         }
 
 
