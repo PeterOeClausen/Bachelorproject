@@ -225,7 +225,7 @@ namespace DROM_Client.Views
             APICaller apiCaller = new APICaller();
             await apiCaller.PostOrderAsync(new NewOrderInfo()
             {
-                Table = "1",
+                Table = 1,
                 Customer = new Customer()
                 {
                     FirstAndMiddleNames = "Bob",

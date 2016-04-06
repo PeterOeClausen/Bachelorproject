@@ -46,10 +46,8 @@ namespace DROM_Client.ViewModels
                     Events = new ObservableCollection<Event>() {
                         new Event() {
                             Id = 1,
-                            EventId = "Activity 1",
                             Label = "Cook order for serving",
                             Description = "Execute to confirm cooking",
-                            StatusMessageAfterExecution = "Order is ready to be served",
                             Included = true, Pending = true, Executed = false,
                             Roles = new List<Role> {
                                 new Role() {
@@ -64,13 +62,11 @@ namespace DROM_Client.ViewModels
                                     Id = 1,
                                     Name = "only pending"
                                 }
-                            },
-                            Parent = false
+                            }
                         },
                         new Event()
                         {
                             Id = 2,
-                            EventId = "Activity 2",
                             Label = "Change to takeaway",
                             Included = true, Pending = true, Executed = false,
                             Roles = new List<Role>

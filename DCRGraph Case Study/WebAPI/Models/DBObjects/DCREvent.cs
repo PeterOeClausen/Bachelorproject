@@ -67,8 +67,6 @@ namespace WebAPI.Models.DBObjects
 
         public string Description { get; set; }
 
-        public string StatusMessageAfterExecution { get; set; }
-
         [Required]
         public bool Included { get; set; }
 

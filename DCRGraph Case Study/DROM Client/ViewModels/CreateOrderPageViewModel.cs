@@ -74,7 +74,7 @@ namespace DROM_Client.ViewModels
             },
             OrderDate = DateTime.Now,
             Notes = "With extra ice please",
-            Table = "1",
+            Table = 1,
             OrderType = "To be served"            
         };
 

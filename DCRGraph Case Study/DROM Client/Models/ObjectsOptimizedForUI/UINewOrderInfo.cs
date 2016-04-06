@@ -23,7 +23,7 @@ namespace DROM_Client.Models.ObjectsOptimizedForUI
         public Customer Customer { get; set; } //Null if Serving, Phone if pickup, All if delivery
         public DateTime OrderDate { get; set; } //Client side sets this
         public string Notes { get; set; }
-        public string Table { get; set; } // -1 if order is for pickup or delivery
+        public int Table { get; set; } // -1 if order is for pickup or delivery
         
 
         public event PropertyChangedEventHandler PropertyChanged;

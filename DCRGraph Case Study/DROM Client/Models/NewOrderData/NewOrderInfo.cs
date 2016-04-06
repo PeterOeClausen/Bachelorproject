@@ -14,6 +14,6 @@ namespace DROM_Client.Models.NewOrderData
         public Customer Customer { get; set; } //Null if Serving, otherwise all info.
         public DateTime OrderDate { get; set; } //DateTime.now in client
         public string Notes { get; set; }
-        public string Table { get; set; } 
+        public int Table { get; set; } 
     }
 }
