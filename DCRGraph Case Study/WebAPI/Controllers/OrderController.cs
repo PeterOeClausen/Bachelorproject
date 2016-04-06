@@ -48,6 +48,15 @@ namespace WebAPI.Controllers
             return Request.CreateResponse(await new DbInteractions().ExecuteEvent(e.Id));
         }
 
+        [Route("api/order/deliveryTypes/{type}")]
+        [HttpGet]
+        public async Task<HttpResponseMessage> DeliveryTypes(int type)
+        {
+
+            //return Request.CreateResponse(HttpStatusCode.OK, new DbInteractions().DeliveryTypes(type));
+            return null;
+        }
+
 
     }
 }
