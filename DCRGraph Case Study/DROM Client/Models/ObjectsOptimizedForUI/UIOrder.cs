@@ -1,6 +1,7 @@
 ﻿using DROM_Client.Models.BusinessObjects;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,9 +12,9 @@ namespace DROM_Client.Models.ObjectsOptimizedForUI
 {
     public class UIOrder : INotifyPropertyChanged
     {
-        private Dictionary<Item, int> _ItemsAndQuantity;
+        private ObservableCollection<ItemQuantity> _ItemsAndQuantity;
 
-        public Dictionary<Item, int> ItemsAndQuantity
+        public ObservableCollection<ItemQuantity> ItemsAndQuantity
         {
             get { return _ItemsAndQuantity; }
             set { Set(ref _ItemsAndQuantity, value); }

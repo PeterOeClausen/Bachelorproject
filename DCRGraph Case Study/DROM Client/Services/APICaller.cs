@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using DROM_Client.Models.BusinessObjects;
-using Windows.UI.ViewManagement;
 
 namespace DROM_Client.Services
 {
@@ -92,20 +91,22 @@ namespace DROM_Client.Services
         public async Task<List<Order>> GetOrders()
         {
             #region testdata:
-            return new List<Order>()
+            var qwe = new List<Order>()
                 {
                 new Order()
                 {
                     Id = 1,
-                    ItemsAndQuantity = new Dictionary<Item, int>() {
-                        {
-                            new Item() {
-                                Id = 1,
-                                Name = "Chiliburger",
-                                Price = 69.9,
-                                Category = "Burger",
-                                Description = "Chiliburger med pommes frites"
-                            },1}
+                    ItemsAndQuantity = new List<ItemQuantity>() {
+                        new ItemQuantity() { 
+                            Item = new Item() {
+                                    Id = 1,
+                                    Name = "Chiliburger",
+                                    Price = 69.9,
+                                    Category = "Burger",
+                                    Description = "Chiliburger med pommes frites"
+                                },
+                            Quantity = 1
+                        }
                     },
                     Customer = new Customer()
                     {
@@ -175,15 +176,16 @@ namespace DROM_Client.Services
                 new Order()
                 {
                     Id = 2,
-                    ItemsAndQuantity = new Dictionary<Item, int>() {
+                    ItemsAndQuantity = new List<ItemQuantity>() {
+                        new ItemQuantity()
                         {
-                            new Item(){
+                            Item = new Item(){
                             Id = 2,
                             Name = "Cola",
                             Price = 69.9,
                             Category = "Drink",
                             Description = "Cola"
-                        },2}
+                        }, Quantity = 2}
                     },
                     Customer = new Customer()
                     {
@@ -251,14 +253,15 @@ namespace DROM_Client.Services
                     new Order()
                 {
                     Id = 2,
-                    ItemsAndQuantity = new Dictionary<Item, int>() {
-                        { new Item(){
+                    ItemsAndQuantity = new List<ItemQuantity>() {
+                        new ItemQuantity()
+                        { Item= new Item(){
                             Id = 2,
                             Name = "Cola",
                             Price = 69.9,
                             Category = "Drink",
                             Description = "Cola"
-                        },2}
+                        },Quantity = 2}
                     },
                     Customer = new Customer()
                     {
@@ -310,21 +313,25 @@ namespace DROM_Client.Services
             //    return null; //Not implemented yet
             //}
 
-            //using (var client = new HttpClient())
-            //{
-            //    try
-            //    {
-            //        client.BaseAddress = BaseAddress;
-            //        var response = await client.GetAsync("api/order/ordersWithSortedEvents", new CancellationToken());
-            //        var ordersReceived = await response.Content.ReadAsAsync<List<Order>>();
-            //        response.EnsureSuccessStatusCode();
-            //        return ordersReceived;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        throw;
-            //    }
-            //}
+
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = BaseAddress;
+                    var response = await client.GetAsync("api/order/ordersWithSortedEvents", new CancellationToken());
+                    var ordersReceived = await response.Content.ReadAsAsync<List<Order>>();
+
+                   // var settings = new JsonSerializerSettings { Converters = new JsonConverter[] { new DictionaryConverter() } };
+                   // var ordersReceived = JsonConvert.DeserializeObject<List<Order>>(jsonOrdersReceived, settings);
+                    response.EnsureSuccessStatusCode();
+                    return ordersReceived;
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
         }
 
         public async Task<List<Item>> GetItems() //Needs to be called only one time.

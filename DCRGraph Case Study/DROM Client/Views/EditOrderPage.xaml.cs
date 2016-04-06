@@ -45,16 +45,20 @@ namespace DROM_Client.Views
                 OrderDate = orderReceived.OrderDate,
                 Notes = orderReceived.Notes,
                 DCRGraph = new UIDCRGraph { Events = new ObservableCollection<Event>()},
-                ItemsAndQuantity = new Dictionary<Item, int>(),
+                ItemsAndQuantity = new ObservableCollection<ItemQuantity>(),
                 Table = orderReceived.Table,
                 OrderType = orderReceived.OrderType,
             };
 
             foreach (Event evnt in orderReceived.DCRGraph.Events) viewModel.OrderBeingEdited.DCRGraph.Events.Add(evnt);
 
-            foreach (KeyValuePair<Item, int> entry in orderReceived.ItemsAndQuantity)
+            foreach (var entry in orderReceived.ItemsAndQuantity)
             {
-                viewModel.OrderBeingEdited.ItemsAndQuantity.Add(entry.Key, entry.Value);
+                viewModel.OrderBeingEdited.ItemsAndQuantity.Add(new ItemQuantity()
+                {
+                    Item = entry.Item,
+                    Quantity = entry.Quantity
+                });
             }
         }
 

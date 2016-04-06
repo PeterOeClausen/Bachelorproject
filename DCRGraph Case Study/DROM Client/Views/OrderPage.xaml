@@ -114,9 +114,9 @@
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding Value}"/>
+                                                        <TextBlock Text="{Binding Quantity}"/>
                                                         <TextBlock xml:space="preserve" Text="x"/>
-                                                        <TextBlock Text="{Binding Key.Name}"/>
+                                                        <TextBlock Text="{Binding Item.Name}"/>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>

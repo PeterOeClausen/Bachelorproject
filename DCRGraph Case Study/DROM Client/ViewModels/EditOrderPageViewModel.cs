@@ -17,16 +17,22 @@ namespace DROM_Client.ViewModels
         public UIOrder OrderBeingEdited { get; set; } = new UIOrder()
         {
             Id = 2,
-                ItemsAndQuantity = new Dictionary<Item, int>() {
-                    {
-                        new Item() {
-                            Id = 3,
-                            Name = "Sprite",
-                            Category = "Drink",
-                            Price = 30.0,
-                            Description = "Soda"
-                        },2
-                    }
+                ItemsAndQuantity = new ObservableCollection<ItemQuantity>() {
+                    
+                        new ItemQuantity()
+                        {
+                            Item = new Item()
+                            {
+                                Id = 3,
+                                Name = "Sprite",
+                                Category = "Drink",
+                                Price = 30.0,
+                                Description = "Soda"
+                            },
+                            Quantity = 2
+                        }
+                        
+                    
                 },
                 Customer = new Customer()
                 {
@@ -94,11 +100,15 @@ namespace DROM_Client.ViewModels
 
         internal void RemoveItem(Item key)
         {
-            Dictionary<Item, int> replacementDictionary = new Dictionary<Item, int>();
-            foreach (KeyValuePair<Item, int> entry in OrderBeingEdited.ItemsAndQuantity)
+            var replacementDictionary = new ObservableCollection<ItemQuantity>();
+            foreach (var entry in OrderBeingEdited.ItemsAndQuantity)
             {
-                if (entry.Key.Equals(key)) continue;
-                else replacementDictionary.Add(entry.Key, entry.Value);
+                if (entry.Item.Equals(key)) continue;
+                else replacementDictionary.Add(new ItemQuantity()
+                {
+                    Item = entry.Item,
+                    Quantity = entry.Quantity
+                });
             }
             OrderBeingEdited.ItemsAndQuantity = replacementDictionary;
         }
@@ -129,12 +139,20 @@ namespace DROM_Client.ViewModels
 
         internal void AddQuantityAndItem(int quantity, Item item)
         {
-            Dictionary<Item, int> replacementDictionary = new Dictionary<Item, int>();
-            foreach (KeyValuePair<Item, int> entry in OrderBeingEdited.ItemsAndQuantity)
+            var replacementDictionary = new ObservableCollection<ItemQuantity>();
+            foreach (var entry in OrderBeingEdited.ItemsAndQuantity)
             {
-                replacementDictionary.Add(entry.Key, entry.Value);
+                replacementDictionary.Add(new ItemQuantity()
+                {
+                    Item = entry.Item,
+                    Quantity = entry.Quantity
+                });
             }
-            replacementDictionary.Add(item, quantity);
+            replacementDictionary.Add(new ItemQuantity()
+            {
+                Item = item,
+                Quantity = quantity
+            });
             OrderBeingEdited.ItemsAndQuantity = replacementDictionary;
         }
 

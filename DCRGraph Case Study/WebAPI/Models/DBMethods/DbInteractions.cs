@@ -129,20 +129,27 @@ namespace WebAPI.Models.DBMethods
                     }
 
                     //put items and quantity on the order
-                    var itemsAndQuantity = new Dictionary<DROM_Client.Models.BusinessObjects.Item, int>();
+                    var itemsAndQuantity = new List<DROM_Client.Models.BusinessObjects.ItemQuantity>();
                     foreach (var od in o.OrderDetails)
                     {
-                        var item = new DROM_Client.Models.BusinessObjects.Item()
+                        var itemQuantity = new ItemQuantity()
                         {
-                            Id = od.Item.Id,
-                            Category = od.Item.Category.Name,
-                            Name = od.Item.Name,
-                            Description = od.Item.Description,
-                            Price = od.Item.Price
+                            Item = new DROM_Client.Models.BusinessObjects.Item()
+                            {
+                                Id = od.Item.Id,
+                                Category = od.Item.Category.Name,
+                                Name = od.Item.Name,
+                                Description = od.Item.Description,
+                                Price = od.Item.Price
 
-                        };
+                            },
+                            Quantity = od.Quantity
 
-                        itemsAndQuantity.Add(item, od.Quantity);
+                    };
+                        
+
+
+                        itemsAndQuantity.Add(itemQuantity);
                     }
                     order.ItemsAndQuantity = itemsAndQuantity;
 
@@ -191,7 +198,48 @@ namespace WebAPI.Models.DBMethods
             using (var db = new Database())
             {
                 var eventToBeExecuted = await db.DCREvents.FindAsync(id);
-                //var qwe = db.DCRGraphs.FindAsync(eventToBeExecuted.)
+                var dcrGraph = db.DCRGraphs.FindAsync(eventToBeExecuted.DCRGraphId);
+                //preconditions:
+                //the event must be included
+                if (eventToBeExecuted.Included == false) return HttpStatusCode.InternalServerError;
+
+
+                foreach (var condition in eventToBeExecuted.ConditionReverseTo)
+                {
+                    //condition events must be executed
+                    if (condition.Executed != true && condition.Included) return HttpStatusCode.InternalServerError;
+                }
+                foreach (var milestone in eventToBeExecuted.MilestoneReverseTo)
+                {
+                    //there must not be a pending milestone 
+                    if (milestone.Pending != false && milestone.Included) return HttpStatusCode.InternalServerError;
+                }
+
+                //Preconditions have succeded!
+                //Setup postconditions:
+
+                
+                foreach (var e in eventToBeExecuted.ExcludeTo)
+                {
+                    //exclude related events
+                    e.Included = false;
+                }
+
+                foreach (var e in eventToBeExecuted.IncludeTo)
+                {
+                    //Include related events
+                    e.Included = true;
+                }
+
+                foreach (var e in eventToBeExecuted.ResponseTo)
+                {
+                    //set related events pending
+                    e.Pending = true;
+                }
+
+               
+
+
                 return HttpStatusCode.OK;
             }
         } 
