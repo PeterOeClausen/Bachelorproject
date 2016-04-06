@@ -67,19 +67,15 @@ namespace DROM_Client.ViewModels
         public OrderPageViewModel()
         {
             _APICaller = new APICaller();
-            getOrders();
             setupData();
         }
 
-        private async void getOrders()
-        {
-            OrdersFromWebAPI = await _APICaller.GetOrders();
-        }
+       
 
         private void setupData()
         {
             Orders = new ObservableCollection<Order>();
-            foreach(Order o in OrdersFromWebAPI)
+            foreach(Order o in _APICaller.GetOrders())
             {
                 Orders.Add(o);
             }

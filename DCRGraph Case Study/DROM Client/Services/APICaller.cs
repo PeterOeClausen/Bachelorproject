@@ -88,10 +88,10 @@ namespace DROM_Client.Services
         /// Receive all orders
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Order>> GetOrders()
+        public List<Order> GetOrders()
         {
             #region testdata:
-            var qwe = new List<Order>()
+            new List<Order>()
                 {
                 new Order()
                 {
@@ -319,8 +319,8 @@ namespace DROM_Client.Services
                 try
                 {
                     client.BaseAddress = BaseAddress;
-                    var response = await client.GetAsync("api/order/ordersWithSortedEvents", new CancellationToken());
-                    var ordersReceived = await response.Content.ReadAsAsync<List<Order>>();
+                    var response = client.GetAsync("api/order/orderswithsortedevents", new CancellationToken()).Result;
+                    var ordersReceived = response.Content.ReadAsAsync<List<Order>>().Result;
 
                    // var settings = new JsonSerializerSettings { Converters = new JsonConverter[] { new DictionaryConverter() } };
                    // var ordersReceived = JsonConvert.DeserializeObject<List<Order>>(jsonOrdersReceived, settings);
