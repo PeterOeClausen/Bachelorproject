@@ -100,6 +100,7 @@
     </Compile>
     <Compile Include="Converters\BoolToColorConverter.cs" />
     <Compile Include="Converters\EditEventGroupNameToVisibilityConverter.cs" />
+    <Compile Include="Converters\PendingEventGroupNameToVisibilityConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

@@ -1,27 +1,31 @@
-﻿using System;
+﻿using DROM_Client.Models.BusinessObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
 
 namespace DROM_Client.Converters
 {
-    public class BoolToColorConverter : IValueConverter
+    public class PendingEventGroupNameToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            bool enabled = (bool)value;
-            if (enabled)
+            List<Group> groups = (List<Group>)value;
+            bool visible = false;
+            foreach (Group g in groups)
             {
-                return "#428bca"; //DCRGraph Blue
+                if (g.Name == "only pending")
+                {
+                    visible = true;
+                }
             }
-            else
+            if (visible)
             {
-                return "LightGray";
+                return "Visible";
             }
+            else return "Collapsed";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

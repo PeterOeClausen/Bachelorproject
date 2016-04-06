@@ -8,6 +8,7 @@ using DROM_Client.Models.BusinessObjects;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using DROM_Client.Services;
+using DROM_Client.Models.ObjectsOptimizedForUI;
 
 namespace DROM_Client.ViewModels
 {
@@ -60,37 +61,51 @@ namespace DROM_Client.ViewModels
         }
         #endregion
 
-        public ObservableCollection<Order> Orders { get; set; } = new ObservableCollection<Order>();
+        public ObservableCollection<Order> Orders { get; set; }
         public List<Order> OrdersFromWebAPI { get; set; }
 
         public OrderPageViewModel()
         {
             _APICaller = new APICaller();
-            _getOrders();
-
+            getOrders();
+            setupData();
         }
 
-        private async void _getOrders()
+        private async void getOrders()
         {
             OrdersFromWebAPI = await _APICaller.GetOrders();
         }
 
-        private void _filterData()
+        private void setupData()
         {
+            Orders = new ObservableCollection<Order>();
+            foreach(Order o in OrdersFromWebAPI)
+            {
+                Orders.Add(o);
+            }
+            #region old code (to be deleted)
             //var query = from Order o in OrdersFromWebAPI
             //            where from Event e in o.DCRGraph.Events
             //                  where from Group g in e.Groups
             //                        where g.Name == "only Pending"
             //                        select o;
 
-
-            //foreach (Order o in OrdersFromWebAPI)
+            //Orders = new ObservableCollection<UIOrder>();
+            //foreach(Order o in OrdersFromWebAPI)
             //{
-            //    foreach(Event e in o.DCRGraph.Events)
+            //    var newUIOrder = new UIOrder
             //    {
-                    
-            //    }
+            //        Id = o.Id,
+            //        Customer = o.Customer,
+            //        OrderDate = o.OrderDate,
+            //        Notes = o.Notes,
+            //        DCRGraph = new UIDCRGraph(),
+            //        Table = o.Table,
+            //        OrderType = o.OrderType,
+            //        ItemsAndQuantity = new Dictionary<Item, int>()
+            //    };
             //}
+            #endregion
         }
 
         public async void ExecuteEvent(Event eventToExecute)
