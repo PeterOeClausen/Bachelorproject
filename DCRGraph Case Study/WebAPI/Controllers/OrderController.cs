@@ -37,12 +37,11 @@ namespace WebAPI.Controllers
             return Request.CreateResponse(new DbInteractions().UpdateOrder(order));
         }
 
-        [Route("api/order/executeevent")]
+        [Route("api/order/executeEvent")]
         [HttpPut]
-        public HttpStatusCode ExecuteEvent(Event e)
+        public HttpResponseMessage ExecuteEvent(Event e)
         {
-            return new DbInteractions().ExecuteEvent(e.Id).Result;
-            
+            return Request.CreateResponse(new DbInteractions().ExecuteEvent(e.Id).Result);
         }
 
 
