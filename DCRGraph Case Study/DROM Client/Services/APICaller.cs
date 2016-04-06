@@ -14,6 +14,14 @@ namespace DROM_Client.Services
 {
     public class APICaller
     {
+
+        public Uri BaseAddress { get; set; }
+
+        public APICaller()
+        {
+            BaseAddress = new Uri("http://localhost:57815/"); //set the address of the api here
+        }
+
         /// <summary>
         /// Save order on web api
         /// </summary>
@@ -27,7 +35,7 @@ namespace DROM_Client.Services
                 {
 
                 
-                client.BaseAddress = new Uri("http://localhost:57815/");
+                client.BaseAddress = BaseAddress;
                 var response = await client.PostAsXmlAsync("api/parse", newOrder, new CancellationToken());
                 return response.StatusCode.ToString();
                     //var content = new FormUrlEncodedContent(newOrder);
@@ -42,7 +50,24 @@ namespace DROM_Client.Services
 
         public async Task<string> PutUpdateOrder(Order updatedOrder)
         {
-            return null; //Not implemented yet
+
+            using (var client = new HttpClient())
+            {
+                try
+                {
+
+
+                    client.BaseAddress = BaseAddress;
+                    var response = await client.PutAsXmlAsync("api/order/updateorder", updatedOrder, new CancellationToken());
+                    return response.StatusCode.ToString();
+                    //var content = new FormUrlEncodedContent(newOrder);
+                    //var response = await client.PostAsJson("api/parse", content);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
         }
 
         /// <summary>
@@ -50,12 +75,12 @@ namespace DROM_Client.Services
         /// </summary>
         /// <param name="eventToExecute"></param>
         /// <returns></returns>
-        public async Task<string> PostExecuteEvent(Event eventToExecute)
+        public async Task<string> PutExecuteEvent(Event eventToExecute)
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:57815/");
-                var response = await client.PostAsXmlAsync("api/eventtoexecute", eventToExecute);
+                client.BaseAddress = BaseAddress;
+                var response = await client.PutAsXmlAsync("api/order/executeevent", eventToExecute);
                 return response.StatusCode.ToString();
             }
         }
@@ -68,7 +93,18 @@ namespace DROM_Client.Services
         {
             using (var client = new HttpClient())
             {
-                return null; //Not implemented yet
+                try
+                {
+                    client.BaseAddress = BaseAddress;
+                    var response = await client.GetAsync("api/order/ordersWithSortedEvents", new CancellationToken());
+                    var ordersReceived = await response.Content.ReadAsAsync<List<Order>>();
+                    response.EnsureSuccessStatusCode();
+                    return ordersReceived;
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             }
         }
 
@@ -96,14 +132,10 @@ namespace DROM_Client.Services
             {
                 try
                 {
-                    client.BaseAddress = new Uri("http://localhost:57815/");
+                    client.BaseAddress = BaseAddress;
                     var response = await client.GetAsync("api/order/items", new CancellationToken());
                     var itemsReceived = await response.Content.ReadAsAsync<List<Item>>();
                     response.EnsureSuccessStatusCode();
-
-                    //foreach(Item item in itemsReceived)
-                    //var content = new FormUrlEncodedContent(newOrder);
-                    //var response = await client.PostAsJson("api/parse", content);
                 }
                 catch (Exception ex)
                 {

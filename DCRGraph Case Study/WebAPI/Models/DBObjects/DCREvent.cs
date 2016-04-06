@@ -59,6 +59,9 @@ namespace WebAPI.Models.DBObjects
 
         public int Id { get; set; }
 
+        
+        public int DCRGraphId { get; set; }
+
         [Required]
         public string EventId { get; set; }
 

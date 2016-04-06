@@ -263,7 +263,7 @@ namespace DROM_Client.ViewModels
 
         public async void ExecuteEvent(Event eventToExecute)
         {
-            await _APICaller.PostExecuteEvent(eventToExecute);
+            await _APICaller.PutExecuteEvent(eventToExecute);
         }
     }
 }
