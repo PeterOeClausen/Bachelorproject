@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using DROM_Client.Services;
 using DROM_Client.Models.ObjectsOptimizedForUI;
+using System.Collections.Specialized;
 
 namespace DROM_Client.ViewModels
 {
@@ -19,27 +20,29 @@ namespace DROM_Client.ViewModels
         public bool Chef
         {
             get { return _chef; }
-            set { Set(ref _chef, value); }
+            set { Set(ref _chef, value); FilterView(); }
         }
+        private bool _chef;
+
         public bool Delivery
         {
             get { return _delivery; }
-            set { Set(ref _delivery, value); }
+            set { Set(ref _delivery, value); FilterView(); }
         }
+        private bool _delivery;
+
         public bool Manager
         {
             get { return _manager; }
-            set { Set(ref _manager, value); }
+            set { Set(ref _manager, value); FilterView(); }
         }
+        private bool _manager;
+
         public bool Waiter
         {
             get { return _waiter; }
-            set { Set(ref _waiter, value); }
+            set { Set(ref _waiter, value); FilterView(); }
         }
-
-        private bool _chef;
-        private bool _delivery;
-        private bool _manager;
         private bool _waiter;
 
         #region Property changed implementation from video (06:48): https://mva.microsoft.com/en-US/training-courses/windows-10-data-binding-14579?l=O5mda3EsB_1405632527
@@ -61,23 +64,30 @@ namespace DROM_Client.ViewModels
         }
         #endregion
 
-        public ObservableCollection<Order> Orders { get; set; } = new ObservableCollection<Order>();
-        public List<Order> OrdersFromWebAPI { get; set; }
+        public ObservableCollection<Order> OrderList { get; set; } = new ObservableCollection<Order>();
+
+        private List<Order> OrdersFromWebAPI { get; set; }
 
         public OrderPageViewModel()
         {
             _APICaller = new APICaller();
+            OrdersFromWebAPI = new List<Order>();
             setupData();
             //setupDesignerData();
             _APICaller.GetDeliveryTypes();
         }
-        
+
         private void setupData()
         {
             foreach(Order o in _APICaller.GetOrders())
             {
-                Orders.Add(o);
+                OrdersFromWebAPI.Add(o);
             }
+            foreach(Order o in OrdersFromWebAPI)
+            {
+                OrderList.Add(o);
+            }
+            //FilterView();
             #region old code (to be deleted)
             //var query = from Order o in OrdersFromWebAPI
             //            where from Event e in o.DCRGraph.Events
@@ -109,7 +119,7 @@ namespace DROM_Client.ViewModels
         public void setupDesignerData()
         {
             #region Test data
-            Orders.Add(
+            OrdersFromWebAPI.Add(
                 new Order()
                 {
                     Id = 1,
@@ -173,6 +183,11 @@ namespace DROM_Client.ViewModels
                                     {
                                         Id = 1,
                                         Name = "Waiter"
+                                    },
+                                    new Role
+                                    {
+                                        Id = 2,
+                                        Name = "Manager"
                                     }
                                 },
                                 Groups = new List<Group>
@@ -190,7 +205,7 @@ namespace DROM_Client.ViewModels
                     OrderType = "To be delivered"
                 });
 
-            Orders.Add(new Order()
+            OrdersFromWebAPI.Add(new Order()
             {
                 Id = 2,
                 ItemsAndQuantity = new List<ItemQuantity>() {
@@ -267,7 +282,7 @@ namespace DROM_Client.ViewModels
                 OrderType = "To be served"
             });
 
-            Orders.Add(new Order()
+            OrdersFromWebAPI.Add(new Order()
             {
                 Id = 2,
                 ItemsAndQuantity = new List<ItemQuantity>() {
@@ -322,13 +337,85 @@ namespace DROM_Client.ViewModels
                 Table = 1,
                 OrderType = "To be served"
             });
-            
-        #endregion
+
+            #endregion
+            FilterView();
         }
 
         public async void ExecuteEvent(Event eventToExecute)
         {
             await _APICaller.PutExecuteEvent(eventToExecute);
+        }
+
+        public void FilterView()
+        {
+            OrderList.Clear();
+            foreach (Order o in OrdersFromWebAPI)
+            {
+                var newOrder = CopyOrderExceptEvents(o);
+                
+                foreach(Event e in o.DCRGraph.Events)
+                {
+                    foreach(Role r in e.Roles)
+                    {
+                        if(r.Name == "Manager" && Manager) //Add manager events if manager events are to be added
+                        {
+                            if (!newOrder.DCRGraph.Events.Contains(e))
+                            {
+                                newOrder.DCRGraph.Events.Add(e);
+                                continue;
+                            }
+                        }
+                        if (r.Name == "Waiter" && Waiter)
+                        {
+                            if (!newOrder.DCRGraph.Events.Contains(e))
+                            {
+                                newOrder.DCRGraph.Events.Add(e);
+                                continue;
+                            }
+                        }
+                        if (r.Name == "Chef" && Chef)
+                        {
+                            if(!newOrder.DCRGraph.Events.Contains(e))
+                            {
+                                newOrder.DCRGraph.Events.Add(e);
+                                continue;
+                            }
+                        }
+                        if (r.Name == "Delivery" && Delivery)
+                        {
+                            if (!newOrder.DCRGraph.Events.Contains(e))
+                            {
+                                newOrder.DCRGraph.Events.Add(e);
+                                continue;
+                            }
+                        }
+                    }
+                }
+                //if (newOrder.DCRGraph.Events.Count > 0) //If no events can be executed dont show order.
+                //{
+                    OrderList.Add(newOrder);
+                //}
+            }
+            //Orders = filteredOrderList;
+        }
+
+        private Order CopyOrderExceptEvents(Order orderToBeCoppied)
+        {
+            var newOrder = new Order()
+            {
+                Id = orderToBeCoppied.Id,
+                ItemsAndQuantity = new List<ItemQuantity>(),
+                Customer = orderToBeCoppied.Customer,
+                OrderDate = orderToBeCoppied.OrderDate,
+                Notes = orderToBeCoppied.Notes,
+                DCRGraph = new DCRGraph() { Id = orderToBeCoppied.Id, Events = new List<Event>()},
+                Table = orderToBeCoppied.Table,
+                OrderType = orderToBeCoppied.OrderType
+            };
+            foreach (ItemQuantity iq in orderToBeCoppied.ItemsAndQuantity) newOrder.ItemsAndQuantity.Add(iq);
+
+            return newOrder;
         }
     }
 }
