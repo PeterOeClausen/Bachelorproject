@@ -82,6 +82,10 @@ namespace DROM_Client.ViewModels
             {
                 OrdersFromWebAPI.Add(o);
             }
+            foreach(Order o in OrdersFromWebAPI)
+            {
+                OrderList.Add(o);
+            }
             //FilterView();
             #region old code (to be deleted)
             //var query = from Order o in OrdersFromWebAPI
