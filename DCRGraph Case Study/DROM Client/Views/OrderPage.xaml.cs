@@ -50,6 +50,7 @@ namespace DROM_Client.Views
             var viewModel = ((Button) sender).DataContext as OrderPageViewModel;
             if (viewModel.Chef) viewModel.Chef = false;
             else viewModel.Chef = true;
+
         }
 
         private void Delivery_Click(object sender, RoutedEventArgs e)

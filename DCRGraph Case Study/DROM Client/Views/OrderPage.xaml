@@ -41,11 +41,15 @@
                     <vm:OrderPageViewModel/>
                 </Grid.DataContext>
                 <!--Order view list-->
-                <ListView ItemsSource="{Binding Orders}">
+                <ListView ItemsSource="{Binding OrderList}" x:Name="OrderListView">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
+                            <Grid BorderThickness="1" BorderBrush="Gray" Padding="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal" Grid.Row="0">
                                     <!--Order id:-->
                                     <StackPanel MinWidth="150">
                                         <TextBlock Text="Order id:"/>
@@ -106,7 +110,7 @@
                                         </Button.Content>
                                     </Button>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,30">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,30" Grid.Row="1">
                                     <!--Items on order-->
                                     <StackPanel MinWidth="150">
                                         <TextBlock Text="Items on order:"/>
@@ -156,7 +160,7 @@
                                         </GridView>
                                     </Grid>
                                 </StackPanel>
-                            </StackPanel>
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

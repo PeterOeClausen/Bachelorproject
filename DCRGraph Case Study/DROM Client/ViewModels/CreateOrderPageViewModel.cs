@@ -111,11 +111,21 @@ namespace DROM_Client.ViewModels
         internal void AddQuantityAndItem(int quantity, Item item)
         {
             Dictionary<Item, int> replacementDictionary = new Dictionary<Item, int>();
-            foreach (KeyValuePair<Item, int> entry in OrderBeingCreated.ItemsAndQuantity)
+            foreach (KeyValuePair<Item, int> entry in OrderBeingCreated.ItemsAndQuantity) //Copy old dictionary
             {
                 replacementDictionary.Add(entry.Key, entry.Value);
             }
-            replacementDictionary.Add(item, quantity);
+            if (!replacementDictionary.ContainsKey(item)) //If item is not in dictionary
+            {
+                replacementDictionary.Add(item, quantity); //Add it
+            }
+            else //else update the value of item
+            {
+                int quan;
+                replacementDictionary.TryGetValue(item, out quan);
+                replacementDictionary.Remove(item);
+                replacementDictionary.Add(item, quan + quantity);
+            }
             OrderBeingCreated.ItemsAndQuantity = replacementDictionary;
         }
 
