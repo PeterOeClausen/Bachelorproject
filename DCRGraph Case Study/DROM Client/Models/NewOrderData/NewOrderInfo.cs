@@ -14,6 +14,7 @@ namespace DROM_Client.Models.NewOrderData
         public Customer Customer { get; set; } //Null if Serving, otherwise all info.
         public DateTime OrderDate { get; set; } //DateTime.now in client
         public string Notes { get; set; }
-        public int Table { get; set; } 
+        public int Table { get; set; }
+        public int GraphType { get; set; } //we do not use this yet, but it is for determining which dcrgraph is used for the order 
     }
 }

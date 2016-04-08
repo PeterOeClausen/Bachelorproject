@@ -102,24 +102,6 @@ namespace WebAPI.Models.Parsing
                         db.Orders.Add(order);
                         db.SaveChanges();
 
-                        
-
-
-
-
-                            /*
-                            var adAgency = context.Companies.Single(c => c.AgencyType == AgencyType.Advertising);
-                            var adClients = context.Companies.Where(c => c.City.StartsWith("B") && c.AgencyType == AgencyType.NotSet).ToList();
-                            adAgency.Clients = adClients;
-
-                            var digitalAgency = context.Companies.Single(c => c.AgencyType == AgencyType.Digital);
-                            var digiClients = context.Companies.Where(c => c.City.StartsWith("L") && c.AgencyType == AgencyType.NotSet).ToList();
-                            digitalAgency.Clients = digiClients;
-
-                            var prAgency = context.Companies.Single(c => c.AgencyType == AgencyType.PR);
-                            var client = context.Companies.Single(c => c.CompanyName == "Black");
-                            prAgency.Clients.Add(client);
-                            */
 
                             //put groups on events
                             foreach (var i in container.EventGroups)
@@ -187,6 +169,7 @@ namespace WebAPI.Models.Parsing
                             InsertBySqlQuery(fromEvent.Id, toEvent.Id, "Milestones");
                         }
                         
+
 
                         foreach (var e in container.Events)
                         {

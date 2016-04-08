@@ -1,4 +1,4 @@
-<dcrgraph title="Bachelor 2" dataTypesStatus="hide" filterLevel="4" zoomLevel="1">
+<dcrgraph title="Bachelor 2" dataTypesStatus="hide" filterLevel="4" zoomLevel="-5">
     <specification>
         <resources>
             <events>
@@ -8,7 +8,8 @@
                             <location xLoc="191" yLoc="478" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -25,7 +26,8 @@
                             <location xLoc="692" yLoc="374" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Chef</role>
+                            <role>Manager</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -42,7 +44,8 @@
                             <location xLoc="686" yLoc="218" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Chef</role>
+                            <role>Manager</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -59,7 +62,8 @@
                             <location xLoc="954" yLoc="282" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Chef</role>
+                            <role>Manager</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -76,7 +80,8 @@
                             <location xLoc="1083" yLoc="102" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -93,7 +98,8 @@
                             <location xLoc="1129" yLoc="264" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -110,7 +116,8 @@
                             <location xLoc="1121" yLoc="427" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -127,7 +134,8 @@
                             <location xLoc="1287" yLoc="94" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -144,7 +152,8 @@
                             <location xLoc="1486" yLoc="306" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -161,7 +170,8 @@
                             <location xLoc="1483" yLoc="85" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -178,7 +188,8 @@
                             <location xLoc="1298" yLoc="806" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>Edit events</group>
@@ -195,7 +206,8 @@
                             <location xLoc="995" yLoc="775" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>Edit events</group>
@@ -212,7 +224,8 @@
                             <location xLoc="878" yLoc="775" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>Edit events</group>
@@ -229,7 +242,8 @@
                             <location xLoc="1409" yLoc="805" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>Edit events</group>
@@ -331,7 +345,8 @@
                             <location xLoc="811" yLoc="549" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Chef</role>
+                            <role>Manager</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -348,7 +363,8 @@
                             <location xLoc="1529" yLoc="811" />
                         </visualization>
                         <roles>
-                            <role></role>
+                            <role>Manager</role>
+                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>Edit events</group>
@@ -416,7 +432,12 @@
                 <writeAccesses />
             </variableAccesses>
             <custom>
-                <roles></roles>
+                <roles>
+                    <role>Manager</role>
+                    <role>Waiter</role>
+                    <role>Chef</role>
+                    <role>Delivery</role>
+                </roles>
                 <groups>
                     <group sequence="0">always</group>
                     <group sequence="0">Edit events</group>

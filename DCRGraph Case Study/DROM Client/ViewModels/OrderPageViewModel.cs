@@ -69,6 +69,7 @@ namespace DROM_Client.ViewModels
             _APICaller = new APICaller();
             setupData();
             //setupDesignerData();
+            _APICaller.GetDeliveryTypes();
         }
         
         private void setupData()
