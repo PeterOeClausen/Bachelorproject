@@ -1,4 +1,4 @@
-<dcrgraph title="Bachelor 2" dataTypesStatus="hide" filterLevel="4" zoomLevel="-4">
+<dcrgraph title="Bachelor 2" dataTypesStatus="hide" filterLevel="4" zoomLevel="1">
     <specification>
         <resources>
             <events>
@@ -277,7 +277,7 @@
                 <event id="Activity 22" scope="private" >
                     <custom>
                         <visualization>
-                            <location xLoc="397" yLoc="75" />
+                            <location xLoc="420" yLoc="45" />
                         </visualization>
                         <roles>
                             <role></role>
@@ -294,7 +294,7 @@
                 <event id="Activity 23" scope="private" >
                     <custom>
                         <visualization>
-                            <location xLoc="202" yLoc="68" />
+                            <location xLoc="145" yLoc="47" />
                         </visualization>
                         <roles>
                             <role></role>
@@ -311,7 +311,7 @@
                 <event id="Activity 24" scope="private" >
                     <custom>
                         <visualization>
-                            <location xLoc="88" yLoc="100" />
+                            <location xLoc="268" yLoc="50" />
                         </visualization>
                         <roles>
                             <role></role>
@@ -458,6 +458,7 @@
                 <response sourceId="Activity 16" targetId="Activity 25" filterLevel="3"  description=""  time=""  groups=""  />
                 <response sourceId="Activity 25" targetId="Activity 3" filterLevel="1"  description=""  time=""  groups=""  />
                 <response sourceId="Activity 25" targetId="Activity 4" filterLevel="1"  description=""  time=""  groups=""  />
+                <response sourceId="Activity 20" targetId="Activity 0" filterLevel="4"  description=""  time=""  groups=""  />
             </responses>
             <excludes>
                 <exclude sourceId="Activity 0" targetId="Activity 0" filterLevel="1"  description=""  time=""  groups=""  />
@@ -520,6 +521,8 @@
                 <exclude sourceId="Activity 13" targetId="Activity 3" filterLevel="3"  description=""  time=""  groups=""  />
                 <exclude sourceId="Activity 26" targetId="Activity 4" filterLevel="1"  description=""  time=""  groups=""  />
                 <exclude sourceId="Activity 25" targetId="Activity 25" filterLevel="1"  description=""  time=""  groups=""  />
+                <exclude sourceId="Activity 23" targetId="Activity 20" filterLevel="4"  description=""  time=""  groups=""  />
+                <exclude sourceId="Activity 22" targetId="Activity 24" filterLevel="4"  description=""  time=""  groups=""  />
             </excludes>
             <includes>
                 <include sourceId="Activity 13" targetId="Activity 7" filterLevel="3"  description=""  time=""  groups=""  />

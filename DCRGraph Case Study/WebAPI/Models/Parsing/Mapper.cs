@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,9 @@ using WebAPI.XMLParser;
 using DROM_Client.Models.NewOrderData;
 using WebAPI.Models.DBObjects;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using WebAPI.Models.DBMethods;
+
 
 namespace WebAPI.Models.Parsing
 {
@@ -21,8 +24,8 @@ namespace WebAPI.Models.Parsing
             {
 
                 
-                using (TransactionScope scope = new TransactionScope())
-                {
+                //using (TransactionScope scope = new TransactionScope())
+                //{
                     try
                     {
                         var graph = new DCRGraph();
@@ -45,7 +48,7 @@ namespace WebAPI.Models.Parsing
                             var item =
                                 db.Items
                                     .FirstOrDefaultAsync(i => i.Name == iq.Key.Name).Result;
-                            if (!item.Equals(item.Name))
+                            if (!iq.Key.Name.ToLower().Equals(item.Name.ToLower()))
                             {
                                 throw new Exception("Item '" + iq.Key.Name + "' did not exist in the database");
                             }
@@ -99,25 +102,27 @@ namespace WebAPI.Models.Parsing
                         db.Orders.Add(order);
                         db.SaveChanges();
 
+                        
 
 
 
-                        /*
-                        var adAgency = context.Companies.Single(c => c.AgencyType == AgencyType.Advertising);
-                        var adClients = context.Companies.Where(c => c.City.StartsWith("B") && c.AgencyType == AgencyType.NotSet).ToList();
-                        adAgency.Clients = adClients;
 
-                        var digitalAgency = context.Companies.Single(c => c.AgencyType == AgencyType.Digital);
-                        var digiClients = context.Companies.Where(c => c.City.StartsWith("L") && c.AgencyType == AgencyType.NotSet).ToList();
-                        digitalAgency.Clients = digiClients;
+                            /*
+                            var adAgency = context.Companies.Single(c => c.AgencyType == AgencyType.Advertising);
+                            var adClients = context.Companies.Where(c => c.City.StartsWith("B") && c.AgencyType == AgencyType.NotSet).ToList();
+                            adAgency.Clients = adClients;
 
-                        var prAgency = context.Companies.Single(c => c.AgencyType == AgencyType.PR);
-                        var client = context.Companies.Single(c => c.CompanyName == "Black");
-                        prAgency.Clients.Add(client);
-                        */
+                            var digitalAgency = context.Companies.Single(c => c.AgencyType == AgencyType.Digital);
+                            var digiClients = context.Companies.Where(c => c.City.StartsWith("L") && c.AgencyType == AgencyType.NotSet).ToList();
+                            digitalAgency.Clients = digiClients;
 
-                        //put groups on events
-                        foreach (var i in container.EventGroups)
+                            var prAgency = context.Companies.Single(c => c.AgencyType == AgencyType.PR);
+                            var client = context.Companies.Single(c => c.CompanyName == "Black");
+                            prAgency.Clients.Add(client);
+                            */
+
+                            //put groups on events
+                            foreach (var i in container.EventGroups)
                         {
 
 
@@ -142,49 +147,33 @@ namespace WebAPI.Models.Parsing
                         //put inclusions on events
                         foreach (var i in container.Inclusions)
                         {
-
                             var fromEvent = container.Events.Find(x => x.EventId.Equals(i.fromNodeId));
                             var toEvent = container.Events.Find(x => x.EventId.Equals(i.toNodeId));
-
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).IncludeFrom.Add(toEvent);
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).IncludeTo.Add(fromEvent);
-
+                            InsertBySqlQuery(fromEvent.Id, toEvent.Id, "Includes");
                         }
                         
                         //put exclusions on events
                         foreach (var i in container.Exclusions)
                         {
-
                             var fromEvent = container.Events.Find(x => x.EventId.Equals(i.fromNodeId));
                             var toEvent = container.Events.Find(x => x.EventId.Equals(i.toNodeId));
-
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ExcludeFrom.Add(toEvent);
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ExcludeTo.Add(fromEvent);
-
+                            InsertBySqlQuery(fromEvent.Id, toEvent.Id, "Excludes");
                         }
 
                         //put responses on events
                         foreach (var i in container.Responses)
                         {
-
                             var fromEvent = container.Events.Find(x => x.EventId.Equals(i.fromNodeId));
                             var toEvent = container.Events.Find(x => x.EventId.Equals(i.toNodeId));
-
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ResponseFrom.Add(toEvent);
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ResponseTo.Add(fromEvent);
-
+                            InsertBySqlQuery(fromEvent.Id, toEvent.Id, "Responses");
                         }
 
                         //put conditions on events
                         foreach (var i in container.Conditions)
                         {
-
                             var fromEvent = container.Events.Find(x => x.EventId.Equals(i.fromNodeId));
                             var toEvent = container.Events.Find(x => x.EventId.Equals(i.toNodeId));
-
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ConditionReverseFrom.Add(toEvent);
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).ConditionReverseTo.Add(fromEvent);
-
+                            InsertBySqlQuery(fromEvent.Id, toEvent.Id, "Conditions");
                         }
 
 
@@ -193,13 +182,9 @@ namespace WebAPI.Models.Parsing
                         //put milestones on events
                         foreach (var i in container.Milestones)
                         {
-
                             var fromEvent = container.Events.Find(x => x.EventId.Equals(i.fromNodeId));
                             var toEvent = container.Events.Find(x => x.EventId.Equals(i.toNodeId));
-
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).MilestoneReverseFrom.Add(toEvent);
-                            container.Events.Find(x => x.EventId.Equals(i.fromNodeId)).MilestoneReverseTo.Add(fromEvent);
-
+                            InsertBySqlQuery(fromEvent.Id, toEvent.Id, "Milestones");
                         }
                         
 
@@ -210,7 +195,7 @@ namespace WebAPI.Models.Parsing
                         db.SaveChanges();
                         
 
-                        scope.Complete();
+                        //scope.Complete();
                         
                         
                     }
@@ -221,11 +206,51 @@ namespace WebAPI.Models.Parsing
                         throw;
                     }
                     
-                }
+                //}
 
             }
         }
-    
+
+        void InsertBySqlQuery(int fromId, int toId, string table)
+        // i is the to or from id. d decides whether to look for from or to. true for from
+        {
+            System.Configuration.Configuration rootWebConfig =
+                System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/MyWebSiteRoot");
+            System.Configuration.ConnectionStringSettings connString;
+
+            connString = rootWebConfig.ConnectionStrings.ConnectionStrings["Database"];
+            try
+            {
+
+
+
+                // Create an SqlConnection from the provided connection string.
+                using (SqlConnection connection = new SqlConnection(connString.ConnectionString))
+                {
+                    // Formulate the command.
+                    SqlCommand command = new SqlCommand();
+                    command.Connection = connection;
+
+                    // Specify the query to be executed.
+                    command.CommandType = CommandType.Text;
+                    
+                    command.CommandText = @"
+                    INSERT INTO " + table + " (FromId, ToId)" +
+                                          " VALUES ('" + fromId + "', '" + toId + "');";
+                    
+
+                    // Open a connection to database.
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
     }
     
 }

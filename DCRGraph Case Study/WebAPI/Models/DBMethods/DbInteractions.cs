@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using DROM_Client.Models.BusinessObjects;
 using Database = WebAPI.Models.DBObjects.Database;
+using System.Data.SqlClient;
+using System.Data;
+using WebAPI.Models.DBObjects;
 
 namespace WebAPI.Models.DBMethods
 {
@@ -196,69 +200,132 @@ namespace WebAPI.Models.DBMethods
 
         public async Task<HttpStatusCode> ExecuteEvent(int id)
         {
+            try
+            {
+
+            
             using (var db = new Database())
             {
-                var eventToBeExecuted = await db.DCREvents
-                    .Where(e => e.Id == id)
-                    .Include(e => e.ConditionReverseTo)
-                    .Include(e => e.ExcludeTo)
-                    .Include(e => e.IncludeTo)
-                    .Include(e => e.MilestoneReverseTo)
-                    .Include(e => e.ResponseTo)
-                    .FirstOrDefaultAsync();
+                var eventToBeExecuted = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == id); 
+                var qwe = this.GetBySqlQuery(42, "Includes", true);
+
+                
+
+                var loadedEvents = new Dictionary<int, DCREvent>();
+
                 //preconditions:
                 //the event must be included
                 if (eventToBeExecuted.Included == false) return HttpStatusCode.InternalServerError;
 
-
-                foreach (var condition in eventToBeExecuted.ConditionReverseTo)
+                //check if conditions are executed
+                var conditions = this.GetBySqlQuery(id, "Conditions", true);
+                foreach (var condition in conditions)
                 {
-                    //condition events must be executed
-                    if (condition.Executed != true && condition.Included) return HttpStatusCode.InternalServerError;
+                    var cEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == condition.Item2);
+                    
+                    if (cEvent.Executed != true && cEvent.Included) return HttpStatusCode.InternalServerError;
                 }
-                foreach (var milestone in eventToBeExecuted.MilestoneReverseTo)
+
+                //there must not be a pending milestone 
+                var milestones = this.GetBySqlQuery(id, "Milestones", true);
+                foreach (var milestone in milestones)
                 {
-                    //there must not be a pending milestone 
-                    if (milestone.Pending != false && milestone.Included) return HttpStatusCode.InternalServerError;
+                    var mEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == milestone.Item2);
+                    
+                    if (mEvent.Pending != false && mEvent.Included) return HttpStatusCode.InternalServerError;
                 }
 
                 //Preconditions have succeded!
+
+
                 //Setup postconditions:
-                
-                
-                foreach (var e in eventToBeExecuted.ExcludeTo)
-                {
-                    //exclude related events
-                    e.Included = false;
-                    db.DCREvents.Attach(e);
-                    db.Entry(e).State = EntityState.Modified;
-                }
-
-                foreach (var e in eventToBeExecuted.IncludeTo)
-                {
-                    //Include related events
-                    e.Included = true;
-                    db.DCREvents.Attach(e);
-                    db.Entry(e).State = EntityState.Modified;
-                }
-
-                foreach (var e in eventToBeExecuted.ResponseTo)
-                {
-                    //set related events pending
-                    e.Pending = true;
-                    db.DCREvents.Attach(e);
-                    db.Entry(e).State = EntityState.Modified;
-                }
-
                 eventToBeExecuted.Pending = false;
                 eventToBeExecuted.Executed = true;
+                loadedEvents.Add(eventToBeExecuted.Id,eventToBeExecuted);
 
-                db.Entry(eventToBeExecuted).State = EntityState.Modified;
+                //exclude related events
+                var excludes = this.GetBySqlQuery(id, "Excludes", true);
+                foreach (var exclude in excludes)
+                {
+                    if (loadedEvents.ContainsKey(exclude.Item2))
+                    {
+                        if (loadedEvents[exclude.Item2].Included)
+                        {
+                            loadedEvents[exclude.Item2].Included = false;
+                        }
+                    }
+                    else
+                    {
+                        var eEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == exclude.Item2);
+                        if (eEvent.Included)
+                        {
+                            eEvent.Included = false;
+                            loadedEvents.Add(eEvent.Id, eEvent);
+                        }
+                    }
+                }
+
+                //Include related events
+                var includes = this.GetBySqlQuery(id, "Includes", true);
+                foreach (var include in includes)
+                {
+                    if (loadedEvents.ContainsKey(include.Item2))
+                    {
+                        if (!loadedEvents[include.Item2].Included)
+                        {
+                            loadedEvents[include.Item2].Included = true;
+                        }
+                    }
+                    else
+                    {
+                        var iEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == include.Item2);
+                        if (!iEvent.Included)
+                        {
+                            iEvent.Included = true;
+                            loadedEvents.Add(iEvent.Id, iEvent);
+                        }
+                    }
+                }
+
+                //set related events pending
+                var responses = this.GetBySqlQuery(id, "Responses", true);
+                foreach (var response in responses)
+                {
+                    if (loadedEvents.ContainsKey(response.Item2))
+                    {
+                        if (!loadedEvents[response.Item2].Pending)
+                        {
+                            loadedEvents[response.Item2].Pending = true;
+                        }
+                    }
+                    else
+                    {
+                        var rEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == response.Item2);
+                        if (!rEvent.Pending)
+                        {
+                            rEvent.Pending = true;
+                            loadedEvents.Add(rEvent.Id, rEvent);
+                        }
+                    }
+                }
+                
+                //set updated events to be updated in db
+                foreach (var e in loadedEvents)
+                {
+                    db.Entry(e.Value).State = EntityState.Modified;
+                }
+                
                 await db.SaveChangesAsync();
 
 
 
                 return HttpStatusCode.OK;
+            }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
         }
         /*
@@ -274,5 +341,67 @@ namespace WebAPI.Models.DBMethods
             }
         }
         */
+
+
+        List<Tuple<int,int>> GetBySqlQuery(int i, string table, bool d)
+            // i is the to or from id. d decides whether to look for from or to. true for from
+        {
+            System.Configuration.Configuration rootWebConfig =
+                System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/MyWebSiteRoot");
+            System.Configuration.ConnectionStringSettings connString;
+
+            connString = rootWebConfig.ConnectionStrings.ConnectionStrings["Database"];
+            try
+            {
+
+            
+
+            // Create an SqlConnection from the provided connection string.
+            using (SqlConnection connection = new SqlConnection(connString.ConnectionString))
+            {
+                // Formulate the command.
+                SqlCommand command = new SqlCommand();
+                command.Connection = connection;
+
+                // Specify the query to be executed.
+                command.CommandType = CommandType.Text;
+                if (d)
+                {
+                    command.CommandText = @"
+                    SELECT FromId, ToId
+                    FROM " + table
+                    + " WHERE FromId=" + i + ";";
+                }
+                else
+                {
+                    command.CommandText = @"
+                    SELECT FromId, ToId
+                    FROM " + table
+                    + " WHERE ToId=" + i + ";";
+                }
+
+                // Open a connection to database.
+                connection.Open();
+
+                // Read data returned for the query.
+                SqlDataReader reader = command.ExecuteReader();
+                var result = new List<Tuple<int, int>>();
+                while (reader.Read())
+                    {
+                        result.Add(new Tuple<int, int>(Int32.Parse(reader[0].ToString()), Int32.Parse(reader[1].ToString())));
+                    }
+                return result;
+                
+            }
+            }
+            catch (Exception ex )
+            {
+
+                throw;
+            }
+        }
+
+
+
     }
 }

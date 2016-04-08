@@ -12,7 +12,6 @@ namespace WebAPI.Models.DBObjects
         public DCREvent()
         {
             EventUIElemements = new HashSet<EventUIElemement>();
-
             Groups = new HashSet<Group>();
             Roles = new HashSet<Role>();
             this.IncludeFrom = new HashSet<DCREvent>();
