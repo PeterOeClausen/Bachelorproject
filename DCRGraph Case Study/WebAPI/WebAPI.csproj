@@ -207,7 +207,6 @@
     <Compile Include="Models\DBObjects\DCRGraph.cs" />
     <Compile Include="Models\DBObjects\EventUIElemement.cs" />
     <Compile Include="Models\DBObjects\Group.cs" />
-    <Compile Include="Models\DBObjects\Include.cs" />
     <Compile Include="Models\DBObjects\IntegerSpecifyingUIElement.cs" />
     <Compile Include="Models\DBObjects\Item.cs" />
     <Compile Include="Models\DBObjects\Order.cs" />
