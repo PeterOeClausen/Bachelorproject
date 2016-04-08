@@ -41,7 +41,7 @@ namespace DROM_Client.ViewModels
         public bool Waiter
         {
             get { return _waiter; }
-            set { Set(ref _waiter, value); FilterView(); }
+            set{ Set(ref _waiter, value); FilterView(); }
         }
         private bool _waiter;
 
@@ -64,24 +64,23 @@ namespace DROM_Client.ViewModels
         }
         #endregion
 
-        public ObservableCollection<Order> OrderList { get; set; } = new ObservableCollection<Order>();
+        public ObservableCollection<Order> OrderList { get { return _OrderList; } }
+        private readonly ObservableCollection<Order> _OrderList = new ObservableCollection<Order>();
 
         private List<Order> OrdersFromWebAPI { get; set; }
 
         public OrderPageViewModel()
         {
             _APICaller = new APICaller();
-            OrdersFromWebAPI = new List<Order>();
             setupData();
             //setupDesignerData();
+            FilterView();
         }
 
         private void setupData()
         {
-            foreach(Order o in _APICaller.GetOrders())
-            {
-                OrdersFromWebAPI.Add(o);
-            }
+            OrdersFromWebAPI = _APICaller.GetOrders();
+            
             foreach(Order o in OrdersFromWebAPI)
             {
                 OrderList.Add(o);
@@ -117,6 +116,8 @@ namespace DROM_Client.ViewModels
         /// </summary>
         public void setupDesignerData()
         {
+            OrdersFromWebAPI = new List<Order>();
+
             #region Test data
             OrdersFromWebAPI.Add(
                 new Order()
@@ -338,7 +339,11 @@ namespace DROM_Client.ViewModels
             });
 
             #endregion
-            FilterView();
+
+            foreach(Order o in OrdersFromWebAPI)
+            {
+                OrderList.Add(o);
+            }
         }
 
         public async void ExecuteEvent(Event eventToExecute)
@@ -349,6 +354,7 @@ namespace DROM_Client.ViewModels
         public void FilterView()
         {
             OrderList.Clear();
+            //var newOrderList = new List<Order>();
             foreach (Order o in OrdersFromWebAPI)
             {
                 var newOrder = CopyOrderExceptEvents(o);
@@ -393,9 +399,11 @@ namespace DROM_Client.ViewModels
                 }
                 //if (newOrder.DCRGraph.Events.Count > 0) //If no events can be executed dont show order.
                 //{
-                    OrderList.Add(newOrder);
+                OrderList.Add(newOrder);
+                //newOrderList.Add(newOrder);
                 //}
             }
+            //OrderList = newOrderList;
             //Orders = filteredOrderList;
         }
 

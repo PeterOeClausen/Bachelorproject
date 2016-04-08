@@ -81,5 +81,11 @@ namespace DROM_Client.Views
             var ViewModel = DataContext as OrderPageViewModel;
             ViewModel.ExecuteEvent(EventToExecute);
         }
+
+        private void TempAddOrderClick(object sender, RoutedEventArgs e)
+        {
+            var ViewModel = DataContext as OrderPageViewModel;
+            ViewModel.OrderList.Add(new Order { Id = 9001});
+        }
     }
 }
