@@ -33,12 +33,35 @@ namespace WebAPI.Migrations
             context.Database.ExecuteSqlCommand("sp_MSForEachTable 'IF OBJECT_ID(''?'') NOT IN (ISNULL(OBJECT_ID(''[dbo].[__MigrationHistory]''),0)) DELETE FROM ?'");
             context.Database.ExecuteSqlCommand("EXEC sp_MSForEachTable 'ALTER TABLE ? CHECK CONSTRAINT ALL'");
 
+            var deliveryTypes = new List<DeliveryType>()
+            {
+                new DeliveryType()
+                {
+                    OrderType = 0,
+                    Type = "For delivery"
+                },
+                new DeliveryType()
+                {
+                    OrderType = 0,
+                    Type = "For serving"
+                },
+                new DeliveryType()
+                {
+                    OrderType = 0,
+                    Type = "For takeaway"
+                }
+            };
+            foreach (var dt in deliveryTypes)
+            {
+                context.DeliveryTypes.AddOrUpdate(dt);
+            }
+            
 
 
             var roles = new List<Role>()
             {
                 new Role(){ Name = "Manager"},
-                new Role(){ Name = "Cook"},
+                new Role(){ Name = "Chef"},
                 new Role() {Name = "Waiter"},
                 new Role() {Name = "Delivery"}
             };

@@ -328,19 +328,21 @@ namespace WebAPI.Models.DBMethods
                 throw;
             }
         }
-        /*
-        public async Task<List<string>> DeliveryTypes(int type)
+        
+        public async Task<List<string>> DeliveryTypes(int orderType)
         {
-            using (var db = new Database() )
+            using (var db = new Database())
             {
-                switch (type)
+                var deliveryTypes = db.DeliveryTypes.Where(dt => dt.OrderType == orderType);
+                var result = new List<string>();
+                foreach (var dt in deliveryTypes)
                 {
-                    case 1:
-                        return await db.DCREvents.FindAsync(slec)
+                    result.Add(dt.Type);
                 }
+                return result;
             }
         }
-        */
+        
 
 
         List<Tuple<int,int>> GetBySqlQuery(int i, string table, bool d)

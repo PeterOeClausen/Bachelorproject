@@ -75,6 +75,7 @@ namespace DROM_Client.ViewModels
             setupData();
             //setupDesignerData();
             FilterViewAcordingToRoles();
+            //_APICaller.GetDeliveryTypes();
         }
 
         private void setupData()

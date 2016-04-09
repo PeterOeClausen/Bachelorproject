@@ -367,5 +367,25 @@ namespace DROM_Client.Services
                 }
             }
         }
+
+        public List<string> GetDeliveryTypes()
+        {
+            var orderGraphType = 0; //this is not really used atm., but will be used in case more than one type of dcrgraphs is in the system
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = BaseAddress;
+                    var response = client.GetAsync("api/order/deliveryTypes/" + orderGraphType, new CancellationToken()).Result;
+                    var deliveryTypesReceived = response.Content.ReadAsAsync<List<string>>().Result;
+                    response.EnsureSuccessStatusCode();
+                    return deliveryTypesReceived;
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+        } 
     }
 }

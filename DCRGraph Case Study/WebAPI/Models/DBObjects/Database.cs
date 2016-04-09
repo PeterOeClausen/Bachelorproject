@@ -95,7 +95,7 @@ namespace WebAPI.Models.DBObjects
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-        //public virtual DbSet<Include> Includes { get; set; }
+        public virtual DbSet<DeliveryType> DeliveryTypes { get; set; }
 
 
 
