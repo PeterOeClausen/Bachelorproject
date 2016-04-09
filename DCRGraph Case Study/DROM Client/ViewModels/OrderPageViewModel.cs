@@ -20,28 +20,28 @@ namespace DROM_Client.ViewModels
         public bool Chef
         {
             get { return _chef; }
-            set { Set(ref _chef, value); FilterView(); }
+            set { Set(ref _chef, value); FilterViewAcordingToRoles(); }
         }
         private bool _chef;
 
         public bool Delivery
         {
             get { return _delivery; }
-            set { Set(ref _delivery, value); FilterView(); }
+            set { Set(ref _delivery, value); FilterViewAcordingToRoles(); }
         }
         private bool _delivery;
 
         public bool Manager
         {
             get { return _manager; }
-            set { Set(ref _manager, value); FilterView(); }
+            set { Set(ref _manager, value); FilterViewAcordingToRoles(); }
         }
         private bool _manager;
 
         public bool Waiter
         {
             get { return _waiter; }
-            set{ Set(ref _waiter, value); FilterView(); }
+            set{ Set(ref _waiter, value); FilterViewAcordingToRoles(); }
         }
         private bool _waiter;
 
@@ -67,14 +67,14 @@ namespace DROM_Client.ViewModels
         public ObservableCollection<Order> OrderList { get { return _OrderList; } }
         private readonly ObservableCollection<Order> _OrderList = new ObservableCollection<Order>();
 
-        private List<Order> OrdersFromWebAPI { get; set; }
+        public List<Order> OrdersFromWebAPI { get; set; }
 
         public OrderPageViewModel()
         {
             _APICaller = new APICaller();
             setupData();
             //setupDesignerData();
-            FilterView();
+            FilterViewAcordingToRoles();
         }
 
         private void setupData()
@@ -351,60 +351,55 @@ namespace DROM_Client.ViewModels
             await _APICaller.PutExecuteEvent(eventToExecute);
         }
 
-        public void FilterView()
+        public void FilterViewAcordingToRoles()
         {
             OrderList.Clear();
-            //var newOrderList = new List<Order>();
             foreach (Order o in OrdersFromWebAPI)
             {
                 var newOrder = CopyOrderExceptEvents(o);
-                
-                foreach(Event e in o.DCRGraph.Events)
+                foreach (Event e in o.DCRGraph.Events)
                 {
-                    foreach(Role r in e.Roles)
+                    if (Manager) //If manager is checked off, we just add all events. (Talk about this with Johan)
                     {
-                        if(r.Name == "Manager" && Manager) //Add manager events if manager events are to be added
+                        if (!newOrder.DCRGraph.Events.Contains(e))
                         {
-                            if (!newOrder.DCRGraph.Events.Contains(e))
-                            {
-                                newOrder.DCRGraph.Events.Add(e);
-                                continue;
-                            }
+                            newOrder.DCRGraph.Events.Add(e);
+                            continue;
                         }
-                        if (r.Name == "Waiter" && Waiter)
+                    }
+                    if (!e.Groups.Exists(ev => ev.Name == "Edit events") && e.Groups.Exists(ev => ev.Name == "only pending")) //Filter out "Edit events" and be sure the event shows for "only pending"
+                    {
+                        foreach (Role r in e.Roles)
                         {
-                            if (!newOrder.DCRGraph.Events.Contains(e))
+                            if (r.Name == "Waiter" && Waiter)
                             {
-                                newOrder.DCRGraph.Events.Add(e);
-                                continue;
+                                if (!newOrder.DCRGraph.Events.Contains(e))
+                                {
+                                    newOrder.DCRGraph.Events.Add(e);
+                                    continue;
+                                }
                             }
-                        }
-                        if (r.Name == "Chef" && Chef)
-                        {
-                            if(!newOrder.DCRGraph.Events.Contains(e))
+                            if (r.Name == "Chef" && Chef)
                             {
-                                newOrder.DCRGraph.Events.Add(e);
-                                continue;
+                                if (!newOrder.DCRGraph.Events.Contains(e))
+                                {
+                                    newOrder.DCRGraph.Events.Add(e);
+                                    continue;
+                                }
                             }
-                        }
-                        if (r.Name == "Delivery" && Delivery)
-                        {
-                            if (!newOrder.DCRGraph.Events.Contains(e))
+                            if (r.Name == "Delivery" && Delivery)
                             {
-                                newOrder.DCRGraph.Events.Add(e);
-                                continue;
+                                if (!newOrder.DCRGraph.Events.Contains(e))
+                                {
+                                    newOrder.DCRGraph.Events.Add(e);
+                                    continue;
+                                }
                             }
                         }
                     }
                 }
-                //if (newOrder.DCRGraph.Events.Count > 0) //If no events can be executed dont show order.
-                //{
                 OrderList.Add(newOrder);
-                //newOrderList.Add(newOrder);
-                //}
             }
-            //OrderList = newOrderList;
-            //Orders = filteredOrderList;
         }
 
         private Order CopyOrderExceptEvents(Order orderToBeCoppied)

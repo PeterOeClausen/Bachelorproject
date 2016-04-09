@@ -36,7 +36,10 @@ namespace DROM_Client.Views
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(EditOrderPage), ((Button) sender).Tag as Order);
+            var selectedOrder = ((Button)sender).Tag as Order;
+            var viewModel = DataContext as OrderPageViewModel;
+            Order originalOrder = viewModel.OrdersFromWebAPI.Find(o => o.Id == selectedOrder.Id);
+            Frame.Navigate(typeof(EditOrderPage), originalOrder);
         }
 
         private void Create_New_Order_Click(object sender, RoutedEventArgs e)
