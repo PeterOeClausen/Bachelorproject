@@ -149,7 +149,7 @@
                 <event id="Activity 10" scope="private" >
                     <custom>
                         <visualization>
-                            <location xLoc="1486" yLoc="306" />
+                            <location xLoc="1486" yLoc="305" />
                         </visualization>
                         <roles>
                             <role>Manager</role>
@@ -433,10 +433,10 @@
             </variableAccesses>
             <custom>
                 <roles>
-                    <role>Manager</role>
-                    <role>Waiter</role>
                     <role>Chef</role>
                     <role>Delivery</role>
+                    <role>Manager</role>
+                    <role>Waiter</role>
                 </roles>
                 <groups>
                     <group sequence="0">always</group>

@@ -45,15 +45,16 @@ namespace DROM_Client.Services
             }
         }
 
-        public async Task<string> PutUpdateOrder(Order updatedOrder)
+        public async Task<string> PutUpdateOrder(Order updatedOrder, int editEvent)
         {
 
             using (var client = new HttpClient())
             {
                 try
                 {
+                    var dto = new Tuple<Order, int>(updatedOrder, editEvent);
                     client.BaseAddress = BaseAddress;
-                    var response = await client.PutAsXmlAsync("api/order/updateorder", updatedOrder, new CancellationToken());
+                    var response = await client.PutAsXmlAsync("api/order/updateorder", dto, new CancellationToken());
                     return response.StatusCode.ToString();
                     //var content = new FormUrlEncodedContent(newOrder);
                     //var response = await client.PostAsJson("api/parse", content);
