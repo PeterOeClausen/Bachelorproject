@@ -50,7 +50,13 @@ namespace DROM_Client.Views
                 OrderType = orderReceived.OrderType,
             };
 
-            foreach (Event evnt in orderReceived.DCRGraph.Events) viewModel.OrderBeingEdited.DCRGraph.Events.Add(evnt);
+            foreach (Event evnt in orderReceived.DCRGraph.Events)
+            {
+                if(evnt.Groups.Exists(g => g.Name == "Edit events")) //Filters to only "Edit events"
+                {
+                    viewModel.OrderBeingEdited.DCRGraph.Events.Add(evnt);
+                }
+            }
 
             foreach (var entry in orderReceived.ItemsAndQuantity)
             {

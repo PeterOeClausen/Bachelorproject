@@ -163,19 +163,13 @@ namespace DROM_Client.ViewModels
             //Call web api.
         }
 
-        //public List<Event> EditEvents {get; set;}
-
-        public void FilterCollection()
+        public void FilterEvents()
         {
-            var eventsToRemove = new List<Event>();
-            foreach(Event editEvent in OrderBeingEdited.DCRGraph.Events)
+            IEnumerable<Event> eventsToRemove = OrderBeingEdited.DCRGraph.Events.Where(ev => ev.Groups.Exists(g => g.Name == "only pending"));
+            foreach(Event e in eventsToRemove)
             {
-                foreach(Group g in editEvent.Groups)
-                {
-                    
-                }
+                OrderBeingEdited.DCRGraph.Events.Remove(e);
             }
-            //EditEvents.Where(e => e.Groups.);
         }
 
         #region Property changed implementation

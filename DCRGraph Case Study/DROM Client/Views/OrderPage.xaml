@@ -34,14 +34,12 @@
                 <Button Content="Waiter" Click="Waiter_Click" Background="{Binding Waiter, Converter={StaticResource BoolToColorConverter}, FallbackValue='Yellow', TargetNullValue='Red'}"/>
                 <Button Content="Create new order" Margin="100,0,0,0" Click="Create_New_Order_Click"/>
                 <Button Content="Log out" HorizontalAlignment="Right" Click="Logout_Click" Margin="100,0,0,0"/>
+                <Button Content="Add Order" Click="TempAddOrderClick"/>
             </StackPanel>
             <Line X1="0" X2="3840" Stroke="Black" HorizontalAlignment="Center" Grid.Row="1"/>
             <Grid x:Name="OrderOverviewStackPanel" Grid.Row="2">
-                <Grid.DataContext>
-                    <vm:OrderPageViewModel/>
-                </Grid.DataContext>
                 <!--Order view list-->
-                <ListView ItemsSource="{Binding OrderList}" x:Name="OrderListView">
+                <ListView ItemsSource="{Binding OrderList, FallbackValue='Binding failed', Mode=OneWay}" x:Name="OrderListView">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid BorderThickness="1" BorderBrush="Gray" Padding="10">

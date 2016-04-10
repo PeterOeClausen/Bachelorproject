@@ -24,7 +24,7 @@
                 <!--Order Id:-->
                 <StackPanel MinWidth="100">
                     <TextBlock Text="Order Id"/>
-                    <TextBlock Text="{Binding OrderBeingEdited.Id}"/>
+                    <TextBlock Text="{Binding OrderBeingEdited.Id, FallbackValue='N/A'}"/>
                 </StackPanel>
                 <!--Order date:-->
                 <StackPanel MinWidth="200">
@@ -88,9 +88,9 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Value}"/>
+                                    <TextBlock Text="{Binding Quantity}"/>
                                     <TextBlock Text="x"/>
-                                    <TextBlock Text="{Binding Key.Name}"/>
+                                    <TextBlock Text="{Binding Item.Name}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -123,15 +123,15 @@
                 <!--Edit event buttons-->
                 <StackPanel MinWidth="500" MaxWidth="500" Padding="20,0,20,0">
                     <TextBlock Text="Edit events to execute:" FontWeight="Bold" Margin="0,20,0,0"/>
-                    <ListView ItemsSource="{Binding OrderBeingEdited.DCRGraph.Events}">
-                        <ListView.ItemTemplate>
+                    <GridView ItemsSource="{Binding OrderBeingEdited.DCRGraph.Events}">
+                        <GridView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Visibility="{Binding Groups, Converter={StaticResource EditEventGroupNameToVisibilityConverter}}">
+                                <Grid Visibility="{Binding Groups, Converter={StaticResource EditEventGroupNameToVisibilityConverter}}">
                                     <Button Content="{Binding Label}" Click="Edit_Event_Execute_Click"/> <!--Visibility="{Binding Groups, Converter={StaticResource EditEventGroupNameToVisibilityConverter}}"-->
-                                </StackPanel>
+                                </Grid>
                             </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                        </GridView.ItemTemplate>
+                    </GridView>
                 </StackPanel>
                 <!--Not implemented yet-->
             </StackPanel>
