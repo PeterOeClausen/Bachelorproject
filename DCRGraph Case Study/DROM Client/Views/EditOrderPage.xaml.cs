@@ -120,7 +120,7 @@ namespace DROM_Client.Views
 
         private void Edit_Event_Execute_Click(object sender, RoutedEventArgs e)
         {
-
+            var eventToExecute = ((Button)sender).Tag as Event;
         }
     }
 }

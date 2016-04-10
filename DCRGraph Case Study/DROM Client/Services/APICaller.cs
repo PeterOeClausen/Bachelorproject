@@ -26,14 +26,14 @@ namespace DROM_Client.Services
         /// </summary>
         /// <param name="newOrder"></param>
         /// <returns></returns>
-        public async Task<string> PostOrderAsync(NewOrderInfo newOrder) //Rename to: PostNewOrder
+        public string PostOrderAsync(NewOrderInfo newOrder) //Rename to: PostNewOrder
         {
             using (var client = new HttpClient())
             {
                 try
                 {
                     client.BaseAddress = BaseAddress;
-                    var response = await client.PostAsXmlAsync("api/parse", newOrder, new CancellationToken());
+                    var response = client.PostAsXmlAsync("api/parse", newOrder, new CancellationToken()).Result;
                     return response.StatusCode.ToString();
                     //var content = new FormUrlEncodedContent(newOrder);
                     //var response = await client.PostAsJson("api/parse", content);
@@ -70,12 +70,12 @@ namespace DROM_Client.Services
         /// </summary>
         /// <param name="eventToExecute"></param>
         /// <returns></returns>
-        public async Task<string> PutExecuteEvent(Event eventToExecute)
+        public string PutExecuteEvent(Event eventToExecute)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = BaseAddress;
-                var response = await client.PutAsXmlAsync("api/order/executeevent", eventToExecute);
+                var response = client.PutAsXmlAsync("api/order/executeevent", eventToExecute).Result;
                 return response.StatusCode.ToString();
             }
         }

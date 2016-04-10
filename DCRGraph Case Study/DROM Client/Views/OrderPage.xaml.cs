@@ -83,6 +83,7 @@ namespace DROM_Client.Views
             var EventToExecute = ((Button)sender).Tag as Event;
             var ViewModel = DataContext as OrderPageViewModel;
             ViewModel.ExecuteEvent(EventToExecute);
+            ViewModel.setupData();
         }
 
         private void TempAddOrderClick(object sender, RoutedEventArgs e)

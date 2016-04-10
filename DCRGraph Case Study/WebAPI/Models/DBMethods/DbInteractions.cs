@@ -93,7 +93,7 @@ namespace WebAPI.Models.DBMethods
                         {
                             foreach (var g in dcrEvent.Groups)
                             {
-                                if ((dcrEvent.Pending == true || g.Name == "Edit Events")) // we only want to give pending events and edit events
+                                if ((dcrEvent.Pending == true || g.Name == "Edit events")) // we only want to give pending events and edit events
                                 {
                                     var businessEvent = new Event
                                     {

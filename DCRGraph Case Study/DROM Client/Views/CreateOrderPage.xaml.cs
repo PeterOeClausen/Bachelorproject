@@ -63,12 +63,13 @@ namespace DROM_Client.Views
                 return;
             }
             //TODO: Check if all information is entered
-            switch ((DeliveryCombobox.SelectedItem as ComboBoxItem).Content as string) //Checks if all data is inserted
+            //switch ((DeliveryCombobox.SelectedItem as ComboBoxItem).Content as string) //Checks if all data is inserted
+            switch (DeliveryCombobox.SelectedItem as string)
             {
                 case "For serving":
                     if (!All_Information_Entered_For_Serving()) return;
                     break;
-                case "For pickup":
+                case "For takeaway":
                     if(!All_Information_Entered_For_Pickup()) return;
                     break;
                 case "For delivery":
@@ -220,10 +221,10 @@ namespace DROM_Client.Views
             }
         }
 
-        private async void Send_Test_Post_Call(object sender, RoutedEventArgs e)
+        private void Send_Test_Post_Call(object sender, RoutedEventArgs e)
         {
             APICaller apiCaller = new APICaller();
-            await apiCaller.PostOrderAsync(new NewOrderInfo()
+            apiCaller.PostOrderAsync(new NewOrderInfo()
             {
                 Table = 1,
                 Customer = new Customer()
@@ -253,6 +254,12 @@ namespace DROM_Client.Views
                 OrderType = "Delivery",
                 OrderDate = DateTime.Now
             });
+        }
+
+        private void DeliveryCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var viewModel = this.DataContext as CreateOrderPageViewModel;
+            viewModel.OrderBeingCreated.OrderType = e.AddedItems.First() as string;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace DROM_Client.Models.ObjectsOptimizedForUI
             set { Set(ref _ItemsAndQuantity, value); }
         }
 
-        public string OrderType { get; set; } //Either "For Serving", "For Delivery", "For Pickup"
+        public string OrderType { get; set; }
         public Customer Customer { get; set; } //Null if Serving, Phone if pickup, All if delivery
         public DateTime OrderDate { get; set; } //Client side sets this
         public string Notes { get; set; }
