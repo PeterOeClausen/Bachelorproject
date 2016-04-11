@@ -223,7 +223,7 @@ namespace WebAPI.Models.DBMethods
                     if (eventToBeExecuted.Included == false) return HttpStatusCode.InternalServerError;
 
                     //check if conditions are executed
-                    var conditions = this.GetBySqlQuery(id, "Conditions", true);
+                    //var conditions = this.GetBySqlQuery(id, "Conditions", true);
                     foreach (var condition in eventToBeExecuted.Conditions)
                     {
                         var cEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == condition.Id);
@@ -232,7 +232,7 @@ namespace WebAPI.Models.DBMethods
                     }
 
                     //there must not be a pending milestone 
-                    var milestones = this.GetBySqlQuery(id, "Milestones", true);
+                    //var milestones = this.GetBySqlQuery(id, "Milestones", true);
                     foreach (var milestone in eventToBeExecuted.Milestones)
                     {
                         var mEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == milestone.Id);
@@ -249,19 +249,19 @@ namespace WebAPI.Models.DBMethods
                     loadedEvents.Add(eventToBeExecuted.Id, eventToBeExecuted);
 
                     //exclude related events
-                    var excludes = this.GetBySqlQuery(id, "Excludes", true);
-                    foreach (var exclude in excludes)
+                    //var excludes = this.GetBySqlQuery(id, "Excludes", true);
+                    foreach (var exclude in eventToBeExecuted.Excludes)
                     {
-                        if (loadedEvents.ContainsKey(exclude.Item2))
+                        if (loadedEvents.ContainsKey(exclude.Id))
                         {
-                            if (loadedEvents[exclude.Item2].Included)
+                            if (loadedEvents[exclude.Id].Included)
                             {
-                                loadedEvents[exclude.Item2].Included = false;
+                                loadedEvents[exclude.Id].Included = false;
                             }
                         }
                         else
                         {
-                            var eEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == exclude.Item2);
+                            var eEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == exclude.Id);
                             if (eEvent.Included)
                             {
                                 eEvent.Included = false;
@@ -271,19 +271,19 @@ namespace WebAPI.Models.DBMethods
                     }
 
                     //Include related events
-                    var includes = this.GetBySqlQuery(id, "Includes", true);
-                    foreach (var include in includes)
+                    //var includes = this.GetBySqlQuery(id, "Includes", true);
+                    foreach (var include in eventToBeExecuted.Includes)
                     {
-                        if (loadedEvents.ContainsKey(include.Item2))
+                        if (loadedEvents.ContainsKey(include.Id))
                         {
-                            if (!loadedEvents[include.Item2].Included)
+                            if (!loadedEvents[include.Id].Included)
                             {
-                                loadedEvents[include.Item2].Included = true;
+                                loadedEvents[include.Id].Included = true;
                             }
                         }
                         else
                         {
-                            var iEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == include.Item2);
+                            var iEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == include.Id);
                             if (!iEvent.Included)
                             {
                                 iEvent.Included = true;
@@ -293,19 +293,19 @@ namespace WebAPI.Models.DBMethods
                     }
 
                     //set related events pending
-                    var responses = this.GetBySqlQuery(id, "Responses", true);
-                    foreach (var response in responses)
+                    //var responses = this.GetBySqlQuery(id, "Responses", true);
+                    foreach (var response in eventToBeExecuted.Responses)
                     {
-                        if (loadedEvents.ContainsKey(response.Item2))
+                        if (loadedEvents.ContainsKey(response.Id))
                         {
-                            if (!loadedEvents[response.Item2].Pending)
+                            if (!loadedEvents[response.Id].Pending)
                             {
-                                loadedEvents[response.Item2].Pending = true;
+                                loadedEvents[response.Id].Pending = true;
                             }
                         }
                         else
                         {
-                            var rEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == response.Item2);
+                            var rEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == response.Id);
                             if (!rEvent.Pending)
                             {
                                 rEvent.Pending = true;
