@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
 
             //try
             //{
-                await new Mapper().mapper(new DCRXmlParser().Parse(Properties.Resources.Bachelor2), info);
+                var qwe = await new Mapper().mapper(new DCRXmlParser().Parse(Properties.Resources.Bachelor2), info);
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK

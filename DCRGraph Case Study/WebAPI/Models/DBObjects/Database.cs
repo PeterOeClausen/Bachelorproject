@@ -18,15 +18,15 @@ namespace WebAPI.Models.DBObjects
         public Database()
             : base("name=Database")
         {
-            
+
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //Includes
             modelBuilder.Entity<DCREvent>()
-                .HasMany(c => c.IncludeFrom)
-                .WithMany(c => c.IncludeTo)
+                .HasMany(c => c.Includes)
+                .WithMany()
                 .Map(m =>
                 {
                     m.MapLeftKey("FromId");
@@ -36,8 +36,8 @@ namespace WebAPI.Models.DBObjects
 
             //Exludes
             modelBuilder.Entity<DCREvent>()
-                .HasMany(c => c.ExcludeFrom)
-                .WithMany(c => c.ExcludeTo)
+                .HasMany(c => c.Excludes)
+                .WithMany()
                 .Map(m =>
                 {
                     m.MapLeftKey("FromId");
@@ -47,8 +47,8 @@ namespace WebAPI.Models.DBObjects
 
             //Responses
             modelBuilder.Entity<DCREvent>()
-                .HasMany(c => c.ResponseFrom)
-                .WithMany(c => c.ResponseTo)
+                .HasMany(c => c.Responses)
+                .WithMany()
                 .Map(m =>
                 {
                     m.MapLeftKey("FromId");
@@ -58,8 +58,8 @@ namespace WebAPI.Models.DBObjects
 
             //Milestones
             modelBuilder.Entity<DCREvent>()
-                .HasMany(c => c.MilestoneReverseFrom)
-                .WithMany(c => c.MilestoneReverseTo)
+                .HasMany(c => c.Milestones)
+                .WithMany()
                 .Map(m =>
                 {
                     m.MapLeftKey("FromId");
@@ -69,14 +69,15 @@ namespace WebAPI.Models.DBObjects
 
             //Conditions
             modelBuilder.Entity<DCREvent>()
-                .HasMany(c => c.ConditionReverseFrom)
-                .WithMany(c => c.ConditionReverseTo)
+                .HasMany(c => c.Conditions)
+                .WithMany()
                 .Map(m =>
                 {
                     m.MapLeftKey("FromId");
                     m.MapRightKey("ToId");
                     m.ToTable("Conditions");
                 });
+
         }
 
         // Add a DbSet for each entity type that you want to include in your model. For more information 
@@ -96,6 +97,7 @@ namespace WebAPI.Models.DBObjects
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<DeliveryType> DeliveryTypes { get; set; }
+
 
 
 
