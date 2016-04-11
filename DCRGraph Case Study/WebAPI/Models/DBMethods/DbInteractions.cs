@@ -206,8 +206,7 @@ namespace WebAPI.Models.DBMethods
             
             using (var db = new Database())
             {
-                var eventToBeExecuted = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == id); 
-                var qwe = this.GetBySqlQuery(42, "Includes", true);
+                var eventToBeExecuted = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == id);
 
                 
 

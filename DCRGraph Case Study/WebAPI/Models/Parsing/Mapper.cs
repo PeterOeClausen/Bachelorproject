@@ -177,6 +177,27 @@ namespace WebAPI.Models.Parsing
                         }
                         db.SaveChanges();
                         
+                    //needs statuscode exception handling
+                    switch (orderInfo.OrderType)
+                        {
+                        case "For serving":
+                            var na = new DbInteractions().ExecuteEvent(
+                                    order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label == "Setup graph serving").Id).Result;
+                                break;
+                        case "For takeaway":
+                            var na1 = new DbInteractions().ExecuteEvent(
+                                    order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label == "Setup graph takeaway").Id).Result;
+                            break;
+                        case "Delivery":
+                            var na2 = new DbInteractions().ExecuteEvent(
+                                    order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label.Contains("Setup graph delivery")).Id).Result;
+                            break;
+                        default:
+                            throw new Exception("ordertype id not match - " + orderInfo.OrderType);
+                    }
+
+                    
+                        
 
                         //scope.Complete();
                         
@@ -192,6 +213,8 @@ namespace WebAPI.Models.Parsing
                 //}
 
             }
+            
+            
         }
 
         void InsertBySqlQuery(int fromId, int toId, string table)
