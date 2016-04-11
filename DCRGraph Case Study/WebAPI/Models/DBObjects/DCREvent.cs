@@ -14,51 +14,15 @@ namespace WebAPI.Models.DBObjects
             EventUIElemements = new HashSet<EventUIElemement>();
             Groups = new HashSet<Group>();
             Roles = new HashSet<Role>();
-            this.IncludeFrom = new HashSet<DCREvent>();
-            this.IncludeTo = new HashSet<DCREvent>();
-            this.ExcludeFrom = new HashSet<DCREvent>();
-            this.ExcludeTo = new HashSet<DCREvent>();
-            this.ResponseFrom = new HashSet<DCREvent>();
-            this.ResponseTo = new HashSet<DCREvent>();
-            this.MilestoneReverseFrom = new HashSet<DCREvent>();
-            this.MilestoneReverseTo = new HashSet<DCREvent>();
-            this.ConditionReverseFrom = new HashSet<DCREvent>();
-            this.ConditionReverseTo = new HashSet<DCREvent>();
-            /*
-            DCREvents3 = new HashSet<DCREvent>();
-            DCRGraphs = new HashSet<DCRGraph>();
-            DCREvents13 = new HashSet<DCREvent>();
-            DCREvents4 = new HashSet<DCREvent>();
-            DCREvents14 = new HashSet<DCREvent>();
-            DCREvents5 = new HashSet<DCREvent>();
-            DCREvents15 = new HashSet<DCREvent>();
-            DCREvents6 = new HashSet<DCREvent>();
-            */
+            this.Includes = new HashSet<DCREvent>();
+            this.Excludes = new HashSet<DCREvent>();
+            this.Responses = new HashSet<DCREvent>();
+            this.Milestones = new HashSet<DCREvent>();
+            this.Conditions = new HashSet<DCREvent>();
         }
-
-        public ICollection<DCREvent> ConditionReverseTo { get; set; }
-               
-        public ICollection<DCREvent> ConditionReverseFrom { get; set; }
-               
-        public ICollection<DCREvent> MilestoneReverseTo { get; set; }
-               
-        public ICollection<DCREvent> MilestoneReverseFrom { get; set; }
-               
-        public ICollection<DCREvent> ResponseTo { get; set; }
-               
-        public ICollection<DCREvent> ResponseFrom { get; set; }
-               
-        public ICollection<DCREvent> ExcludeTo { get; set; }
-               
-        public ICollection<DCREvent> ExcludeFrom { get; set; }
-
-        public ICollection<DCREvent> IncludeFrom { get; set; }
-         
-        public ICollection<DCREvent> IncludeTo { get; set; }
 
         public int Id { get; set; }
 
-        
         public int DCRGraphId { get; set; }
 
         [Required]
@@ -83,7 +47,19 @@ namespace WebAPI.Models.DBObjects
 
       
         public virtual ICollection<EventUIElemement> EventUIElemements { get; set; }
+
         public virtual ICollection<Group> Groups { get; set; }
+
         public virtual ICollection<Role> Roles { get; set; }
+
+        public virtual ICollection<DCREvent> Conditions { get; set; }
+
+        public virtual ICollection<DCREvent> Milestones { get; set; }
+
+        public virtual ICollection<DCREvent> Responses { get; set; }
+
+        public virtual ICollection<DCREvent> Excludes { get; set; }
+
+        public virtual ICollection<DCREvent> Includes { get; set; }
     }
 }

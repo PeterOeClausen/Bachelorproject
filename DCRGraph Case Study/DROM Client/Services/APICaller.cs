@@ -53,8 +53,18 @@ namespace DROM_Client.Services
                 {
                     var dto = new Tuple<Order, List<int>>(updatedOrder, editEvents);
                     client.BaseAddress = BaseAddress;
-                    var response = client.PutAsXmlAsync("api/order/updateorder", dto, new CancellationToken()).Result;
-                    return response.StatusCode.ToString();
+                    var response = client.PutAsXmlAsync("api/order/updateorder", dto).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        //do succes thing
+                        return response.StatusCode.ToString();
+                    }
+                    else
+                    {
+                        //do failure thing
+                        return response.StatusCode.ToString();
+                    }
+                    
                     //var content = new FormUrlEncodedContent(newOrder);
                     //var response = await client.PostAsJson("api/parse", content);
                 }
