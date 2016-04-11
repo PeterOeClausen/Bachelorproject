@@ -146,7 +146,7 @@ namespace DROM_Client.ViewModels
             OrderBeingCreated.ItemsAndQuantity = replacementDictionary;
         }
 
-        internal async void SaveOrder()
+        internal void SaveOrder()
         {
             NewOrderInfo createdOrder = new NewOrderInfo()
             {

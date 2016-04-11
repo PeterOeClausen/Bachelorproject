@@ -34,7 +34,19 @@ namespace DROM_Client.Services
                 {
                     client.BaseAddress = BaseAddress;
                     var response = client.PostAsXmlAsync("api/parse", newOrder, new CancellationToken()).Result;
-                    return response.StatusCode.ToString();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        //do succes thing
+                        return response.StatusCode.ToString();
+                    }
+                    else
+                    {
+                        //response.Content;
+                        //response.StatusCode;
+                        
+                        //do failure thing
+                        return response.StatusCode.ToString();
+                    }
                     //var content = new FormUrlEncodedContent(newOrder);
                     //var response = await client.PostAsJson("api/parse", content);
                 }
@@ -396,6 +408,6 @@ namespace DROM_Client.Services
                     throw;
                 }
             }
-        } 
+        }
     }
 }
