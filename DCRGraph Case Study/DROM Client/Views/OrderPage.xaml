@@ -28,11 +28,11 @@
             <!--Top menu bar-->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0">
                 <TextBlock Text="Views:" VerticalAlignment="Center"/>
-                <Button Content="Chef" Click="Chef_Click" Background="{Binding Chef, Converter={StaticResource BoolToColorConverter}, FallbackValue='Yellow', TargetNullValue='Red'}"/>
-                <Button Content="Delivery" Click="Delivery_Click" Background="{Binding Delivery, Converter={StaticResource BoolToColorConverter}, FallbackValue='Yellow', TargetNullValue='Red'}"/>
-                <Button Content="Manager" Click="Manger_Click" Background="{Binding Manager, Converter={StaticResource BoolToColorConverter}, FallbackValue='Yellow', TargetNullValue='Red'}"/>
-                <Button Content="Waiter" Click="Waiter_Click" Background="{Binding Waiter, Converter={StaticResource BoolToColorConverter}, FallbackValue='Yellow', TargetNullValue='Red'}"/>
-                <Button Content="Show only pending orders" Click="Show_Only_Pending_Orders_Click" Background="{Binding ShowOnlyPendingOrders, Converter={StaticResource BoolToColorConverter}, FallbackValue='Yellow', TargetNullValue='Red'}" Margin="10,0,0,0"/>
+                <Button Content="Chef" Click="Chef_Click" Background="{Binding Chef, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"/>
+                <Button Content="Delivery" Click="Delivery_Click" Background="{Binding Delivery, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"/>
+                <Button Content="Manager" Click="Manger_Click" Background="{Binding Manager, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"/>
+                <Button Content="Waiter" Click="Waiter_Click" Background="{Binding Waiter, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"/>
+                <Button Content="Show only pending orders" Click="Show_Only_Pending_Orders_Click" Background="{Binding ShowOnlyPendingOrders, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}" Margin="10,0,0,0"/>
                 <Button Content="Create new order" Margin="100,0,0,0" Click="Create_New_Order_Click"/>
                 <Button Content="Log out" HorizontalAlignment="Right" Click="Logout_Click" Margin="100,0,0,0"/>
                 <!--<Button Content="Add Order" Click="TempAddOrderClick"/>-->
@@ -50,7 +50,7 @@
                                 </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal" Grid.Row="0">
                                     <!--Order id:-->
-                                    <StackPanel MinWidth="150">
+                                    <StackPanel>
                                         <TextBlock Text="Order id:"/>
                                         <TextBlock Text="{Binding Id, TargetNullValue='-1', FallbackValue='-2'}"/>
                                     </StackPanel>
