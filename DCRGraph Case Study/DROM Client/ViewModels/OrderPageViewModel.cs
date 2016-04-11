@@ -45,6 +45,13 @@ namespace DROM_Client.ViewModels
         }
         private bool _waiter;
 
+        public bool ShowOnlyPendingOrders
+        {
+            get { return _ShowOnlyPendingOrders; }
+            set { Set(ref _ShowOnlyPendingOrders, value); FilterViewAcordingToRoles(); }
+        }
+        private bool _ShowOnlyPendingOrders;
+
         #region Property changed implementation from video (06:48): https://mva.microsoft.com/en-US/training-courses/windows-10-data-binding-14579?l=O5mda3EsB_1405632527
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -275,7 +282,7 @@ namespace DROM_Client.ViewModels
                         }
                 },
                 Table = 1,
-                OrderType = "To be served"
+                OrderType = "For delivery"
             });
 
             OrdersFromWebAPI.Add(new Order()
@@ -390,6 +397,10 @@ namespace DROM_Client.ViewModels
                             }
                         }
                     }
+                }
+                if(_ShowOnlyPendingOrders && newOrder.DCRGraph.Events.Count == 0)
+                {
+                    continue;
                 }
                 OrderList.Add(newOrder);
             }

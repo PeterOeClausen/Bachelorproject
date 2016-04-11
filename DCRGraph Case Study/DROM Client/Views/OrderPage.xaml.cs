@@ -76,6 +76,13 @@ namespace DROM_Client.Views
             if (viewModel.Waiter) viewModel.Waiter = false;
             else viewModel.Waiter = true;
         }
+
+        private void Show_Only_Pending_Orders_Click(object sender, RoutedEventArgs e)
+        {
+            var viewModel = ((Button)sender).DataContext as OrderPageViewModel;
+            if (viewModel.ShowOnlyPendingOrders) viewModel.ShowOnlyPendingOrders = false;
+            else viewModel.ShowOnlyPendingOrders = true;
+        }
         #endregion
 
         private void Execute_Event_Click(object sender, RoutedEventArgs e)
@@ -85,11 +92,11 @@ namespace DROM_Client.Views
             ViewModel.ExecuteEvent(EventToExecute);
             ViewModel.setupData();
         }
-
-        private void TempAddOrderClick(object sender, RoutedEventArgs e)
-        {
-            var ViewModel = DataContext as OrderPageViewModel;
-            ViewModel.OrderList.Add(new Order { Id = 9001});
-        }
+        
+        //private void TempAddOrderClick(object sender, RoutedEventArgs e)
+        //{
+        //    var ViewModel = DataContext as OrderPageViewModel;
+        //    ViewModel.OrderList.Add(new Order { Id = 9001});
+        //}
     }
 }

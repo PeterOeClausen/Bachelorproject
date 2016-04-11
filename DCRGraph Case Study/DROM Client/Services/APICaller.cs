@@ -45,7 +45,7 @@ namespace DROM_Client.Services
             }
         }
 
-        public async Task<string> PutUpdateOrder(Order updatedOrder)
+        public string PutUpdateOrder(Order updatedOrder)
         {
 
             using (var client = new HttpClient())
@@ -53,7 +53,7 @@ namespace DROM_Client.Services
                 try
                 {
                     client.BaseAddress = BaseAddress;
-                    var response = await client.PutAsXmlAsync("api/order/updateorder", updatedOrder, new CancellationToken());
+                    var response = client.PutAsXmlAsync("api/order/updateorder", updatedOrder, new CancellationToken()).Result;
                     return response.StatusCode.ToString();
                     //var content = new FormUrlEncodedContent(newOrder);
                     //var response = await client.PostAsJson("api/parse", content);

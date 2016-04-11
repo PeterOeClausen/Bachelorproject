@@ -251,7 +251,7 @@ namespace DROM_Client.Views
                         4 }
                 },
                 Notes = "this is a very special and very testy order",
-                OrderType = "Delivery",
+                OrderType = "For delivery",
                 OrderDate = DateTime.Now
             });
         }
