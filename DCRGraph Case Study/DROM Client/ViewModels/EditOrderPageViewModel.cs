@@ -162,8 +162,9 @@ namespace DROM_Client.ViewModels
             };
             foreach (ItemQuantity iq in OrderBeingEdited.ItemsAndQuantity) ChangedOrder.ItemsAndQuantity.Add(iq);
             foreach (Event e in OrderBeingEdited.DCRGraph.Events) ChangedOrder.DCRGraph.Events.Add(e);
-
+            
             _APICaller.PutUpdateOrder(ChangedOrder, new List<int>() { EditEvents.First().Id});
+           // _APICaller.PutUpdateOrder(ChangedOrder);
         }
 
         public void FilterEvents()

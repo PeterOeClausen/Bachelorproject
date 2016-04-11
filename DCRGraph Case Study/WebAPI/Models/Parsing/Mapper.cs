@@ -10,6 +10,7 @@ using DROM_Client.Models.NewOrderData;
 using WebAPI.Models.DBObjects;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using System.Net;
 using WebAPI.Models.DBMethods;
 
 
@@ -18,7 +19,7 @@ namespace WebAPI.Models.Parsing
     class Mapper
     {
         
-        public Mapper(EventAndRolesContainer container, NewOrderInfo orderInfo)
+        public async Task<HttpStatusCode> mapper(EventAndRolesContainer container, NewOrderInfo orderInfo)
         {
             using (var db = new WebAPI.Models.DBObjects.Database())
             {
@@ -177,10 +178,34 @@ namespace WebAPI.Models.Parsing
                         }
                         db.SaveChanges();
                         
+                    //needs statuscode exception handling
+                    switch (orderInfo.OrderType)
+                        {
+                        case "For serving":
+                            var na = await new DbInteractions().ExecuteEvent(
+                                    order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label == "Setup graph serving").Id);
+                                var stopwe = 5;
+                                break;
+                        case "For takeaway":
+                            var na1 = await new DbInteractions().ExecuteEvent(
+                                    order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label == "Setup graph takeaway").Id);
+                                var stop1 = 1;
+                            break;
+                        case "For delivery":
+                            var na2 = await new DbInteractions().ExecuteEvent(
+                                    order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label.Contains("Setup graph delivery")).Id);
+                                var stop = 5;
+                            break;
+                        default:
+                            throw new Exception("ordertype id not match - " + orderInfo.OrderType);
+                    }
+
+                    
+                        
 
                         //scope.Complete();
-                        
-                        
+                        return HttpStatusCode.OK;
+
                     }
                     catch (Exception ex)
                     {
@@ -192,6 +217,8 @@ namespace WebAPI.Models.Parsing
                 //}
 
             }
+            
+            
         }
 
         void InsertBySqlQuery(int fromId, int toId, string table)
