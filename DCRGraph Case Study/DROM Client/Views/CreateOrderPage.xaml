@@ -38,11 +38,7 @@
                 <StackPanel Margin="20,20,0,0">
                     <!--Delivery method-->
                     <TextBlock Text="Delivery method:" FontWeight="Bold" />
-                    <ComboBox x:Name="DeliveryCombobox">
-                        <ComboBoxItem Content="For serving" />
-                        <ComboBoxItem Content="For pickup" />
-                        <ComboBoxItem Content="For delivery" />
-                    </ComboBox>
+                    <ComboBox x:Name="DeliveryCombobox" ItemsSource="{Binding DeliveryMethodsList}" SelectionChanged="DeliveryCombobox_SelectionChanged"/>
                     <!--Table number-->
                     <TextBlock Text="Table number:" FontWeight="Bold"/>
                     <TextBox Text="{Binding OrderBeingCreated.Table}" x:Name="Table_Number_Text_Box"/>

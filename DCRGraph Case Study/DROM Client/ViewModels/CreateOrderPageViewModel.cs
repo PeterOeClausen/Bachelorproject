@@ -15,6 +15,7 @@ namespace DROM_Client.ViewModels
     {
         private APICaller _APICaller { get; set; }
         public ObservableCollection<Item> ItemCollection {get; set;}
+        public List<string> DeliveryMethodsList { get; set; }
 
         public CreateOrderPageViewModel()
         {
@@ -25,7 +26,7 @@ namespace DROM_Client.ViewModels
             {
                 ItemCollection.Add(i);
             }
-            //getItems();
+            DeliveryMethodsList = _APICaller.GetDeliveryTypes();
 
             //ItemCollection = new ObservableCollection<Item>()
             //{
@@ -47,44 +48,60 @@ namespace DROM_Client.ViewModels
             //    }
             //};
 
-            //Change to get items from APICaller.
+            //DeliveryMethodsList = new List<string>(){"For serving", "For delivery", "For pickup"};
         }
 
         private async void getItems()
         {
             List<Item> items = _APICaller.GetItems();
         }
-        
+
         public UINewOrderInfo OrderBeingCreated { get; set; } = new UINewOrderInfo() //Just bindable data for design
         {
-            //Id = 2,
-            ItemsAndQuantity = new Dictionary<Item, int>() {
-                    {
-                        new Item() {
-                            Id = 3,
-                            Name = "Sprite",
-                            Category = "Drink",
-                            Price = 30.0,
-                            Description = "Soda"
-                        },2
-                    }
-                },
+            ItemsAndQuantity = new Dictionary<Item, int>(),
             Customer = new Customer()
             {
-                Id = 4,
-                FirstAndMiddleNames = "Fjong",
-                LastName = "Fjongson",
-                Email = "Fjong@Fjongson.com",
-                Phone = 22222222,
-                StreetAndNumber = "Qwerty Road 66",
-                ZipCode = 1234,
-                City = "Amsterdam"
+                FirstAndMiddleNames = "",
+                LastName = "",
+                Email = "",
+                //Phone = 0,
+                StreetAndNumber = "",
+                //ZipCode = 0,
+                City = "",
             },
             OrderDate = DateTime.Now,
-            Notes = "With extra ice please",
-            Table = 1,
-            OrderType = "To be served"            
+            Notes = "",
+            //Table = 0
         };
+        //{
+        //    //Id = 2,
+        //    ItemsAndQuantity = new Dictionary<Item, int>() {
+        //            {
+        //                new Item() {
+        //                    Id = 3,
+        //                    Name = "Sprite",
+        //                    Category = "Drink",
+        //                    Price = 30.0,
+        //                    Description = "Soda"
+        //                },2
+        //            }
+        //        },
+        //    Customer = new Customer()
+        //    {
+        //        Id = 4,
+        //        FirstAndMiddleNames = "Fjong",
+        //        LastName = "Fjongson",
+        //        Email = "Fjong@Fjongson.com",
+        //        Phone = 22222222,
+        //        StreetAndNumber = "Qwerty Road 66",
+        //        ZipCode = 1234,
+        //        City = "Amsterdam"
+        //    },
+        //    OrderDate = DateTime.Now,
+        //    Notes = "With extra ice please",
+        //    Table = 1,
+        //    OrderType = "To be served"            
+        //};
 
         /// <summary>
         /// RemoveItem takes a key item specified in OrderBeingCreated.ItemsAndQuatity and copies all values from old dictionary into a new dictionary, and replaces the reference.
@@ -140,7 +157,7 @@ namespace DROM_Client.ViewModels
                 Notes = OrderBeingCreated.Notes,
                 Table = OrderBeingCreated.Table
             };
-            await _APICaller.PostOrderAsync(createdOrder);
+            _APICaller.PostOrderAsync(createdOrder);
         }
     }
 }

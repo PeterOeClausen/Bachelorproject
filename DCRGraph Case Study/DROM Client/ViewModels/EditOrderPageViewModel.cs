@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using Windows.UI.Xaml.Data;
 using System.Collections.ObjectModel;
 using DROM_Client.Models.ObjectsOptimizedForUI;
+using DROM_Client.Services;
 
 namespace DROM_Client.ViewModels
 {
@@ -98,6 +99,10 @@ namespace DROM_Client.ViewModels
                 OrderType = "To be served"
             };
 
+        public Event EditEventToExecute;
+
+        private APICaller _APICaller;
+
         internal void RemoveItem(Item key)
         {
             var replacementDictionary = new ObservableCollection<ItemQuantity>();
@@ -113,28 +118,12 @@ namespace DROM_Client.ViewModels
             OrderBeingEdited.ItemsAndQuantity = replacementDictionary;
         }
 
-        public ObservableCollection<Item> ItemCollection { get; set; }
+        public ObservableCollection<Item> ItemCollection { get; set; } = new ObservableCollection<Item>();
 
         public EditOrderPageViewModel() {
-            ItemCollection = new ObservableCollection<Item>()
-            {
-                new Item
-                {
-                    Name = "Cola"
-                },
-                new Item
-                {
-                    Name = "Sprite"
-                },
-                new Item
-                {
-                    Name = "Pizza"
-                },
-                new Item
-                {
-                    Name = "Burger"
-                }
-            };
+
+            _APICaller = new APICaller();
+            foreach (Item item in _APICaller.GetItems()) ItemCollection.Add(item);
         }
 
         internal void AddQuantityAndItem(int quantity, Item item)
@@ -160,7 +149,21 @@ namespace DROM_Client.ViewModels
 
         internal void SaveOrder()
         {
-            //Call web api.
+            Order ChangedOrder = new Order
+            {
+                Id = OrderBeingEdited.Id,
+                ItemsAndQuantity = new List<ItemQuantity>(),
+                Customer = OrderBeingEdited.Customer,
+                OrderDate = OrderBeingEdited.OrderDate,
+                Notes = OrderBeingEdited.Notes,
+                DCRGraph = new DCRGraph() { Id = OrderBeingEdited.Id, Events = new List<Event>() },
+                Table = OrderBeingEdited.Table,
+                OrderType = OrderBeingEdited.OrderType
+            };
+            foreach (ItemQuantity iq in OrderBeingEdited.ItemsAndQuantity) ChangedOrder.ItemsAndQuantity.Add(iq);
+            foreach (Event e in OrderBeingEdited.DCRGraph.Events) ChangedOrder.DCRGraph.Events.Add(e);
+
+            _APICaller.PutUpdateOrder(ChangedOrder);
         }
 
         public void FilterEvents()

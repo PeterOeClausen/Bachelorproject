@@ -45,6 +45,13 @@ namespace DROM_Client.ViewModels
         }
         private bool _waiter;
 
+        public bool ShowOnlyPendingOrders
+        {
+            get { return _ShowOnlyPendingOrders; }
+            set { Set(ref _ShowOnlyPendingOrders, value); FilterViewAcordingToRoles(); }
+        }
+        private bool _ShowOnlyPendingOrders;
+
         #region Property changed implementation from video (06:48): https://mva.microsoft.com/en-US/training-courses/windows-10-data-binding-14579?l=O5mda3EsB_1405632527
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -74,19 +81,14 @@ namespace DROM_Client.ViewModels
             _APICaller = new APICaller();
             setupData();
             //setupDesignerData();
-            FilterViewAcordingToRoles();
-            //_APICaller.GetDeliveryTypes();
+            
+            List<string> DeliveryTypes = _APICaller.GetDeliveryTypes();
         }
 
-        private void setupData()
+        public void setupData()
         {
             OrdersFromWebAPI = _APICaller.GetOrders();
-            
-            foreach(Order o in OrdersFromWebAPI)
-            {
-                OrderList.Add(o);
-            }
-            //FilterView();
+            FilterViewAcordingToRoles();
             #region old code (to be deleted)
             //var query = from Order o in OrdersFromWebAPI
             //            where from Event e in o.DCRGraph.Events
@@ -280,7 +282,7 @@ namespace DROM_Client.ViewModels
                         }
                 },
                 Table = 1,
-                OrderType = "To be served"
+                OrderType = "For delivery"
             });
 
             OrdersFromWebAPI.Add(new Order()
@@ -340,16 +342,13 @@ namespace DROM_Client.ViewModels
             });
 
             #endregion
-
-            foreach(Order o in OrdersFromWebAPI)
-            {
-                OrderList.Add(o);
-            }
+            
+            FilterViewAcordingToRoles();
         }
 
-        public async void ExecuteEvent(Event eventToExecute)
+        public void ExecuteEvent(Event eventToExecute)
         {
-            await _APICaller.PutExecuteEvent(eventToExecute);
+            _APICaller.PutExecuteEvent(eventToExecute);
         }
 
         public void FilterViewAcordingToRoles()
@@ -360,18 +359,18 @@ namespace DROM_Client.ViewModels
                 var newOrder = CopyOrderExceptEvents(o);
                 foreach (Event e in o.DCRGraph.Events)
                 {
-                    if (Manager) //If manager is checked off, we just add all events. (Talk about this with Johan)
-                    {
-                        if (!newOrder.DCRGraph.Events.Contains(e))
-                        {
-                            newOrder.DCRGraph.Events.Add(e);
-                            continue;
-                        }
-                    }
                     if (!e.Groups.Exists(ev => ev.Name == "Edit events") && e.Groups.Exists(ev => ev.Name == "only pending")) //Filter out "Edit events" and be sure the event shows for "only pending"
                     {
                         foreach (Role r in e.Roles)
                         {
+                            if (Manager) //If manager is checked off, we just add all events. (Talk about this with Johan)
+                            {
+                                if (!newOrder.DCRGraph.Events.Contains(e))
+                                {
+                                    newOrder.DCRGraph.Events.Add(e);
+                                    continue;
+                                }
+                            }
                             if (r.Name == "Waiter" && Waiter)
                             {
                                 if (!newOrder.DCRGraph.Events.Contains(e))
@@ -398,6 +397,10 @@ namespace DROM_Client.ViewModels
                             }
                         }
                     }
+                }
+                if(_ShowOnlyPendingOrders && newOrder.DCRGraph.Events.Count == 0)
+                {
+                    continue;
                 }
                 OrderList.Add(newOrder);
             }
