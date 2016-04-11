@@ -99,53 +99,27 @@ namespace DROM_Client.ViewModels
                 OrderType = "To be served"
             };
 
-        public Event EditEventToExecute;
-
+        public Event ItemsOnOrderHasBeenChangedEvent;
+        public bool ItemsOnOrderHasBeenChanged;
+        public List<Event> EditEventsToExecute = new List<Event>();
         private APICaller _APICaller;
-
-        internal void RemoveItem(Item key)
-        {
-            var replacementDictionary = new ObservableCollection<ItemQuantity>();
-            foreach (var entry in OrderBeingEdited.ItemsAndQuantity)
-            {
-                if (entry.Item.Equals(key)) continue;
-                else replacementDictionary.Add(new ItemQuantity()
-                {
-                    Item = entry.Item,
-                    Quantity = entry.Quantity
-                });
-            }
-            OrderBeingEdited.ItemsAndQuantity = replacementDictionary;
-        }
-
         public ObservableCollection<Item> ItemCollection { get; set; } = new ObservableCollection<Item>();
+        public ObservableCollection<Event> EditEvents;
 
         public EditOrderPageViewModel() {
-
             _APICaller = new APICaller();
             foreach (Item item in _APICaller.GetItems()) ItemCollection.Add(item);
         }
 
-        internal void AddQuantityAndItem(int quantity, Item item)
+        internal void AddItemQuantity(Item item, int quantity)
         {
-            var replacementDictionary = new ObservableCollection<ItemQuantity>();
-            foreach (var entry in OrderBeingEdited.ItemsAndQuantity)
-            {
-                replacementDictionary.Add(new ItemQuantity()
-                {
-                    Item = entry.Item,
-                    Quantity = entry.Quantity
-                });
-            }
-            replacementDictionary.Add(new ItemQuantity()
-            {
-                Item = item,
-                Quantity = quantity
-            });
-            OrderBeingEdited.ItemsAndQuantity = replacementDictionary;
+            OrderBeingEdited.ItemsAndQuantity.Add(new ItemQuantity { Item = item, Quantity = quantity });
         }
 
-        public ObservableCollection<Event> EditEvents;
+        internal void RemoveItemQuantity(ItemQuantity itemQuantity)
+        {
+            OrderBeingEdited.ItemsAndQuantity.Remove(itemQuantity);
+        }
 
         internal void SaveOrder()
         {
@@ -162,19 +136,26 @@ namespace DROM_Client.ViewModels
             };
             foreach (ItemQuantity iq in OrderBeingEdited.ItemsAndQuantity) ChangedOrder.ItemsAndQuantity.Add(iq);
             foreach (Event e in OrderBeingEdited.DCRGraph.Events) ChangedOrder.DCRGraph.Events.Add(e);
-            
-            _APICaller.PutUpdateOrder(ChangedOrder, new List<int>() { EditEvents.First().Id});
-           // _APICaller.PutUpdateOrder(ChangedOrder);
+
+            if(ItemsOnOrderHasBeenChanged)
+            {
+                EditEventsToExecute.Add(ItemsOnOrderHasBeenChangedEvent);
+            }
+
+            var EventIdsToExecute = new List<int>();
+            foreach (Event e in EditEventsToExecute) EventIdsToExecute.Add(e.Id);
+            _APICaller.PutUpdateOrder(ChangedOrder, EventIdsToExecute);
         }
 
-        public void FilterEvents()
-        {
-            IEnumerable<Event> eventsToRemove = OrderBeingEdited.DCRGraph.Events.Where(ev => ev.Groups.Exists(g => g.Name == "only pending"));
-            foreach(Event e in eventsToRemove)
-            {
-                OrderBeingEdited.DCRGraph.Events.Remove(e);
-            }
-        }
+        //Code is not in use:
+        //public void FilterEvents()
+        //{
+        //    IEnumerable<Event> eventsToRemove = OrderBeingEdited.DCRGraph.Events.Where(ev => ev.Groups.Exists(g => g.Name == "only pending" || g.Name == "Hidden edit events"));
+        //    foreach(Event e in eventsToRemove)
+        //    {
+        //        OrderBeingEdited.DCRGraph.Events.Remove(e);
+        //    }
+        //}
 
         #region Property changed implementation
         public event PropertyChangedEventHandler PropertyChanged;

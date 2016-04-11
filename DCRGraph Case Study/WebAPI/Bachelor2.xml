@@ -200,28 +200,10 @@
                         <eventData></eventData>
                     </custom>
                 </event>
-                <event id="Activity 15" scope="private" >
-                    <custom>
-                        <visualization>
-                            <location xLoc="995" yLoc="775" />
-                        </visualization>
-                        <roles>
-                            <role>Manager</role>
-                            <role>Waiter</role>
-                        </roles>
-                        <groups>
-                            <group>Edit events</group>
-                        </groups>
-                        <eventType></eventType>
-                        <eventDescription></eventDescription>
-                        <level>1</level>
-                        <eventData></eventData>
-                    </custom>
-                </event>
                 <event id="Activity 16" scope="private" >
                     <custom>
                         <visualization>
-                            <location xLoc="878" yLoc="775" />
+                            <location xLoc="877" yLoc="798" />
                         </visualization>
                         <roles>
                             <role>Manager</role>
@@ -229,6 +211,7 @@
                         </roles>
                         <groups>
                             <group>Edit events</group>
+                            <group>Hidden edit events</group>
                         </groups>
                         <eventType></eventType>
                         <eventDescription></eventDescription>
@@ -392,8 +375,7 @@
                 <label id="Done" />
                 <label id="Pay" />
                 <label id="Change to takeaway" />
-                <label id="Remove item from order" />
-                <label id="Add item to order" />
+                <label id="Items have changed" />
                 <label id="Change to delivery" />
                 <label id="Setup graph web takeaway" />
                 <label id="Setup graph web delivery" />
@@ -415,8 +397,7 @@
                 <labelMapping eventId="Activity 10" labelId="Done"/>
                 <labelMapping eventId="Activity 11" labelId="Pay"/>
                 <labelMapping eventId="Activity 13" labelId="Change to takeaway"/>
-                <labelMapping eventId="Activity 15" labelId="Remove item from order"/>
-                <labelMapping eventId="Activity 16" labelId="Add item to order"/>
+                <labelMapping eventId="Activity 16" labelId="Items have changed"/>
                 <labelMapping eventId="Activity 19" labelId="Change to delivery"/>
                 <labelMapping eventId="Activity 20" labelId="Setup graph web takeaway"/>
                 <labelMapping eventId="Activity 21" labelId="Setup graph web delivery"/>
@@ -441,6 +422,7 @@
                 <groups>
                     <group sequence="0">always</group>
                     <group sequence="0">Edit events</group>
+                    <group sequence="0">Hidden edit events</group>
                     <group sequence="0">only pending</group>
                     <group sequence="0">Waiter serves order</group>
                 </groups>
@@ -475,7 +457,6 @@
                 <response sourceId="Activity 23" targetId="Activity 11" filterLevel="4"  description=""  time=""  groups=""  />
                 <response sourceId="Activity 24" targetId="Activity 4" filterLevel="4"  description=""  time=""  groups=""  />
                 <response sourceId="Activity 24" targetId="Activity 11" filterLevel="4"  description=""  time=""  groups=""  />
-                <response sourceId="Activity 15" targetId="Activity 25" filterLevel="3"  description=""  time=""  groups=""  />
                 <response sourceId="Activity 16" targetId="Activity 25" filterLevel="3"  description=""  time=""  groups=""  />
                 <response sourceId="Activity 25" targetId="Activity 3" filterLevel="1"  description=""  time=""  groups=""  />
                 <response sourceId="Activity 25" targetId="Activity 4" filterLevel="1"  description=""  time=""  groups=""  />
@@ -554,7 +535,6 @@
                 <include sourceId="Activity 13" targetId="Activity 4" filterLevel="3"  description=""  time=""  groups=""  />
                 <include sourceId="Activity 26" targetId="Activity 3" filterLevel="1"  description=""  time=""  groups=""  />
                 <include sourceId="Activity 16" targetId="Activity 25" filterLevel="1"  description=""  time=""  groups=""  />
-                <include sourceId="Activity 15" targetId="Activity 25" filterLevel="1"  description=""  time=""  groups=""  />
             </includes>
             <milestones>
                 <milestone sourceId="Activity 4" targetId="Activity 5" filterLevel="1"  description=""  time=""  groups=""  />
@@ -589,7 +569,6 @@
                 <event id="Activity 10"/>
                 <event id="Activity 11"/>
                 <event id="Activity 13"/>
-                <event id="Activity 15"/>
                 <event id="Activity 16"/>
                 <event id="Activity 19"/>
                 <event id="Activity 20"/>

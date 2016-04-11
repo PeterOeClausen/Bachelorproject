@@ -75,7 +75,8 @@ namespace WebAPI.Migrations
             var groups = new List<Group>()
             {
                 new Group() {Name = "only pending"},
-                new Group() {Name = "Edit events"}
+                new Group() {Name = "Edit events"},
+                new Group() {Name = "Hidden edit events" }
             };
 
             foreach (var g in groups)

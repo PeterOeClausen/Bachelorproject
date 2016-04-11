@@ -63,17 +63,17 @@ namespace DROM_Client.Views
                 return;
             }
             //TODO: Check if all information is entered
-            //switch ((DeliveryCombobox.SelectedItem as ComboBoxItem).Content as string) //Checks if all data is inserted
+
             switch (DeliveryCombobox.SelectedItem as string)
             {
                 case "For serving":
                     if (!All_Information_Entered_For_Serving()) return;
                     break;
                 case "For takeaway":
-                    if(!All_Information_Entered_For_Pickup()) return;
+                    if (!All_Information_Entered_For_Pickup()) return;
                     break;
                 case "For delivery":
-                    if(!All_Information_Entered_For_Delivery()) return;
+                    if (!All_Information_Entered_For_Delivery()) return;
                     break;
             }
             viewModel.SaveOrder();
@@ -97,6 +97,11 @@ namespace DROM_Client.Views
             if(!(int.TryParse(Table_Number_Text_Box.Text,out tableNumber)))
             {
                 CreateAndShowMessageDialog("Please enter a valid table integer number.");
+                return false;
+            }
+            else if (tableNumber == 0)
+            {
+                CreateAndShowMessageDialog("Sorry, but you need to specify a table number that is not '0'");
                 return false;
             }
             return true;
@@ -219,41 +224,6 @@ namespace DROM_Client.Views
             {
                 CreateAndShowMessageDialog("You need to select one and only one item from the list above.");
             }
-        }
-
-        private void Send_Test_Post_Call(object sender, RoutedEventArgs e)
-        {
-            APICaller apiCaller = new APICaller();
-            apiCaller.PostOrderAsync(new NewOrderInfo()
-            {
-                Table = 1,
-                Customer = new Customer()
-                {
-                    FirstAndMiddleNames = "Bob",
-                    LastName = "Bobson",
-                    City = "TestCity",
-                    Email = "Test@mail.dk",
-                    Phone = 12121212,
-                    StreetAndNumber = "testgade 12",
-                    ZipCode = 2300
-                },
-                ItemsAndQuantity = new Dictionary<Item, int>()
-                {
-                    {new Item()
-                    {
-                        Name = "Lone Star"
-                    },
-                        2 },
-                    {new Item()
-                    {
-                        Name = "Cola"
-                    },
-                        4 }
-                },
-                Notes = "this is a very special and very testy order",
-                OrderType = "For delivery",
-                OrderDate = DateTime.Now
-            });
         }
 
         private void DeliveryCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -42,7 +42,7 @@
                     <TextBox Text="{Binding OrderBeingEdited.Table, FallbackValue='N/A'}"/>
                 </StackPanel>
                 <!--Save button:-->
-                <Button Click="Save_Click">
+                <Button Click="Save_Click" MinWidth="64">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <SymbolIcon Symbol="Save"/>
@@ -51,7 +51,7 @@
                     </Button.Content>
                 </Button>
                 <!--Cancel button:-->
-                <Button Click="Cancel_Click">
+                <Button Click="Cancel_Click" Margin="5,0,0,0">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <SymbolIcon Symbol="Cancel"/>
@@ -80,11 +80,12 @@
                     <TextBlock Text="City:" Margin="0,20,0,0"/>
                     <TextBox Text="{Binding OrderBeingEdited.Customer.City, Mode=TwoWay, FallbackValue='N/A'}"/>
                 </StackPanel>
-                <!--Items on order:-->
-                <StackPanel Padding="20,0,20,0" Background="Wheat">
-                    <TextBlock Text="Items on order:" Margin="0,20,0,0" FontWeight="Bold" />
+                <!--Items and notes:-->
+                <StackPanel Padding="20,0,20,0" MinWidth="300">
                     <!--Items list:-->
-                    <ListView ItemsSource="{Binding OrderBeingEdited.ItemsAndQuantity}" Background="AntiqueWhite" x:Name="Items_On_Order_List_View">
+                    <StackPanel Background="Wheat" Margin="0,20,0,0">
+                        <TextBlock Text="Items on order:" FontWeight="Bold" />
+                        <ListView ItemsSource="{Binding OrderBeingEdited.ItemsAndQuantity}" Background="AntiqueWhite" x:Name="Items_On_Order_List_View" MinHeight="30">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -111,15 +112,19 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </StackPanel>
-                        <Button Content="Add" Click="Add_Click"/>
-                        <Button Content="Delete" Click="Remove_Click"/>
+                        <Button Content="Add" Click="Add_Click" VerticalAlignment="Bottom"/>
+                        <Button Content="Remove" Click="Remove_Click" VerticalAlignment="Bottom"/>
                     </StackPanel>
+                    </StackPanel>
+                    <!--Notes:-->
+                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0,10,0,0"/>
+                    <TextBox Text="{Binding OrderBeingEdited.Notes, Mode=TwoWay}" 
+                             TextWrapping="Wrap" 
+                             AcceptsReturn="True"
+                             MinHeight="60"/>
                 </StackPanel>
-                <!--Notes:-->
-                <StackPanel MinWidth="500" MaxWidth="500" Padding="20,0,20,0">
-                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0,20,0,0"/>
-                    <TextBox Text="{Binding OrderBeingEdited.Notes, Mode=TwoWay}" TextWrapping="Wrap"/>
-                </StackPanel>
+                
+                
                 <!--Edit event buttons-->
                 <StackPanel MinWidth="500" MaxWidth="500" Padding="20,0,20,0">
                     <TextBlock Text="Edit events to execute:" FontWeight="Bold" Margin="0,20,0,0"/>
@@ -127,7 +132,7 @@
                         <GridView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Visibility="{Binding Groups, Converter={StaticResource EditEventGroupNameToVisibilityConverter}}">
-                                    <Button Content="{Binding Label}" Click="Edit_Event_Execute_Click"/> <!--Visibility="{Binding Groups, Converter={StaticResource EditEventGroupNameToVisibilityConverter}}"-->
+                                    <Button Content="{Binding Label}" Click="Edit_Event_Execute_Click" Tag="{Binding}"/> <!--Visibility="{Binding Groups, Converter={StaticResource EditEventGroupNameToVisibilityConverter}}"-->
                                 </Grid>
                             </DataTemplate>
                         </GridView.ItemTemplate>

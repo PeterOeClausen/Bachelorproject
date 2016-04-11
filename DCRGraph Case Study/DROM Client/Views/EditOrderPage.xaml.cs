@@ -52,10 +52,11 @@ namespace DROM_Client.Views
 
             foreach (Event evnt in orderReceived.DCRGraph.Events)
             {
-                if(evnt.Groups.Exists(g => g.Name == "Edit events")) //Filters to only "Edit events"
+                if(evnt.Groups.Exists(g => g.Name == "Edit events") && !evnt.Groups.Exists(g => g.Name == "Hidden edit events")) //Filters to only "Edit events"
                 {
                     viewModel.OrderBeingEdited.DCRGraph.Events.Add(evnt);
                 }
+                if (evnt.Groups.Exists(g => g.Name == "Hidden edit events")) viewModel.ItemsOnOrderHasBeenChangedEvent = evnt;
             }
 
             foreach (var entry in orderReceived.ItemsAndQuantity)
@@ -82,13 +83,19 @@ namespace DROM_Client.Views
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
+            if(this.Item_Box.SelectedItem == null)
+            {
+                CreateAndShowMessageDialog("You have to select an item to add.");
+                return;
+            }
+            var selectedItem = Item_Box.SelectedItem as Item;
             string quanAsString = this.Quantity_Box.Text;
             int quanAsInt;
             if (int.TryParse(quanAsString, out quanAsInt))
             {
-                var NewItem = this.Item_Box.SelectedItem as Item;
                 var viewModel = this.DataContext as EditOrderPageViewModel;
-                viewModel.AddQuantityAndItem(quanAsInt, NewItem);
+                viewModel.AddItemQuantity(selectedItem, quanAsInt);
+                viewModel.ItemsOnOrderHasBeenChanged = true;
             }
             else
             {
@@ -96,25 +103,18 @@ namespace DROM_Client.Views
             }
         }
 
-        private async void CreateAndShowMessageDialog(string message)
-        {
-            var messageDialog = new MessageDialog(message);
-            messageDialog.CancelCommandIndex = 0;
-            await messageDialog.ShowAsync();
-        }
-
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
             if (this.Items_On_Order_List_View.SelectedItems.Count == 1)
             {
-                var selected = (KeyValuePair<Item, int>)this.Items_On_Order_List_View.SelectedItem;
-
+                var selectedItemQuantity = Items_On_Order_List_View.SelectedItem as ItemQuantity;
                 var viewModel = this.DataContext as EditOrderPageViewModel;
-                viewModel.RemoveItem(selected.Key);
+                viewModel.RemoveItemQuantity(selectedItemQuantity);
+                viewModel.ItemsOnOrderHasBeenChanged = true;
             }
             else
             {
-                CreateAndShowMessageDialog("You need to select one and only one item from the list above.");
+                CreateAndShowMessageDialog("You need to select an item from the order to remove.");
             }
         }
 
@@ -122,8 +122,17 @@ namespace DROM_Client.Views
         {
             var eventToExecute = ((Button)sender).Tag as Event;
             var viewModel = this.DataContext as EditOrderPageViewModel;
-            viewModel.EditEventToExecute = eventToExecute;
+            viewModel.EditEventsToExecute.Clear();
+            viewModel.EditEventsToExecute.Add(eventToExecute);
+            CreateAndShowMessageDialog("'" + eventToExecute.Label + "' will be done when you save.");
             //Update UI for delivery method.
+        }
+
+        private async void CreateAndShowMessageDialog(string message)
+        {
+            var messageDialog = new MessageDialog(message);
+            messageDialog.CancelCommandIndex = 0;
+            await messageDialog.ShowAsync();
         }
     }
 }

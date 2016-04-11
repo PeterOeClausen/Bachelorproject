@@ -13,7 +13,7 @@
     </Page.DataContext>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel>
+        <StackPanel Margin="10,0,0,0">
             <TextBlock Text="Create new order" FontWeight="Bold" FontSize="30" />
             <StackPanel Orientation="Horizontal">
                 <!--Customer information:-->
@@ -21,30 +21,30 @@
                     <TextBlock Text="Customer information:" FontWeight="Bold" Margin="0,20,0,0"/>
                     <TextBlock Text="First name:"/>
                     <TextBox Text="{Binding OrderBeingCreated.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" MinWidth="300" HorizontalAlignment="Left" x:Name="First_Name_Text_Box"/>
-                    <TextBlock Text="Last name:" Margin="0,20,0,0"/>
+                    <TextBlock Text="Last name:" Margin="0,10,0,0"/>
                     <TextBox Text="{Binding OrderBeingCreated.Customer.LastName, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Last_Name_Text_Box"/>
-                    <TextBlock Text="Email:" Margin="0,20,0,0"/>
+                    <TextBlock Text="Email:" Margin="0,10,0,0"/>
                     <TextBox Text="{Binding OrderBeingCreated.Customer.Email, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Email_Text_Box"/>
-                    <TextBlock Text="Phone:" Margin="0,20,0,0"/>
+                    <TextBlock Text="Phone:" Margin="0,10,0,0"/>
                     <TextBox Text="{Binding OrderBeingCreated.Customer.Phone, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Phone_Text_Box"/>
-                    <TextBlock Text="Street and number:" Margin="0,20,0,0"/>
+                    <TextBlock Text="Street and number:" Margin="0,10,0,0"/>
                     <TextBox Text="{Binding OrderBeingCreated.Customer.StreetAndNumber, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Street_And_Number_Text_Box"/>
-                    <TextBlock Text="Zip:" Margin="0,20,0,0"/>
+                    <TextBlock Text="Zip:" Margin="0,10,0,0"/>
                     <TextBox Text="{Binding OrderBeingCreated.Customer.ZipCode, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Zip_Text_Box"/>
-                    <TextBlock Text="City:" Margin="0,20,0,0"/>
+                    <TextBlock Text="City:" Margin="0,10,0,0"/>
                     <TextBox Text="{Binding OrderBeingCreated.Customer.City, Mode=TwoWay, FallbackValue='N/A'}" x:Name="City_Text_Box"/>
                 </StackPanel>
                 <!--Delivery method, table number and items on order-->
                 <StackPanel Margin="20,20,0,0">
                     <!--Delivery method-->
                     <TextBlock Text="Delivery method:" FontWeight="Bold" />
-                    <ComboBox x:Name="DeliveryCombobox" ItemsSource="{Binding DeliveryMethodsList}" SelectionChanged="DeliveryCombobox_SelectionChanged"/>
+                    <ComboBox x:Name="DeliveryCombobox" ItemsSource="{Binding DeliveryMethodsList}" SelectionChanged="DeliveryCombobox_SelectionChanged" MinWidth="200" />
                     <!--Table number-->
-                    <TextBlock Text="Table number:" FontWeight="Bold"/>
+                    <TextBlock Text="Table number:" FontWeight="Bold" Margin="0,10,0,0"/>
                     <TextBox Text="{Binding OrderBeingCreated.Table}" x:Name="Table_Number_Text_Box"/>
                     <!--Items on order-->
-                    <StackPanel Background="Wheat">
-                        <TextBlock Text="Items on order:" Margin="0,20,0,0" FontWeight="Bold" />
+                    <StackPanel Background="Wheat" Margin="0,10,0,0">
+                        <TextBlock Text="Items on order:" FontWeight="Bold" />
                         <!--Items list:-->
                         <ListView ItemsSource="{Binding OrderBeingCreated.ItemsAndQuantity}" Background="AntiqueWhite" x:Name="Items_On_Order_List_View">
                             <ListView.ItemTemplate>
@@ -73,17 +73,24 @@
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
                             </StackPanel>
-                            <Button Content="Add" Click="Add_Click"/>
-                            <Button Content="Remove" Click="Remove_Click"/>
+                            <Button Content="Add" Click="Add_Click" VerticalAlignment="Bottom"/>
+                            <Button Content="Remove" Click="Remove_Click" VerticalAlignment="Bottom"/>
                         </StackPanel>
                     </StackPanel>
+                    <!--Notes-->
+                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0,10,0,0"/>
+                    <TextBox Text="{Binding OrderBeingCreated.Notes, Mode=TwoWay}" 
+                             TextWrapping="Wrap" 
+                             AcceptsReturn="True"
+                             MinHeight="60"/>
                 </StackPanel>
-                <!--Buttons and notes-->
+                <!--Save and cancel buttons-->
                 <StackPanel Margin="20,20,0,0" MinWidth="500" MaxWidth="500">
+                    <TextBlock Text="Save or cancel order:" FontWeight="Bold"/>
                     <!--Buttons-->
                     <StackPanel Orientation="Horizontal">
                         <!--Save button:-->
-                        <Button Click="Save_Click">
+                        <Button Click="Save_Click" MinWidth="64">
                             <Button.Content>
                                 <StackPanel Orientation="Vertical">
                                     <SymbolIcon Symbol="Save"/>
@@ -92,7 +99,7 @@
                             </Button.Content>
                         </Button>
                         <!--Cancel button:-->
-                        <Button Click="Cancel_Click">
+                        <Button Click="Cancel_Click" Margin="5,0,0,0" MinWidth="64">
                             <Button.Content>
                                 <StackPanel Orientation="Vertical">
                                     <SymbolIcon Symbol="Cancel"/>
@@ -100,13 +107,6 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-
-                        <Button Content="Send test post call" Click="Send_Test_Post_Call"/>
-                    </StackPanel>
-                    <!--Notes-->
-                    <StackPanel>
-                        <TextBlock Text="Notes:" FontWeight="Bold" Margin="0,20,0,0"/>
-                        <TextBox Text="{Binding OrderBeingCreated.Notes, Mode=TwoWay}" TextWrapping="Wrap"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
