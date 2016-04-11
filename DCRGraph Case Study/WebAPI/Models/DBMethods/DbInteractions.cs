@@ -170,27 +170,35 @@ namespace WebAPI.Models.DBMethods
             }
         }
 
-        public async Task<HttpStatusCode> UpdateOrder(DROM_Client.Models.BusinessObjects.Order order)
+        public async Task<HttpStatusCode> UpdateOrder(Tuple<DROM_Client.Models.BusinessObjects.Order, List<int>> data)
         {
 
             using (var db = new Database())
             {
-                var orderToBeUpdated = await db.Orders.FindAsync(order.Id);
+
+                var dbInter = new DbInteractions();
+                foreach (var i in data.Item2)
+                {
+                    var status = await dbInter.ExecuteEvent(i);
+                    if (status != HttpStatusCode.OK) return status; //Preconditions were not meet
+                }
+
+                var orderToBeUpdated = await db.Orders.FindAsync(data.Item1.Id);
 
                 //update related customer
-                orderToBeUpdated.Customer.City = order.Customer.City;
-                orderToBeUpdated.Customer.Email = order.Customer.Email;
-                orderToBeUpdated.Customer.FirstName = order.Customer.FirstAndMiddleNames;
-                orderToBeUpdated.Customer.LastName = order.Customer.LastName;
-                orderToBeUpdated.Customer.Phone = order.Customer.Phone;
-                orderToBeUpdated.Customer.StreetAndNumber = order.Customer.StreetAndNumber;
-                orderToBeUpdated.Customer.Zipcode = order.Customer.ZipCode;
+                orderToBeUpdated.Customer.City = data.Item1.Customer.City;
+                orderToBeUpdated.Customer.Email = data.Item1.Customer.Email;
+                orderToBeUpdated.Customer.FirstName = data.Item1.Customer.FirstAndMiddleNames;
+                orderToBeUpdated.Customer.LastName = data.Item1.Customer.LastName;
+                orderToBeUpdated.Customer.Phone = data.Item1.Customer.Phone;
+                orderToBeUpdated.Customer.StreetAndNumber = data.Item1.Customer.StreetAndNumber;
+                orderToBeUpdated.Customer.Zipcode = data.Item1.Customer.ZipCode;
 
                 //update the order
-                orderToBeUpdated.Notes = order.Notes;
-                orderToBeUpdated.Table = order.Table;
-                orderToBeUpdated.OrderType = order.OrderType;
-                order.ItemsAndQuantity = order.ItemsAndQuantity;
+                orderToBeUpdated.Notes = data.Item1.Notes;
+                orderToBeUpdated.Table = data.Item1.Table;
+                orderToBeUpdated.OrderType = data.Item1.OrderType;
+                data.Item1.ItemsAndQuantity = data.Item1.ItemsAndQuantity;
 
                 db.Entry(orderToBeUpdated).State = EntityState.Modified;
                 await db.SaveChangesAsync();

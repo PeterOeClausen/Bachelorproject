@@ -35,9 +35,9 @@ namespace WebAPI.Controllers
 
         [Route("api/order/UpdateOrder")]
         [HttpPut]
-        public async Task<HttpResponseMessage> UpdateOrder(DROM_Client.Models.BusinessObjects.Order order)
+        public async Task<HttpResponseMessage> UpdateOrder(Tuple<DROM_Client.Models.BusinessObjects.Order, List<int>> data)
         {
-            return Request.CreateResponse(new DbInteractions().UpdateOrder(order));
+            return Request.CreateResponse(await new DbInteractions().UpdateOrder(data));
         }
 
         [Route("api/order/executeEvent")]
