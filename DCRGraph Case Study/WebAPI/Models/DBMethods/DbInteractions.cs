@@ -186,13 +186,16 @@ namespace WebAPI.Models.DBMethods
                 var orderToBeUpdated = await db.Orders.FindAsync(data.Item1.Id);
 
                 //update related customer
-                orderToBeUpdated.Customer.City = data.Item1.Customer.City;
-                orderToBeUpdated.Customer.Email = data.Item1.Customer.Email;
-                orderToBeUpdated.Customer.FirstName = data.Item1.Customer.FirstAndMiddleNames;
-                orderToBeUpdated.Customer.LastName = data.Item1.Customer.LastName;
-                orderToBeUpdated.Customer.Phone = data.Item1.Customer.Phone;
-                orderToBeUpdated.Customer.StreetAndNumber = data.Item1.Customer.StreetAndNumber;
-                orderToBeUpdated.Customer.Zipcode = data.Item1.Customer.ZipCode;
+                if (orderToBeUpdated.Customer != null)
+                {
+                    orderToBeUpdated.Customer.City = data.Item1.Customer.City;
+                    orderToBeUpdated.Customer.Email = data.Item1.Customer.Email;
+                    orderToBeUpdated.Customer.FirstName = data.Item1.Customer.FirstAndMiddleNames;
+                    orderToBeUpdated.Customer.LastName = data.Item1.Customer.LastName;
+                    orderToBeUpdated.Customer.Phone = data.Item1.Customer.Phone;
+                    orderToBeUpdated.Customer.StreetAndNumber = data.Item1.Customer.StreetAndNumber;
+                    orderToBeUpdated.Customer.Zipcode = data.Item1.Customer.ZipCode;
+                }
 
                 //update the order
                 orderToBeUpdated.Notes = data.Item1.Notes;
