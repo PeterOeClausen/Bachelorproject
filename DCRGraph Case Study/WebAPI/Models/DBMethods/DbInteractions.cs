@@ -83,7 +83,8 @@ namespace WebAPI.Models.DBMethods
                     order.DCRGraph = new DROM_Client.Models.BusinessObjects.DCRGraph()
                     {
                         Id = o.DCRGraph.Id,
-                        Events = new List<Event>()
+                        Events = new List<Event>(),
+                        state = o.DCRGraph.state
                     };
 
                     //convert events and attach them to the graph
@@ -201,7 +202,27 @@ namespace WebAPI.Models.DBMethods
                 orderToBeUpdated.Notes = data.Item1.Notes;
                 orderToBeUpdated.Table = data.Item1.Table;
                 orderToBeUpdated.OrderType = data.Item1.OrderType;
-                data.Item1.ItemsAndQuantity = data.Item1.ItemsAndQuantity;
+                //data.Item1.ItemsAndQuantity = data.Item1.ItemsAndQuantity;
+                db.OrderDetails.RemoveRange(orderToBeUpdated.OrderDetails);
+                var newOrderDetails = new HashSet<OrderDetail>();
+                foreach (var iq in data.Item1.ItemsAndQuantity)
+                {
+
+                    var item = await db.Items.FirstOrDefaultAsync(i => i.Id == iq.Item.Id);
+                    var order = await db.Orders.FirstOrDefaultAsync(o => o.Id == data.Item1.Id);
+                    newOrderDetails.Add(new OrderDetail()
+                    {
+                        Item = item,
+                        ItemId = item.Id,
+                        Order = order,
+                        OrderId = order.Id,
+                        Quantity = iq.Quantity
+                    });
+                }
+
+                db.OrderDetails.AddRange(orderToBeUpdated.OrderDetails);
+                
+                orderToBeUpdated.OrderDetails = newOrderDetails;
 
                 db.Entry(orderToBeUpdated).State = EntityState.Modified;
                 await db.SaveChangesAsync();
@@ -220,7 +241,7 @@ namespace WebAPI.Models.DBMethods
                     var eventToBeExecuted = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == id);
                     
                     var loadedEvents = new Dictionary<int, DCREvent>();
-
+                    
                     //preconditions:
                     //the event must be included
                     if (eventToBeExecuted.Included == false) return HttpStatusCode.InternalServerError;
@@ -322,10 +343,22 @@ namespace WebAPI.Models.DBMethods
                     {
                         db.Entry(e.Value).State = EntityState.Modified;
                     }
+                    
 
                     await db.SaveChangesAsync();
 
+                    var order = await (from o in db.Orders.Include(o => o.DCRGraph.DCREvents)
+                                       where o.DCRGraph.Id == eventToBeExecuted.DCRGraphId
+                                       select o).FirstOrDefaultAsync();
 
+                    if (order.DCRGraph.DCREvents.Any(dcrEvent => dcrEvent.Included && dcrEvent.Pending))
+                    {
+                        return HttpStatusCode.OK;
+                    }
+
+                    order.DCRGraph.state = true;
+                    db.Entry(order).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
 
                     return HttpStatusCode.OK;
                 }
