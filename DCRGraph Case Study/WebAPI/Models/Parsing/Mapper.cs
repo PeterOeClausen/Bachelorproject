@@ -31,7 +31,7 @@ namespace WebAPI.Models.Parsing
                 {
                     var graph = new DCRGraph()
                     {
-                        state = false,
+                        AcceptingState = false,
                     };
                     graph.DCREvents = container.Events;
 
@@ -77,15 +77,14 @@ namespace WebAPI.Models.Parsing
 
                     if (orderInfo.OrderType != "For serving")
                     {
-                        var customer =
-                            db.Customers
-                                .FirstOrDefaultAsync(c => c.Phone == orderInfo.Customer.Phone).Result;
+                        var customer = 
+                            await db.Customers
+                                            .FirstOrDefaultAsync(c => c.Phone == orderInfo.Customer.Phone);
 
 
 
                         if (customer == null)
                         {
-                            if (orderInfo.Customer.Phone == 0) throw new Exception("Missing phone number on customer - Mapper.cs");
                             customer = new Customer()
                             {
                                 City = orderInfo.Customer.City ?? "n/a",

@@ -57,6 +57,13 @@ namespace WebAPI.Controllers
                 await new DbInteractions().DeliveryTypes(orderType));
         }
 
+        [Route("api/order/Archive")]
+        [HttpPut]
+        public async Task<HttpResponseMessage> ArchiveOrder(int order)
+        {
+            return Request.CreateResponse(await new DbInteractions().AchiveOrder(order));
+        }
+
 
     }
 }

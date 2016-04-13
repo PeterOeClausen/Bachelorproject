@@ -18,7 +18,7 @@ namespace WebAPI.Models.DBObjects
         public Database()
             : base("name=Database")
         {
-
+            this.Configuration.LazyLoadingEnabled = false;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

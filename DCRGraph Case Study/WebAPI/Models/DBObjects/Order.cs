@@ -28,9 +28,7 @@ namespace WebAPI.Models.DBObjects
 
         [Required]
         public string OrderType { get; set; }
-
-        public int? Customer_Id { get; set; }
-
+        
         public virtual Customer Customer { get; set; }
 
         public virtual DCRGraph DCRGraph { get; set; }

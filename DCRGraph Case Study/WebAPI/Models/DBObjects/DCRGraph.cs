@@ -11,18 +11,14 @@ namespace WebAPI.Models.DBObjects
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public DCRGraph()
         {
-            Orders = new HashSet<Order>();
             DCREvents = new HashSet<DCREvent>();
         }
 
         public int Id { get; set; }
 
-        public bool state { get; set; }
+        public bool AcceptingState { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Orders { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+      [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DCREvent> DCREvents { get; set; }
     }
 }

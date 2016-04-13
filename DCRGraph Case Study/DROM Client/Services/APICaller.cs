@@ -347,7 +347,7 @@ namespace DROM_Client.Services
                 }
                 catch (Exception ex)
                 {
-                    throw;
+                    return new List<Order>();
                 }
             }
         }
@@ -402,6 +402,33 @@ namespace DROM_Client.Services
                     var deliveryTypesReceived = response.Content.ReadAsAsync<List<string>>().Result;
                     response.EnsureSuccessStatusCode();
                     return deliveryTypesReceived;
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+        }
+
+        public string PutArchiveOrder(int orderId)
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = BaseAddress;
+                    var response = client.PutAsXmlAsync("api/order/Archive", orderId).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        //do succes thing
+                        return response.StatusCode.ToString();
+                    }
+                    else
+                    {
+                        //do failure thing
+                        return response.StatusCode.ToString();
+                    }
+                    
                 }
                 catch (Exception ex)
                 {
