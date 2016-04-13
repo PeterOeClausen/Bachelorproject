@@ -9,6 +9,5 @@ namespace DROM_Client.Models.BusinessObjects
     {
         public int Id { get; set; }
         public List<Event> Events { get; set; }
-        public bool state { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace DROM_Client.Models.BusinessObjects
         public DCRGraph DCRGraph { get; set; }
         public int Table { get; set; }
         public string OrderType { get; set; }
-        public bool State { get; set; }
+        public bool AcceptingState { get; set; }
 
     }
 }

@@ -22,7 +22,6 @@ namespace WebAPI.Models.DBObjects
 
         public string Email { get; set; }
 
-        [Required]
         public int Phone { get; set; }
 
         public string StreetAndNumber { get; set; }
