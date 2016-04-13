@@ -62,6 +62,11 @@ namespace DROM_Client.Views
                 CreateAndShowMessageDialog("Please select a delivery method.");
                 return;
             }
+            if(viewModel.OrderBeingCreated.ItemsAndQuantity.Count == 0)
+            {
+                CreateAndShowMessageDialog("Sorry, an order must have items on order.");
+                return;
+            }
             //TODO: Check if all information is entered
 
             switch (DeliveryCombobox.SelectedItem as string)
@@ -99,7 +104,7 @@ namespace DROM_Client.Views
                 CreateAndShowMessageDialog("Please enter a valid table integer number.");
                 return false;
             }
-            else if (tableNumber == 0)
+            if (tableNumber == 0)
             {
                 CreateAndShowMessageDialog("Sorry, but you need to specify a table number that is not '0'");
                 return false;
@@ -123,7 +128,7 @@ namespace DROM_Client.Views
             }
             else if (Last_Name_Text_Box.Text == "")
             {
-                CreateAndShowMessageDialog("Please enter the customer's first name.");
+                CreateAndShowMessageDialog("Please enter the customer's last name.");
                 return false;
             }
             else if (Email_Text_Box.Text == "")

@@ -99,8 +99,10 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToColorConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\EditEventGroupNameToVisibilityConverter.cs" />
     <Compile Include="Converters\PendingEventGroupNameToVisibilityConverter.cs" />
+    <Compile Include="Converters\ValueZeroToVisibilityConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

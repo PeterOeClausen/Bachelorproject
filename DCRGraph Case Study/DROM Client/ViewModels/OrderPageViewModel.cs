@@ -73,6 +73,94 @@ namespace DROM_Client.ViewModels
 
         public ObservableCollection<Order> OrderList { get { return _OrderList; } }
         private readonly ObservableCollection<Order> _OrderList = new ObservableCollection<Order>();
+        //#region Easy to insert test data:
+        //{
+        //    new Order()
+        //{
+        //    Id = 1,
+        //            ItemsAndQuantity = new List<ItemQuantity>() {
+        //                new ItemQuantity() {
+        //                    Item = new Item() {
+        //                            Id = 1,
+        //                            Name = "Chiliburger",
+        //                            Price = 69.9,
+        //                            Category = "Burger",
+        //                            Description = "Chiliburger med pommes frites"
+        //                        },
+        //                    Quantity = 1
+        //                }
+        //            },
+        //            Customer = new Customer()
+        //            {
+        //                Id = 1,
+        //                FirstAndMiddleNames = "John",
+        //                LastName = "Doe",
+        //                Email = "John@Doe.com",
+        //                Phone = 88888888,
+        //                StreetAndNumber = "Rued Langaardsvej 7",
+        //                ZipCode = 2300,
+        //                City = "København S"
+        //            },
+        //            OrderDate = DateTime.Now,
+        //            Notes = "Minus tomatoes please",
+        //            DCRGraph = new DCRGraph
+        //            {
+        //                Id = 1,
+        //                Events = new List<Event>() {
+        //                    new Event() {
+        //                        Id = 1,
+        //                        Label = "Confirm web order",
+        //                        Description = "Execute to confirm",
+        //                        Included = true, Pending = true, Executed = false,
+        //                        Roles = new List<Role> {
+        //                            new Role() {
+        //                                Id = 1,
+        //                                Name = "Waiter"
+        //                            }
+        //                        },
+        //                        Groups = new List<Group>
+        //                        {
+        //                            new Group()
+        //                            {
+        //                                Id = 1,
+        //                                Name = "only pending"
+        //                            }
+        //                        },
+        //                    },
+        //                    new Event()
+        //                    {
+        //                        Id = 2,
+        //                        Label = "Change to takeaway",
+        //                        Included = true, Pending = true, Executed = false,
+        //                        Roles = new List<Role>
+        //                        {
+        //                            new Role
+        //                            {
+        //                                Id = 1,
+        //                                Name = "Waiter"
+        //                            },
+        //                            new Role
+        //                            {
+        //                                Id = 2,
+        //                                Name = "Manager"
+        //                            }
+        //                        },
+        //                        Groups = new List<Group>
+        //                        {
+        //                            new Group
+        //                            {
+        //                                Id = 2,
+        //                                Name = "Edit events"
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            },
+        //            Table = 0,
+        //            OrderType = "To be delivered"
+        //        }
+        //};
+        //#endregion
 
         public List<Order> OrdersFromWebAPI { get; set; }
 
@@ -349,6 +437,11 @@ namespace DROM_Client.ViewModels
         public void ExecuteEvent(Event eventToExecute)
         {
             _APICaller.PutExecuteEvent(eventToExecute);
+        }
+
+        internal void ArchiveOrder(Order orderToBeArchived)
+        {
+            //_APICaller.ArchiveOrder(orderToBeArchived);
         }
 
         public void FilterViewAcordingToRoles()

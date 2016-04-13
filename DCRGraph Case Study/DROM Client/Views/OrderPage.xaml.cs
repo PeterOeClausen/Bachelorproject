@@ -29,6 +29,12 @@ namespace DROM_Client.Views
             this.InitializeComponent();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            var viewModel = DataContext as OrderPageViewModel;
+            viewModel.setupData();
+        }
+
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(LoginPage));
@@ -92,7 +98,15 @@ namespace DROM_Client.Views
             ViewModel.ExecuteEvent(EventToExecute);
             ViewModel.setupData();
         }
-        
+
+        private void Archive_Click(object sender, RoutedEventArgs e)
+        {
+            var orderToBeArchived = ((Button)sender).Tag as Order;
+            var viewModel = DataContext as OrderPageViewModel;
+            viewModel.ArchiveOrder(orderToBeArchived);
+            viewModel.setupData();
+        }
+
         //private void TempAddOrderClick(object sender, RoutedEventArgs e)
         //{
         //    var ViewModel = DataContext as OrderPageViewModel;

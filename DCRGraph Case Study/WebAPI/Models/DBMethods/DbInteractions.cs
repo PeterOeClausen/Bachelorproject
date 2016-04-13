@@ -357,6 +357,7 @@ namespace WebAPI.Models.DBMethods
                     }
 
                     order.DCRGraph.state = true;
+                    db.Entry(order.DCRGraph).State = EntityState.Modified;
                     db.Entry(order).State = EntityState.Modified;
                     await db.SaveChangesAsync();
 
