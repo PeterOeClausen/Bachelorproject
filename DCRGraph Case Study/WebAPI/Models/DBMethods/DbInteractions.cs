@@ -247,20 +247,24 @@ namespace WebAPI.Models.DBMethods
                             });
                         }
 
-                        //map customer to DTO Customer
-                        order.Customer = new DROM_Client.Models.BusinessObjects.Customer()
-                        {
-                            Id = queryOrder.Customer.Id,
-                            City = queryOrder.Customer.City,
-                            Phone = queryOrder.Customer.Phone,
-                            ZipCode = queryOrder.Customer.Zipcode,
-                            Email = queryOrder.Customer.Email,
-                            StreetAndNumber = queryOrder.Customer.StreetAndNumber,
-                            LastName = queryOrder.Customer.LastName,
-                            FirstAndMiddleNames = queryOrder.Customer.FirstName
-                        };
 
-                       orders.Add(order);
+                        if (order.OrderType != "For serving")
+                        {
+                            //map customer to DTO Customer
+                            order.Customer = new DROM_Client.Models.BusinessObjects.Customer()
+                            {
+                                Id = queryOrder.Customer.Id,
+                                City = queryOrder.Customer.City,
+                                Phone = queryOrder.Customer.Phone,
+                                ZipCode = queryOrder.Customer.Zipcode,
+                                Email = queryOrder.Customer.Email,
+                                StreetAndNumber = queryOrder.Customer.StreetAndNumber,
+                                LastName = queryOrder.Customer.LastName,
+                                FirstAndMiddleNames = queryOrder.Customer.FirstName
+                            };
+                        }
+
+                        orders.Add(order);
                     }
 
 
