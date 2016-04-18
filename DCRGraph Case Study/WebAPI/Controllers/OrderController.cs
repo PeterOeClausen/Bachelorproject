@@ -59,9 +59,9 @@ namespace WebAPI.Controllers
 
         [Route("api/order/Archive")]
         [HttpPut]
-        public async Task<HttpResponseMessage> ArchiveOrder(int order)
+        public async Task<HttpResponseMessage> ArchiveOrder(DROM_Client.Models.BusinessObjects.Order order)
         {
-            return Request.CreateResponse(await new DbInteractions().AchiveOrder(order));
+            return Request.CreateResponse(await new DbInteractions().AchiveOrder(order.Id));
         }
 
 

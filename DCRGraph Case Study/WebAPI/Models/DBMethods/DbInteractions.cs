@@ -122,8 +122,13 @@ namespace WebAPI.Models.DBMethods
                             var groupsWithNoDuplicates = new Dictionary<int, string>();
                             foreach (var group in queryOrder.EditEventsGroups)
                             {
-                                if(!groupsWithNoDuplicates.ContainsKey(group.ElementAt(0).Id))
-                                    groupsWithNoDuplicates.Add(group.ElementAt(0).Id, group.ElementAt(0).Name);
+                                
+                                foreach (var g in group)
+                                {
+                                    if (!groupsWithNoDuplicates.ContainsKey(g.Id))
+                                        groupsWithNoDuplicates.Add(g.Id, g.Name);
+                                }
+                                
                             }
                             
                             
@@ -143,8 +148,11 @@ namespace WebAPI.Models.DBMethods
                             var rolesWithNoDuplicates = new Dictionary<int, string>();
                             foreach (var role in queryOrder.EditEventsGroups)
                             {
-                                if (!rolesWithNoDuplicates.ContainsKey(role.ElementAt(0).Id))
-                                    rolesWithNoDuplicates.Add(role.ElementAt(0).Id, role.ElementAt(0).Name);
+                                foreach (var r in role)
+                                {
+                                    if (!rolesWithNoDuplicates.ContainsKey(r.Id))
+                                        rolesWithNoDuplicates.Add(r.Id, r.Name);
+                                }
                             }
 
                             //put roles on the event
@@ -181,8 +189,11 @@ namespace WebAPI.Models.DBMethods
                             var groupsWithNoDuplicates = new Dictionary<int, string>();
                             foreach (var group in queryOrder.PendingEventsGroups)
                             {
-                                if (!groupsWithNoDuplicates.ContainsKey(group.ElementAt(0).Id))
-                                    groupsWithNoDuplicates.Add(group.ElementAt(0).Id, group.ElementAt(0).Name);
+                                foreach (var g in group)
+                                {
+                                    if (!groupsWithNoDuplicates.ContainsKey(g.Id))
+                                        groupsWithNoDuplicates.Add(g.Id, g.Name);
+                                }
                             }
 
                             //put groups on the event
@@ -200,8 +211,11 @@ namespace WebAPI.Models.DBMethods
                             var rolesWithNoDuplicates = new Dictionary<int, string>();
                             foreach (var role in queryOrder.EditEventsGroups)
                             {
-                                if (!rolesWithNoDuplicates.ContainsKey(role.ElementAt(0).Id))
-                                    rolesWithNoDuplicates.Add(role.ElementAt(0).Id, role.ElementAt(0).Name);
+                                foreach (var r in role)
+                                {
+                                    if (!rolesWithNoDuplicates.ContainsKey(r.Id))
+                                        rolesWithNoDuplicates.Add(r.Id, r.Name);
+                                }
                             }
 
                             //put roles on the event
@@ -679,5 +693,134 @@ namespace WebAPI.Models.DBMethods
 
             }
         }
+
+        ////get orders from db
+        //var orders = db.Orders
+        //    .Include(o => o.DCRGraph.DCREvents.Select(e => e.Groups))
+        //    .Include(o => o.DCRGraph.DCREvents.Select(e => e.Roles))
+        //    .Include(o => o.Customer)
+        //    .Include(o => o.OrderDetails.Select(od => od.Item.Category))
+        //    ;
+
+
+
+
+
+
+
+
+        ////var orders = db.Orders;
+        //List<DROM_Client.Models.BusinessObjects.Order> orderList = new List<DROM_Client.Models.BusinessObjects.Order>();
+
+        ////convert db orders to serializable transfer orders
+        //foreach (var o in orders)
+        //{
+
+        //    var order = new DROM_Client.Models.BusinessObjects.Order()
+        //    {
+        //        Id = o.Id,
+        //        OrderType = o.OrderType,
+        //        Notes = o.Notes ?? "",
+        //        OrderDate = o.OrderDate,
+        //        Table = o.Table
+        //    };
+
+        //    //if db customer not null, put it on the order, otherwise attach an empty customer to the order
+        //    if (o.Customer != null)
+        //    {
+        //        var customer = new DROM_Client.Models.BusinessObjects.Customer()
+        //        {
+        //            Id = o.Customer.Id,
+        //            Phone = o.Customer.Phone,
+        //            ZipCode = o.Customer.Zipcode,
+        //            StreetAndNumber = o.Customer.StreetAndNumber,
+        //            City = o.Customer.City,
+        //            Email = o.Customer.Email,
+        //            FirstAndMiddleNames = o.Customer.FirstName,
+        //            LastName = o.Customer.LastName
+
+        //        };
+        //        order.Customer = customer;
+        //    }
+        //    else order.Customer = new DROM_Client.Models.BusinessObjects.Customer();
+
+        //    //attach DCRGraph to the order
+        //    order.DCRGraph = new DROM_Client.Models.BusinessObjects.DCRGraph()
+        //    {
+        //        Id = o.DCRGraph.Id,
+        //        Events = new List<Event>()
+        //    };
+
+        //    //convert events and attach them to the graph
+        //    foreach (var dcrEvent in o.DCRGraph.DCREvents)
+        //    {
+        //        if (dcrEvent.Included == true) // only add included events
+        //        {
+        //            foreach (var g in dcrEvent.Groups)
+        //            {
+        //                if ((dcrEvent.Pending == true || g.Name == "Edit events")) // we only want to give pending events and edit events
+        //                {
+        //                    var businessEvent = new Event
+        //                    {
+        //                        Id = dcrEvent.Id,
+        //                        Description = dcrEvent.Description ?? "",
+        //                        Executed = dcrEvent.Executed,
+        //                        Included = dcrEvent.Included,
+        //                        Label = dcrEvent.Label,
+        //                        Pending = dcrEvent.Pending,
+        //                        Roles = null,
+        //                        Groups = new List<DROM_Client.Models.BusinessObjects.Group>()
+        //                    };
+
+        //                    //get groups onto the event
+        //                    foreach (var groupList in dcrEvent.Groups)
+        //                    {
+        //                        var group = new DROM_Client.Models.BusinessObjects.Group();
+        //                        group.Id = groupList.Id;
+        //                        group.Name = groupList.Name;
+        //                        businessEvent.Groups.Add(group);
+        //                    }
+
+        //                    //get roles onto the event
+        //                    businessEvent.Roles = new List<DROM_Client.Models.BusinessObjects.Role>();
+        //                    foreach (var r in dcrEvent.Roles)
+        //                    {
+        //                        var role = new DROM_Client.Models.BusinessObjects.Role();
+        //                        role.Id = r.Id;
+        //                        role.Name = r.Name;
+        //                        businessEvent.Roles.Add(role);
+        //                    }
+
+        //                    order.DCRGraph.Events.Add(businessEvent);
+        //                }
+        //            }
+        //        }
+
+        //    }
+
+        //    //put items and quantity on the order
+        //    var itemsAndQuantity = new List<DROM_Client.Models.BusinessObjects.ItemQuantity>();
+        //    foreach (var od in o.OrderDetails)
+        //    {
+        //        var itemQuantity = new ItemQuantity()
+        //        {
+        //            Item = new DROM_Client.Models.BusinessObjects.Item()
+        //            {
+        //                Id = od.Item.Id,
+        //                Category = od.Item.Category.Name,
+        //                Name = od.Item.Name,
+        //                Description = od.Item.Description,
+        //                Price = od.Item.Price
+
+        //            },
+        //            Quantity = od.Quantity
+
+        //        };
+
+
+
+        //        itemsAndQuantity.Add(itemQuantity);
+        //    }
+        //    order.ItemsAndQuantity = itemsAndQuantity;
     }
 }

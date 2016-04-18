@@ -116,8 +116,8 @@
                             <location xLoc="1121" yLoc="427" />
                         </visualization>
                         <roles>
+                            <role>Delivery</role>
                             <role>Manager</role>
-                            <role>Waiter</role>
                         </roles>
                         <groups>
                             <group>only pending</group>
@@ -167,7 +167,7 @@
                 <event id="Activity 11" scope="private" >
                     <custom>
                         <visualization>
-                            <location xLoc="1483" yLoc="85" />
+                            <location xLoc="1483" yLoc="84" />
                         </visualization>
                         <roles>
                             <role>Manager</role>
@@ -203,7 +203,7 @@
                 <event id="Activity 16" scope="private" >
                     <custom>
                         <visualization>
-                            <location xLoc="877" yLoc="798" />
+                            <location xLoc="878" yLoc="776" />
                         </visualization>
                         <roles>
                             <role>Manager</role>
@@ -257,7 +257,7 @@
                 <event id="Activity 21" scope="private" >
                     <custom>
                         <visualization>
-                            <location xLoc="701" yLoc="30" />
+                            <location xLoc="702" yLoc="30" />
                         </visualization>
                         <roles>
                             <role></role>

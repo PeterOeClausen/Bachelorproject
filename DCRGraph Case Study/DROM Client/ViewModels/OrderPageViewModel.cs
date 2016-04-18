@@ -441,7 +441,7 @@ namespace DROM_Client.ViewModels
 
         internal void ArchiveOrder(Order orderToBeArchived)
         {
-            //_APICaller.ArchiveOrder(orderToBeArchived);
+            _APICaller.PutArchiveOrder(orderToBeArchived);
         }
 
         public void FilterViewAcordingToRoles()
@@ -510,7 +510,8 @@ namespace DROM_Client.ViewModels
                 Notes = orderToBeCoppied.Notes,
                 DCRGraph = new DCRGraph() { Id = orderToBeCoppied.Id, Events = new List<Event>()},
                 Table = orderToBeCoppied.Table,
-                OrderType = orderToBeCoppied.OrderType
+                OrderType = orderToBeCoppied.OrderType,
+                AcceptingState = orderToBeCoppied.AcceptingState
             };
             foreach (ItemQuantity iq in orderToBeCoppied.ItemsAndQuantity) newOrder.ItemsAndQuantity.Add(iq);
 
