@@ -50,6 +50,18 @@ namespace DROM_Client.Views
                 OrderType = orderReceived.OrderType,
             };
 
+            if(orderReceived.Customer == null)
+            {
+                viewModel.OrderBeingEdited.Customer = new Customer()
+                {
+                    FirstAndMiddleNames = "",
+                    LastName = "",
+                    Email = "",
+                    StreetAndNumber = "",
+                    City = ""
+                };
+            }
+
             foreach (Event evnt in orderReceived.DCRGraph.Events)
             {
                 if(evnt.Groups.Exists(g => g.Name == "Edit events") && !evnt.Groups.Exists(g => g.Name == "Hidden edit events")) //Filters to only "Edit events"
