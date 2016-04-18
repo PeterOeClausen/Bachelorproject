@@ -26,7 +26,11 @@ namespace DROM_Client.Models.ObjectsOptimizedForUI
         public string Notes { get; set; }
         public UIDCRGraph DCRGraph { get; set; }
         public int Table { get; set; }
-        public string OrderType { get; set; }
+        public string OrderType {
+            get { return _OrderType; }
+            set { Set(ref _OrderType, value); }
+        }
+        private string _OrderType;
 
         #region PropertyChangedEvent stuff
         public event PropertyChangedEventHandler PropertyChanged;
