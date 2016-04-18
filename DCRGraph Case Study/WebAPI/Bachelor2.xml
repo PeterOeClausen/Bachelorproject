@@ -1,4 +1,4 @@
-<dcrgraph title="Bachelor 2" dataTypesStatus="hide" filterLevel="4" zoomLevel="-5">
+<dcrgraph title="Bachelor 2" dataTypesStatus="hide" filterLevel="4" zoomLevel="2">
     <specification>
         <resources>
             <events>
@@ -374,16 +374,16 @@
                 <label id="Clean table" />
                 <label id="Done" />
                 <label id="Pay" />
-                <label id="Change to takeaway" />
+                <label id="For takeaway" />
                 <label id="Items have changed" />
-                <label id="Change to delivery" />
+                <label id="For delivery" />
                 <label id="Setup graph web takeaway" />
                 <label id="Setup graph web delivery" />
                 <label id="Setup graph delivery" />
                 <label id="Setup graph serving" />
                 <label id="Setup graph takeaway" />
                 <label id="confirm changes" />
-                <label id="Change to serve" />
+                <label id="For serving" />
             </labels>
             <labelMappings>
                 <labelMapping eventId="Activity 0" labelId="Confirm web order"/>
@@ -396,16 +396,16 @@
                 <labelMapping eventId="Activity 9" labelId="Clean table"/>
                 <labelMapping eventId="Activity 10" labelId="Done"/>
                 <labelMapping eventId="Activity 11" labelId="Pay"/>
-                <labelMapping eventId="Activity 13" labelId="Change to takeaway"/>
+                <labelMapping eventId="Activity 13" labelId="For takeaway"/>
                 <labelMapping eventId="Activity 16" labelId="Items have changed"/>
-                <labelMapping eventId="Activity 19" labelId="Change to delivery"/>
+                <labelMapping eventId="Activity 19" labelId="For delivery"/>
                 <labelMapping eventId="Activity 20" labelId="Setup graph web takeaway"/>
                 <labelMapping eventId="Activity 21" labelId="Setup graph web delivery"/>
                 <labelMapping eventId="Activity 22" labelId="Setup graph delivery"/>
                 <labelMapping eventId="Activity 23" labelId="Setup graph serving"/>
                 <labelMapping eventId="Activity 24" labelId="Setup graph takeaway"/>
                 <labelMapping eventId="Activity 25" labelId="confirm changes"/>
-                <labelMapping eventId="Activity 26" labelId="Change to serve"/>
+                <labelMapping eventId="Activity 26" labelId="For serving"/>
             </labelMappings>
             <expressions></expressions>
             <variables></variables>

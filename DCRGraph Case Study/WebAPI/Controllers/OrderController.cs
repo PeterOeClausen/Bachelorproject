@@ -9,7 +9,7 @@ using DROM_Client.Models.BusinessObjects;
 using Newtonsoft.Json;
 using WebAPI.Models.DBMethods;
 using WebAPI.Models.DBObjects;
-
+using Item = DROM_Client.Models.BusinessObjects.Item;
 
 
 namespace WebAPI.Controllers
@@ -20,48 +20,61 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> GetItems()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, await new DbInteractions().GetItems());
+            var result = await new DbInteractions().GetItems();
+            var response = Request.CreateResponse(result.Item3, result.Item1 ?? new List<Item>());
+            response.ReasonPhrase = result.Item2;
+            return response;
         }
 
         [Route("api/order/ordersWithSortedEvents")]
         [HttpGet]
         public async Task<HttpResponseMessage> GetOrders()
         {
-            //var orders = await new DbInteractions().GetOrdersWithSortedEvents();
-            //var json = JsonConvert.SerializeObject(orders);
-            //var des = JsonConvert.DeserializeObject<List<DROM_Client.Models.BusinessObjects.Order>>(json);
-            return Request.CreateResponse(HttpStatusCode.OK, await new DbInteractions().GetOrdersWithSortedEvents());
+
+            var result = await new DbInteractions().GetOrdersWithSortedEvents();
+            var response = Request.CreateResponse(result.Item3, result.Item1 ?? new List<DROM_Client.Models.BusinessObjects.Order>());
+            response.ReasonPhrase = result.Item2;
+            return response;
         }
 
         [Route("api/order/UpdateOrder")]
         [HttpPut]
         public async Task<HttpResponseMessage> UpdateOrder(Tuple<DROM_Client.Models.BusinessObjects.Order, List<int>> data)
         {
-            return Request.CreateResponse(await new DbInteractions().UpdateOrder(data));
+            var result = await new DbInteractions().UpdateOrder(data);
+            var response = Request.CreateResponse(result.Item2);
+            response.ReasonPhrase = result.Item1;
+            return response;
         }
 
         [Route("api/order/executeEvent")]
         [HttpPut]
         public async Task<HttpResponseMessage> ExecuteEvent(Event e)
         {
-            
-            return Request.CreateResponse(await new DbInteractions().ExecuteEvent(e.Id));
+            var result = await new DbInteractions().ExecuteEvent(e.Id);
+            var response = Request.CreateResponse(result.Item2);
+            response.ReasonPhrase = result.Item1;
+            return response;
         }
 
         [Route("api/order/deliveryTypes/{orderType}")]
         [HttpGet]
         public async Task<HttpResponseMessage> DeliveryTypes(int orderType)
         {
-            return Request.CreateResponse(
-                HttpStatusCode.OK, 
-                await new DbInteractions().DeliveryTypes(orderType));
+            var result = await new DbInteractions().DeliveryTypes(orderType);
+            var response = Request.CreateResponse(result.Item3, result.Item1);
+            response.ReasonPhrase = result.Item2;
+            return response;
         }
 
         [Route("api/order/Archive")]
         [HttpPut]
         public async Task<HttpResponseMessage> ArchiveOrder(DROM_Client.Models.BusinessObjects.Order order)
         {
-            return Request.CreateResponse(await new DbInteractions().AchiveOrder(order.Id));
+            var result = await new DbInteractions().AchiveOrder(order.Id);
+            var response = Request.CreateResponse(result.Item2);
+            response.ReasonPhrase = result.Item1;
+            return response;
         }
 
 
