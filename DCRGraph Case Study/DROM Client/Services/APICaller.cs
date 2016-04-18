@@ -410,14 +410,14 @@ namespace DROM_Client.Services
             }
         }
 
-        public string PutArchiveOrder(int orderId)
+        public string PutArchiveOrder(Order order)
         {
             using (var client = new HttpClient())
             {
                 try
                 {
                     client.BaseAddress = BaseAddress;
-                    var response = client.PutAsXmlAsync("api/order/Archive", orderId).Result;
+                    var response = client.PutAsXmlAsync("api/order/archive", order).Result;
                     if (response.IsSuccessStatusCode)
                     {
                         //do succes thing

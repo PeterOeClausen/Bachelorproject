@@ -22,8 +22,6 @@
         <converters:ValueZeroToVisibilityConverter x:Key="ValueZeroToVisibilityConverter"/>
     </Page.Resources>
 
-
-
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -116,7 +114,7 @@
                                 <!--Archive button - shows only when order can be archived-->
                                 <Button Click="Archive_Click"
                                             Tag="{Binding Mode=OneWay}" 
-                                            Visibility="{Binding State, Converter={StaticResource BoolToVisibilityConverter}}"
+                                            Visibility="{Binding AcceptingState, Converter={StaticResource BoolToVisibilityConverter}}"
                                             ToolTipService.ToolTip="Click to archive order when it's done"
                                             Background="Green">
                                     <Button.Content>
