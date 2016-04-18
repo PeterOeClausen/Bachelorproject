@@ -50,6 +50,18 @@ namespace DROM_Client.Views
                 OrderType = orderReceived.OrderType,
             };
 
+            if(orderReceived.Customer == null)
+            {
+                viewModel.OrderBeingEdited.Customer = new Customer()
+                {
+                    FirstAndMiddleNames = "",
+                    LastName = "",
+                    Email = "",
+                    StreetAndNumber = "",
+                    City = ""
+                };
+            }
+
             foreach (Event evnt in orderReceived.DCRGraph.Events)
             {
                 if(evnt.Groups.Exists(g => g.Name == "Edit events") && !evnt.Groups.Exists(g => g.Name == "Hidden edit events")) //Filters to only "Edit events"
@@ -124,8 +136,20 @@ namespace DROM_Client.Views
             var viewModel = this.DataContext as EditOrderPageViewModel;
             viewModel.EditEventsToExecute.Clear();
             viewModel.EditEventsToExecute.Add(eventToExecute);
+            viewModel.OrderBeingEdited.OrderType = ConvertEventToOrdertypeString(eventToExecute);
             CreateAndShowMessageDialog("'" + eventToExecute.Label + "' will be done when you save.");
             //Update UI for delivery method.
+        }
+
+        private string ConvertEventToOrdertypeString (Event e)
+        {
+            switch (e.Label)
+            {
+                case "Change to takeaway": return "For takeaway";
+                case "Change to delivery": return "For delivery";
+                case "Change to serve": return "For serving";
+                default: return null;
+            }
         }
 
         private async void CreateAndShowMessageDialog(string message)

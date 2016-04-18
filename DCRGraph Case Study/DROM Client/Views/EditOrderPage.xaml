@@ -34,7 +34,7 @@
                 <!--Delivery method:-->
                 <StackPanel MinWidth="150">
                     <TextBlock Text="Order type:"/>
-                    <TextBlock Text="{Binding OrderBeingEdited.OrderType, FallbackValue='N/A'}"/>
+                    <TextBlock Text="{Binding OrderBeingEdited.OrderType, Mode=TwoWay, FallbackValue='N/A'}"/>
                 </StackPanel>
                 <!--Save button:-->
                 <Button Click="Save_Click" MinWidth="64">
