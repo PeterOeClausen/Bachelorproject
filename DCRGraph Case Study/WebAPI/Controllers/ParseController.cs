@@ -22,27 +22,26 @@ namespace WebAPI.Controllers
         public async Task<HttpResponseMessage> Post([FromBody] NewOrderInfo info)
         {
 
-            
-
-            //try
-            //{
-                var qwe = await new Mapper().mapper(new DCRXmlParser().Parse(Properties.Resources.Bachelor2), info);
-                return new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.OK
-                };
-            /*}
+            try
+            {
+                await new Mapper().mapper(new DCRXmlParser().Parse(Properties.Resources.Bachelor2), info);
+                var response = Request.CreateResponse(HttpStatusCode.OK);
+                response.ReasonPhrase = "success";
+                return response;
+            }
             catch (Exception ex)
             {
-                return new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.BadRequest
-                };
-                throw;
-            }*/
-            
+                var response = Request.CreateResponse(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+                return response;
+            }
 
             
+            
+
+
+
+
         }
     }
 }
