@@ -281,16 +281,33 @@ namespace WebAPI.Models.DBMethods
                     //update related customer
                     if (data.Item1.OrderType != "For serving")
                     {
-                        orderToBeUpdated.Customer = new DBObjects.Customer()
+                        if (orderToBeUpdated.Customer == null)
                         {
-                            City = data.Item1.Customer.City,
-                            Email = data.Item1.Customer.Email,
-                            FirstName = data.Item1.Customer.FirstAndMiddleNames,
-                            LastName = data.Item1.Customer.LastName,
-                            Phone = data.Item1.Customer.Phone,
-                            StreetAndNumber = data.Item1.Customer.StreetAndNumber,
-                            Zipcode = data.Item1.Customer.ZipCode
-                        };
+                            orderToBeUpdated.Customer = new DBObjects.Customer()
+                            {
+                                City = data.Item1.Customer.City,
+                                Email = data.Item1.Customer.Email,
+                                FirstName = data.Item1.Customer.FirstAndMiddleNames,
+                                LastName = data.Item1.Customer.LastName,
+                                Phone = data.Item1.Customer.Phone,
+                                StreetAndNumber = data.Item1.Customer.StreetAndNumber,
+                                Zipcode = data.Item1.Customer.ZipCode
+                            };
+                            db.Entry(orderToBeUpdated.Customer).State = EntityState.Added;
+
+                        }
+                        else
+                        {
+                            orderToBeUpdated.Customer.City = data.Item1.Customer.City;
+                            orderToBeUpdated.Customer.Email = data.Item1.Customer.Email;
+                            orderToBeUpdated.Customer.FirstName = data.Item1.Customer.FirstAndMiddleNames;
+                            orderToBeUpdated.Customer.LastName = data.Item1.Customer.LastName;
+                            orderToBeUpdated.Customer.Phone = data.Item1.Customer.Phone;
+                            orderToBeUpdated.Customer.StreetAndNumber = data.Item1.Customer.StreetAndNumber;
+                            orderToBeUpdated.Customer.Zipcode = data.Item1.Customer.ZipCode;
+                        }
+                        
+                        
                     }
 
                     //update the order
