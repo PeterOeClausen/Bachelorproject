@@ -136,21 +136,21 @@ namespace DROM_Client.Views
             var viewModel = this.DataContext as EditOrderPageViewModel;
             viewModel.EditEventsToExecute.Clear();
             viewModel.EditEventsToExecute.Add(eventToExecute);
-            viewModel.OrderBeingEdited.OrderType = ConvertEventToOrdertypeString(eventToExecute);
-            CreateAndShowMessageDialog("'" + eventToExecute.Label + "' will be done when you save.");
-            //Update UI for delivery method.
+            viewModel.OrderBeingEdited.OrderType = eventToExecute.Label; //ConvertEventToOrdertypeString(eventToExecute);
+            CreateAndShowMessageDialog("Order type will be saved as: '" + eventToExecute.Label + "' when you save.");
         }
 
-        private string ConvertEventToOrdertypeString (Event e)
-        {
-            switch (e.Label)
-            {
-                case "Change to takeaway": return "For takeaway";
-                case "Change to delivery": return "For delivery";
-                case "Change to serve": return "For serving";
-                default: return null;
-            }
-        }
+        //To be deleted:
+        //private string ConvertEventToOrdertypeString (Event e)
+        //{
+        //    switch (e.Label)
+        //    {
+        //        case "Change to takeaway": return "For takeaway";
+        //        case "Change to delivery": return "For delivery";
+        //        case "Change to serve": return "For serving";
+        //        default: return null;
+        //    }
+        //}
 
         private async void CreateAndShowMessageDialog(string message)
         {

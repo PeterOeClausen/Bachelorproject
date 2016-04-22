@@ -125,7 +125,7 @@
                 
                 <!--Edit event buttons-->
                 <StackPanel MinWidth="500" MaxWidth="500" Padding="20,0,20,0">
-                    <TextBlock Text="Edit events to execute:" FontWeight="Bold" Margin="0,20,0,0"/>
+                    <TextBlock Text="You can choose to change order type:" FontWeight="Bold" Margin="0,20,0,0"/>
                     <GridView ItemsSource="{Binding OrderBeingEdited.DCRGraph.Events}">
                         <GridView.ItemTemplate>
                             <DataTemplate>
