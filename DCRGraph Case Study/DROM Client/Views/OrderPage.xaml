@@ -39,13 +39,13 @@
                         Click="Show_Only_Pending_Orders_Click" 
                         Background="{Binding ShowOnlyPendingOrders, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}" 
                         Margin="5,0,0,0"/>
-                <ComboBox PlaceholderText="Choose sorting" Margin="100,0,0,0">
+                <!--<ComboBox PlaceholderText="Choose sorting" Margin="100,0,0,0">
                     <ComboBoxItem Content="Newest orders first"/>
                     <ComboBoxItem Content="Oldest orders first"/>
                     <ComboBoxItem Content="Order id ascending"/>
                     <ComboBoxItem Content="Order id decending"/>
                 </ComboBox>
-                <Button Content="Sort"/>
+                <Button Content="Sort"/>-->
                 <Button Content="Create new order" Margin="100,0,0,0" Click="Create_New_Order_Click"/>
                 <Button Content="Log out" HorizontalAlignment="Right" Click="Logout_Click" Margin="100,0,0,0"/>
                 <!--<Button Content="Add Order" Click="TempAddOrderClick"/>-->

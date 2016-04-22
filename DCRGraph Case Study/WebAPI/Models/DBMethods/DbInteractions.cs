@@ -337,6 +337,7 @@ namespace WebAPI.Models.DBMethods
                     orderToBeUpdated.OrderDetails = newOrderDetails;
 
                     db.Entry(orderToBeUpdated).State = EntityState.Modified;
+                    db.Entry(orderToBeUpdated.Customer).State = EntityState.Modified;
                     await db.SaveChangesAsync();
                     return new Tuple<string, HttpStatusCode>("Success", HttpStatusCode.OK);
                 }

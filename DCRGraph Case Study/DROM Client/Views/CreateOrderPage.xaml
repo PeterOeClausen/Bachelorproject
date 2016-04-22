@@ -6,11 +6,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:DROM_Client.ViewModels"
+    xmlns:converters="using:DROM_Client.Converters"
     mc:Ignorable="d">
 
     <Page.DataContext>
         <vm:CreateOrderPageViewModel/>
     </Page.DataContext>
+
+    <Page.Resources>
+        <converters:DeliveryOptionToVisibilityConverter x:Key="DeliveryOptionToVisibilityConverter"/>
+    </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ScrollViewer>
@@ -18,7 +23,7 @@
             <TextBlock Text="Create new order" FontWeight="Bold" FontSize="30" />
             <VariableSizedWrapGrid Orientation="Horizontal">
                 <!--Customer information:-->
-                <StackPanel Padding="10">
+                <StackPanel Padding="10" x:Name="CustomerInformationStackPanel" Visibility="{Binding OrderBeingCreated.OrderType, Converter={StaticResource DeliveryOptionToVisibilityConverter}, Mode=TwoWay}">
                     <TextBlock Text="Customer information:" FontWeight="Bold"/>
                     <TextBlock Text="First name:"/>
                     <TextBox Text="{Binding OrderBeingCreated.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" MinWidth="300" HorizontalAlignment="Left" x:Name="First_Name_Text_Box"/>
