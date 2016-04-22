@@ -8,7 +8,6 @@ namespace WebAPI.Models.DBObjects
 
     public partial class DCRGraph
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public DCRGraph()
         {
             DCREvents = new HashSet<DCREvent>();
@@ -17,8 +16,7 @@ namespace WebAPI.Models.DBObjects
         public int Id { get; set; }
 
         public bool AcceptingState { get; set; }
-
-      [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        
         public virtual ICollection<DCREvent> DCREvents { get; set; }
     }
 }
