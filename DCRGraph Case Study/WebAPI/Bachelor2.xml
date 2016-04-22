@@ -1,4 +1,4 @@
-<dcrgraph title="Bachelor 2" dataTypesStatus="hide" filterLevel="4" zoomLevel="2">
+<dcrgraph title="Bachelor 2" dataTypesStatus="hide" filterLevel="4" zoomLevel="-1">
     <specification>
         <resources>
             <events>
@@ -549,6 +549,7 @@
                 <milestone sourceId="Activity 11" targetId="Activity 7" filterLevel="1"  description=""  time=""  groups=""  />
                 <milestone sourceId="Activity 11" targetId="Activity 10" filterLevel="1"  description=""  time=""  groups=""  />
                 <milestone sourceId="Activity 25" targetId="Activity 3" filterLevel="1"  description=""  time=""  groups=""  />
+                <milestone sourceId="Activity 25" targetId="Activity 5" filterLevel="1"  description=""  time=""  groups=""  />
             </milestones>
             <spawns></spawns>
         </constraints>

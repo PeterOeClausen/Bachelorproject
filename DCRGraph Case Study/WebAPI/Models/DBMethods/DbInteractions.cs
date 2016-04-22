@@ -70,9 +70,9 @@ namespace WebAPI.Models.DBMethods
                                      new
                                      {
                                          Order = o,
-                                        //child collections aren't loaded, and have to be slected seperately
+                                         //child collections aren't loaded, and have to be slected seperately
 
-                                        Graph = o.DCRGraph,
+                                         Graph = o.DCRGraph,
                                          Events = (from e in o.DCRGraph.DCREvents
                                                    where
                                                            (
@@ -281,13 +281,16 @@ namespace WebAPI.Models.DBMethods
                     //update related customer
                     if (data.Item1.OrderType != "For serving")
                     {
-                        orderToBeUpdated.Customer.City = data.Item1.Customer.City;
-                        orderToBeUpdated.Customer.Email = data.Item1.Customer.Email;
-                        orderToBeUpdated.Customer.FirstName = data.Item1.Customer.FirstAndMiddleNames;
-                        orderToBeUpdated.Customer.LastName = data.Item1.Customer.LastName;
-                        orderToBeUpdated.Customer.Phone = data.Item1.Customer.Phone;
-                        orderToBeUpdated.Customer.StreetAndNumber = data.Item1.Customer.StreetAndNumber;
-                        orderToBeUpdated.Customer.Zipcode = data.Item1.Customer.ZipCode;
+                        orderToBeUpdated.Customer = new DBObjects.Customer()
+                        {
+                            City = data.Item1.Customer.City,
+                            Email = data.Item1.Customer.Email,
+                            FirstName = data.Item1.Customer.FirstAndMiddleNames,
+                            LastName = data.Item1.Customer.LastName,
+                            Phone = data.Item1.Customer.Phone,
+                            StreetAndNumber = data.Item1.Customer.StreetAndNumber,
+                            Zipcode = data.Item1.Customer.ZipCode
+                        };
                     }
 
                     //update the order
@@ -323,7 +326,7 @@ namespace WebAPI.Models.DBMethods
             }
             catch (Exception ex)
             {
-                return new Tuple<string, HttpStatusCode>(ex.Message, HttpStatusCode.OK);
+                return new Tuple<string, HttpStatusCode>(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -342,7 +345,7 @@ namespace WebAPI.Models.DBMethods
                         .Include(e => e.Responses)
                         .Include(e => e.Milestones)
                         .FirstOrDefaultAsync(e => e.Id == id);
-                    
+
 
                     //preconditions:
                     //the event must be included
@@ -373,19 +376,19 @@ namespace WebAPI.Models.DBMethods
                     {
                         e.Included = false;
                     }
-                    
+
                     //Include related events
                     foreach (var e in eventToBeExecuted.Includes)
                     {
                         e.Included = true;
                     }
-                    
+
                     //set related events pending
                     foreach (var e in eventToBeExecuted.Responses)
                     {
                         e.Pending = true;
                     }
-                    
+
                     //set state to modified and save.
                     db.Entry(eventToBeExecuted).State = EntityState.Modified;
                     await db.SaveChangesAsync();
