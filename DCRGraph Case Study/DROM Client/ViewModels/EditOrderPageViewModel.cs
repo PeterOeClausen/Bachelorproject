@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Data;
 using System.Collections.ObjectModel;
 using DROM_Client.Models.ObjectsOptimizedForUI;
 using DROM_Client.Services;
+using Windows.UI.Popups;
 
 namespace DROM_Client.ViewModels
 {
@@ -108,7 +109,9 @@ namespace DROM_Client.ViewModels
 
         public EditOrderPageViewModel() {
             _APICaller = new APICaller();
-            foreach (Item item in _APICaller.GetItems()) ItemCollection.Add(item);
+            Tuple<bool, string, List<Item>> answerFromWebAPI = _APICaller.GetItems();
+            if (answerFromWebAPI.Item1 == false) CreateAndShowMessageDialog(answerFromWebAPI.Item2); //Show message popup if API call fails
+            foreach (Item item in answerFromWebAPI.Item3) ItemCollection.Add(item);
         }
 
         internal void AddItemQuantity(Item item, int quantity)
@@ -177,5 +180,12 @@ namespace DROM_Client.ViewModels
             return true;
         }
         #endregion
+
+        private async void CreateAndShowMessageDialog(string message)
+        {
+            var messageDialog = new MessageDialog(message);
+            messageDialog.CancelCommandIndex = 0;
+            await messageDialog.ShowAsync();
+        }
     }
 }

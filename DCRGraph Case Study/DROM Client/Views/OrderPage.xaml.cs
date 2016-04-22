@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using DROM_Client.Models.BusinessObjects;
 using DROM_Client.ViewModels;
+using Windows.UI.Popups;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -56,7 +57,7 @@ namespace DROM_Client.Views
         #region View selection buttons
         private void Chef_Click(object sender, RoutedEventArgs e)
         {
-            var viewModel = ((Button) sender).DataContext as OrderPageViewModel;
+            var viewModel = ((Button)sender).DataContext as OrderPageViewModel;
             if (viewModel.Chef) viewModel.Chef = false;
             else viewModel.Chef = true;
 
@@ -65,7 +66,7 @@ namespace DROM_Client.Views
         private void Delivery_Click(object sender, RoutedEventArgs e)
         {
             var viewModel = ((Button)sender).DataContext as OrderPageViewModel;
-            if (viewModel.Delivery)viewModel.Delivery = false;
+            if (viewModel.Delivery) viewModel.Delivery = false;
             else viewModel.Delivery = true;
         }
 
@@ -95,7 +96,8 @@ namespace DROM_Client.Views
         {
             var EventToExecute = ((Button)sender).Tag as Event;
             var ViewModel = DataContext as OrderPageViewModel;
-            ViewModel.ExecuteEvent(EventToExecute);
+            Tuple<bool, string> answer = ViewModel.ExecuteEvent(EventToExecute);
+            if (answer.Item1 == false) CreateAndShowMessageDialog(answer.Item2); //If API fails, create popup message.
             ViewModel.setupData();
         }
 
@@ -107,10 +109,57 @@ namespace DROM_Client.Views
             viewModel.setupData();
         }
 
+        private void GetOrdersFromWebAPI_Click(object sender, RoutedEventArgs e)
+        {
+            var viewModel = DataContext as OrderPageViewModel;
+            Tuple<bool, string, List<Order>> answerFromViewModel = viewModel.setupData();
+            if (answerFromViewModel.Item1 == false) CreateAndShowMessageDialog(answerFromViewModel.Item2);
+            else if (answerFromViewModel.Item3.Count == 0) CreateAndShowMessageDialog("No orders were found on the Web API. Please 'Create new order', or click 'Get orders from Web API' again later.");
+        }
+
         //private void TempAddOrderClick(object sender, RoutedEventArgs e)
         //{
         //    var ViewModel = DataContext as OrderPageViewModel;
         //    ViewModel.OrderList.Add(new Order { Id = 9001});
         //}
+
+        private async void CreateAndShowMessageDialog(string message)
+        {
+            var messageDialog = new MessageDialog(message);
+            messageDialog.CancelCommandIndex = 0;
+            await messageDialog.ShowAsync();
+        }
+
+        private Order orderToBeDeleted;
+        private async void Delete_Order_Click(object sender, RoutedEventArgs e)
+        {
+            orderToBeDeleted = ((Button)sender).Tag as Order;
+            // Create the message dialog and set its content
+            var messageDialog = new MessageDialog("Are you sure you want to delete this order?");
+
+            // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
+            messageDialog.Commands.Add(new UICommand("Yes",
+                new UICommandInvokedHandler(this.delete_Popup_Yes)));
+            messageDialog.Commands.Add(new UICommand("No",
+                new UICommandInvokedHandler(this.delete_Popup_No)));
+
+            // Set the command to be invoked when escape is pressed
+            messageDialog.CancelCommandIndex = 1;
+
+            // Show the message dialog
+            await messageDialog.ShowAsync();
+        }
+
+        private async void delete_Popup_Yes(IUICommand command)
+        {
+            var viewModel = DataContext as OrderPageViewModel;
+            viewModel.DeleteOrder(orderToBeDeleted);
+            viewModel.setupData();
+        }
+
+        private async void delete_Popup_No(IUICommand command)
+        {
+            //Do nothing
+        }
     }
 }

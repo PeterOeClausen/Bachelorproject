@@ -157,7 +157,7 @@ namespace DROM_Client.Views
         //        default: return null;
         //    }
         //}
-
+        
         private async void CreateAndShowMessageDialog(string message)
         {
             var messageDialog = new MessageDialog(message);
