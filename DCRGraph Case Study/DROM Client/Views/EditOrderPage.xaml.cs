@@ -81,10 +81,16 @@ namespace DROM_Client.Views
             }
         }
 
+        /// <summary>
+        /// Event handler for 'Save' button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             var viewModel = this.DataContext as EditOrderPageViewModel;
-            viewModel.SaveOrder();
+            Tuple<bool, string> answerFromWebApi = viewModel.SaveOrder();
+            if (answerFromWebApi.Item1 == false) CreateAndShowMessageDialog(answerFromWebApi.Item2); //Shows error message if API failed.
             Frame.Navigate(typeof(OrderPage));
         }
 

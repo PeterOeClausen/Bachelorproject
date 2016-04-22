@@ -116,6 +116,7 @@
     <Compile Include="Models\BusinessObjects\Order.cs" />
     <Compile Include="Models\BusinessObjects\Role.cs" />
     <Compile Include="Models\NewOrderData\NewOrderInfo.cs" />
+    <Compile Include="Models\ObjectsOptimizedForUI\DataReceivedFromAPI.cs" />
     <Compile Include="Models\ObjectsOptimizedForUI\UIDCRGraph.cs" />
     <Compile Include="Models\ObjectsOptimizedForUI\UINewOrderInfo.cs" />
     <Compile Include="Models\ObjectsOptimizedForUI\UIOrder.cs" />

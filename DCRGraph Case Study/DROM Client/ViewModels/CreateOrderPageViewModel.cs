@@ -146,7 +146,7 @@ namespace DROM_Client.ViewModels
             OrderBeingCreated.ItemsAndQuantity = replacementDictionary;
         }
 
-        internal void SaveOrder()
+        internal Tuple<bool, string> SaveOrder()
         {
             NewOrderInfo createdOrder = new NewOrderInfo()
             {
@@ -157,7 +157,7 @@ namespace DROM_Client.ViewModels
                 Notes = OrderBeingCreated.Notes,
                 Table = OrderBeingCreated.Table
             };
-            _APICaller.PostOrderAsync(createdOrder);
+            return _APICaller.PostOrderAsync(createdOrder);
         }
     }
 }

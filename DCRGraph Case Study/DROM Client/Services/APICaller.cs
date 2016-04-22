@@ -22,11 +22,11 @@ namespace DROM_Client.Services
         }
 
         /// <summary>
-        /// Save order on web api
+        /// Save order on web api.
         /// </summary>
-        /// <param name="newOrder"></param>
-        /// <returns></returns>
-        public string PostOrderAsync(NewOrderInfo newOrder) //Rename to: PostNewOrder
+        /// <param name="newOrder">New Order to be saved.</param>
+        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
+        public Tuple<bool,string> PostOrderAsync(NewOrderInfo newOrder) //Rename to: PostNewOrder
         {
             using (var client = new HttpClient())
             {
@@ -36,19 +36,14 @@ namespace DROM_Client.Services
                     var response = client.PostAsXmlAsync("api/parse", newOrder, new CancellationToken()).Result;
                     if (response.IsSuccessStatusCode)
                     {
-                        //do succes thing
-                        return response.StatusCode.ToString();
+                        var answer = new Tuple<bool, string>(true, response.StatusCode.ToString());
+                        return answer;
                     }
-                    else
+                    else //do failure thing
                     {
-                        //response.Content;
-                        //response.StatusCode;
-                        
-                        //do failure thing
-                        return response.StatusCode.ToString();
+                        var answer = new Tuple<bool, string>(false, "Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
+                        return answer;
                     }
-                    //var content = new FormUrlEncodedContent(newOrder);
-                    //var response = await client.PostAsJson("api/parse", content);
                 }
                 catch (Exception ex)
                 {
@@ -57,7 +52,13 @@ namespace DROM_Client.Services
             }
         }
 
-        public string PutUpdateOrder(Order updatedOrder, List<int> editEvents)
+        /// <summary>
+        /// Calls API to update order.
+        /// </summary>
+        /// <param name="updatedOrder">Updated order to be saved</param>
+        /// <param name="editEvents">List of id's of edit events to be executed</param>
+        /// <returns></returns>
+        public Tuple<bool, string> PutUpdateOrder(Order updatedOrder, List<int> editEvents)
         {
             using (var client = new HttpClient())
             {
@@ -68,17 +69,12 @@ namespace DROM_Client.Services
                     var response = client.PutAsXmlAsync("api/order/updateorder", dto).Result;
                     if (response.IsSuccessStatusCode)
                     {
-                        //do succes thing
-                        return response.StatusCode.ToString();
+                        return new Tuple<bool, string>(true, response.StatusCode.ToString());
                     }
-                    else
+                    else //do failure thing
                     {
-                        //do failure thing
-                        return response.StatusCode.ToString();
+                        return new Tuple<bool, string>(false, "Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
                     }
-                    
-                    //var content = new FormUrlEncodedContent(newOrder);
-                    //var response = await client.PostAsJson("api/parse", content);
                 }
                 catch (Exception ex)
                 {
@@ -98,7 +94,14 @@ namespace DROM_Client.Services
             {
                 client.BaseAddress = BaseAddress;
                 var response = client.PutAsXmlAsync("api/order/executeevent", eventToExecute).Result;
-                return response.StatusCode.ToString();
+                if (response.IsSuccessStatusCode)
+                {
+                    return response.StatusCode.ToString();
+                }
+                else //Do faillure thing
+                {
+                    return response.StatusCode.ToString();
+                }
             }
         }
 

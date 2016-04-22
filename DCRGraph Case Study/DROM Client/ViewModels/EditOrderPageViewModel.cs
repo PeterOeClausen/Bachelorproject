@@ -121,7 +121,11 @@ namespace DROM_Client.ViewModels
             OrderBeingEdited.ItemsAndQuantity.Remove(itemQuantity);
         }
 
-        internal void SaveOrder()
+        /// <summary>
+        /// Saves edited order.
+        /// </summary>
+        /// <returns>Tuple with bool and string, Item1 == true if success, Item2 == false if not success and Item2 contains errormessage.</returns>
+        internal Tuple<bool, string> SaveOrder()
         {
             Order ChangedOrder = new Order
             {
@@ -136,15 +140,13 @@ namespace DROM_Client.ViewModels
             };
             foreach (ItemQuantity iq in OrderBeingEdited.ItemsAndQuantity) ChangedOrder.ItemsAndQuantity.Add(iq);
             foreach (Event e in OrderBeingEdited.DCRGraph.Events) ChangedOrder.DCRGraph.Events.Add(e);
-
             if(ItemsOnOrderHasBeenChanged)
             {
                 EditEventsToExecute.Add(ItemsOnOrderHasBeenChangedEvent);
             }
-
             var EventIdsToExecute = new List<int>();
             foreach (Event e in EditEventsToExecute) EventIdsToExecute.Add(e.Id);
-            _APICaller.PutUpdateOrder(ChangedOrder, EventIdsToExecute);
+            return _APICaller.PutUpdateOrder(ChangedOrder, EventIdsToExecute);
         }
 
         //Code is not in use:

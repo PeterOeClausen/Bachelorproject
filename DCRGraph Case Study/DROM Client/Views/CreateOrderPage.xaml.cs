@@ -81,7 +81,8 @@ namespace DROM_Client.Views
                     if (!All_Information_Entered_For_Delivery()) return;
                     break;
             }
-            viewModel.SaveOrder();
+            Tuple<bool,string> answer = viewModel.SaveOrder();
+            if (answer.Item1 == false) CreateAndShowMessageDialog(answer.Item2);
             Frame.Navigate(typeof(OrderPage));
         }
 
