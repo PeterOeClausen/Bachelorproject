@@ -229,7 +229,7 @@ namespace WebAPI.Models.DBMethods
                         }
 
                         //If there is a customer, include it.
-                        if (order.Customer != null)
+                        if (queryOrder.Customer != null)
                         {
                             //map customer to DTO Customer
                             order.Customer = new DROM_Client.Models.BusinessObjects.Customer()
@@ -337,7 +337,6 @@ namespace WebAPI.Models.DBMethods
                     orderToBeUpdated.OrderDetails = newOrderDetails;
 
                     db.Entry(orderToBeUpdated).State = EntityState.Modified;
-                    db.Entry(orderToBeUpdated.Customer).State = EntityState.Modified;
                     await db.SaveChangesAsync();
                     return new Tuple<string, HttpStatusCode>("Success", HttpStatusCode.OK);
                 }
