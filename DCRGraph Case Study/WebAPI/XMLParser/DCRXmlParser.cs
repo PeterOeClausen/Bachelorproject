@@ -119,8 +119,6 @@ namespace WebAPI.XMLParser
             return Container;
         }
 
-        
-
         private List<Constraint> ParseConditions(XDocument doc)
         {
             var ConditionList = new List<Constraint>();
@@ -269,18 +267,5 @@ namespace WebAPI.XMLParser
             return MilestonesList;
         }
 
-
-        //should no longer be nececary
-        private List<string> ParseRoles(XDocument doc)
-        {
-            var RolesList = new List<string>();
-
-            foreach (var role in doc.Descendants("roles").Elements().Where(element => element.Parent.Parent.Parent.Name != "event"))
-            {
-                if (role.Value != "") RolesList.Add(role.Value);
-            }
-
-            return RolesList;
-        }
     }
 }

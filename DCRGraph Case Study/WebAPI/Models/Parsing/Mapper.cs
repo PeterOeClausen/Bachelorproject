@@ -234,47 +234,6 @@ namespace WebAPI.Models.Parsing
 
 
         }
-
-        void InsertBySqlQuery(int fromId, int toId, string table)
-        // i is the to or from id. d decides whether to look for from or to. true for from
-        {
-            System.Configuration.Configuration rootWebConfig =
-                System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/MyWebSiteRoot");
-            System.Configuration.ConnectionStringSettings connString;
-
-            connString = rootWebConfig.ConnectionStrings.ConnectionStrings["Database"];
-            try
-            {
-
-
-
-                // Create an SqlConnection from the provided connection string.
-                using (SqlConnection connection = new SqlConnection(connString.ConnectionString))
-                {
-                    // Formulate the command.
-                    SqlCommand command = new SqlCommand();
-                    command.Connection = connection;
-
-                    // Specify the query to be executed.
-                    command.CommandType = CommandType.Text;
-
-                    command.CommandText = @"
-                    INSERT INTO " + table + " (FromId, ToId)" +
-                                          " VALUES ('" + fromId + "', '" + toId + "');";
-
-
-                    // Open a connection to database.
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-        }
-
     }
 
 }
