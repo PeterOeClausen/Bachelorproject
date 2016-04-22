@@ -8,6 +8,7 @@ using DROM_Client.Models.NewOrderData;
 using DROM_Client.Services;
 using DROM_Client.Models.ObjectsOptimizedForUI;
 using System.Collections.ObjectModel;
+using Windows.UI.Popups;
 
 namespace DROM_Client.ViewModels
 {
@@ -21,39 +22,19 @@ namespace DROM_Client.ViewModels
         {
             ItemCollection = new ObservableCollection<Item>();
             this._APICaller = new APICaller();
-            List<Item> items = _APICaller.GetItems();
-            foreach (Item i in items)
+
+            //Getting items from web api
+            Tuple<bool, string, List<Item>> ItemsFromWebAPI = _APICaller.GetItems();
+            if (ItemsFromWebAPI.Item1 == false) CreateAndShowMessageDialog(ItemsFromWebAPI.Item2);
+            foreach (Item i in ItemsFromWebAPI.Item3)
             {
                 ItemCollection.Add(i);
             }
-            DeliveryMethodsList = _APICaller.GetDeliveryTypes();
 
-            //ItemCollection = new ObservableCollection<Item>()
-            //{
-            //    new Item
-            //    {
-            //        Name = "Cola"
-            //    },
-            //    new Item
-            //    {
-            //        Name = "Sprite"
-            //    },
-            //    new Item
-            //    {
-            //        Name = "Pizza"
-            //    },
-            //    new Item
-            //    {
-            //        Name = "Burger"
-            //    }
-            //};
-
-            //DeliveryMethodsList = new List<string>(){"For serving", "For delivery", "For pickup"};
-        }
-
-        private async void getItems()
-        {
-            List<Item> items = _APICaller.GetItems();
+            //Getting delivery types from web api
+            Tuple<bool, string, List<string>> deliveryTypesFromWebAPI = _APICaller.GetDeliveryTypes();
+            if (deliveryTypesFromWebAPI.Item1 == false) CreateAndShowMessageDialog(deliveryTypesFromWebAPI.Item2);
+            DeliveryMethodsList = deliveryTypesFromWebAPI.Item3;
         }
 
         public UINewOrderInfo OrderBeingCreated { get; set; } = new UINewOrderInfo() //Just bindable data for design
@@ -146,7 +127,7 @@ namespace DROM_Client.ViewModels
             OrderBeingCreated.ItemsAndQuantity = replacementDictionary;
         }
 
-        internal void SaveOrder()
+        internal Tuple<bool, string> SaveOrder()
         {
             NewOrderInfo createdOrder = new NewOrderInfo()
             {
@@ -157,7 +138,14 @@ namespace DROM_Client.ViewModels
                 Notes = OrderBeingCreated.Notes,
                 Table = OrderBeingCreated.Table
             };
-            _APICaller.PostOrderAsync(createdOrder);
+            return _APICaller.PostOrderAsync(createdOrder);
+        }
+
+        private async void CreateAndShowMessageDialog(string message)
+        {
+            var messageDialog = new MessageDialog(message);
+            messageDialog.CancelCommandIndex = 0;
+            await messageDialog.ShowAsync();
         }
     }
 }

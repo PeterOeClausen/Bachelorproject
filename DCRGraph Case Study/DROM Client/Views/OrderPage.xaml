@@ -46,7 +46,8 @@
                     <ComboBoxItem Content="Order id decending"/>
                 </ComboBox>
                 <Button Content="Sort"/>-->
-                <Button Content="Create new order" Margin="100,0,0,0" Click="Create_New_Order_Click"/>
+            <Button Content="Get orders from Web API" Margin="5,0,0,0" Click="GetOrdersFromWebAPI_Click"/>
+            <Button Content="Create new order" Margin="100,0,0,0" Click="Create_New_Order_Click"/>
                 <Button Content="Log out" HorizontalAlignment="Right" Click="Logout_Click" Margin="100,0,0,0"/>
                 <!--<Button Content="Add Order" Click="TempAddOrderClick"/>-->
             </StackPanel>
@@ -64,7 +65,7 @@
                             <StackPanel Orientation="Horizontal" Grid.Row="0">
                                 <!--Order id:-->
                                 <StackPanel MinWidth="100">
-                                    <TextBlock Text="Order id:"/>
+                                    <TextBlock Text="Order id"/>
                                     <TextBlock Text="{Binding Id, TargetNullValue='-1', FallbackValue='-2'}"/>
                                 </StackPanel>
                                 <!--Order date:-->
@@ -75,37 +76,36 @@
                                 <!--Status:-->
                                 <!--Order type:-->
                                 <StackPanel MinWidth="100">
-                                    <TextBlock Text="Order type:"/>
+                                    <TextBlock Text="Order type"/>
                                     <TextBlock Text="{Binding OrderType, FallbackValue='Binding failed', TargetNullValue='No order type was found'}"
                                                    />
                                 </StackPanel>
                                 <!--Table data:-->
                                 <StackPanel MinWidth="100">
-                                    <TextBlock Text="Table number:"/>
+                                    <TextBlock Text="Table number"/>
                                     <TextBlock Text="{Binding Table, FallbackValue='N/A'}"/>
                                 </StackPanel>
                                 <!--Customer name:-->
                                 <StackPanel MinWidth="200">
-                                    <TextBlock Text="Customer name:"/>
+                                    <TextBlock Text="Customer name"/>
                                     <TextBlock>
                                             <Run Text="{Binding Customer.FirstAndMiddleNames}"/>
-                                            <Run Text=" "/>
                                             <Run Text="{Binding Customer.LastName}"/>
                                     </TextBlock>
                                 </StackPanel>
                                 <!--Email:-->
                                 <StackPanel MinWidth="200" ScrollViewer.HorizontalScrollBarVisibility="Visible">
-                                    <TextBlock Text="Email:"/>
+                                    <TextBlock Text="Email"/>
                                     <TextBlock Text="{Binding Customer.Email, TargetNullValue='No email entered'}" TextWrapping="Wrap"/>
                                 </StackPanel>
                                 <!--Phone:-->
                                 <StackPanel MinWidth="100">
-                                    <TextBlock Text="Phone: "/>
+                                    <TextBlock Text="Phone"/>
                                     <TextBlock Text="{Binding Customer.Phone}" Visibility="{Binding Customer.Phone, Converter={StaticResource ValueZeroToVisibilityConverter}}"/>
                                 </StackPanel>
                                 <!--Address-->
                                 <StackPanel MinWidth="200">
-                                    <TextBlock Text="Address:"/>
+                                    <TextBlock Text="Address"/>
                                     <TextBlock Text="{Binding Customer.StreetAndNumber}"/>
                                     <TextBlock Text="{Binding Customer.ZipCode}" 
                                                    Visibility="{Binding Customer.ZipCode, Converter={StaticResource ValueZeroToVisibilityConverter}}"/>
@@ -116,7 +116,7 @@
                                             Tag="{Binding Mode=OneWay}" 
                                             Visibility="{Binding AcceptingState, Converter={StaticResource BoolToVisibilityConverter}}"
                                             ToolTipService.ToolTip="Click to archive order when it's done"
-                                            Background="Green">
+                                            Background="#FF3F7F3F">
                                     <Button.Content>
                                         <StackPanel>
                                             <SymbolIcon Symbol="Accept"/>
@@ -126,12 +126,25 @@
                                 </Button>
                                 <!--Edit button-->
                                 <Button Click="Edit_Click" 
-                                            Tag="{Binding Mode=OneWay}" 
-                                            ToolTipService.ToolTip="Click to edit order" >
+                                        Tag="{Binding Mode=OneWay}" 
+                                        ToolTipService.ToolTip="Click to edit order"
+                                        MinWidth="70">
                                     <Button.Content>
                                         <StackPanel Orientation="Vertical">
                                             <SymbolIcon Symbol="Edit"/>
                                             <TextBlock Text="Edit"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <!--Delete order button-->
+                                <Button Click="Delete_Order_Click" 
+                                        Tag="{Binding Mode=OneWay}"
+                                        ToolTipService.ToolTip="Click to delete the order"
+                                        Background="#FFF85151">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Vertical">
+                                            <SymbolIcon Symbol="Delete"/>
+                                            <TextBlock Text="Delete order"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -154,7 +167,7 @@
                                 </StackPanel>
                                 <!--Notes-->
                                 <StackPanel MinWidth="200" MaxWidth="200">
-                                    <TextBlock Text="Notes:"/>
+                                    <TextBlock Text="Notes"/>
                                     <TextBlock Text="{Binding Notes, TargetNullValue=
                                         'Target value', FallbackValue='FallBackValue'}" TextWrapping="Wrap" MaxWidth="400"/>
                                 </StackPanel>

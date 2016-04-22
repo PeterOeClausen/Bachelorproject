@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using DROM_Client.Services;
 using DROM_Client.Models.ObjectsOptimizedForUI;
 using System.Collections.Specialized;
+using Windows.UI.Popups;
 
 namespace DROM_Client.ViewModels
 {
@@ -169,14 +170,14 @@ namespace DROM_Client.ViewModels
             _APICaller = new APICaller();
             setupData();
             //setupDesignerData();
-            
-            List<string> DeliveryTypes = _APICaller.GetDeliveryTypes();
         }
 
-        public void setupData()
+        public Tuple<bool, string, List<Order>> setupData()
         {
-            OrdersFromWebAPI = _APICaller.GetOrders();
+            Tuple<bool, string, List<Order>> answerFromWebApi = _APICaller.GetOrders();
+            OrdersFromWebAPI = answerFromWebApi.Item3;
             FilterViewAcordingToRoles();
+            return answerFromWebApi;
             #region old code (to be deleted)
             //var query = from Order o in OrdersFromWebAPI
             //            where from Event e in o.DCRGraph.Events
@@ -434,14 +435,21 @@ namespace DROM_Client.ViewModels
             FilterViewAcordingToRoles();
         }
 
-        public void ExecuteEvent(Event eventToExecute)
+        public Tuple<bool, string> ExecuteEvent(Event eventToExecute)
         {
-            _APICaller.PutExecuteEvent(eventToExecute);
+            return _APICaller.PutExecuteEvent(eventToExecute);
         }
 
         internal void ArchiveOrder(Order orderToBeArchived)
         {
-            _APICaller.PutArchiveOrder(orderToBeArchived);
+            var archiveOrderOnWebAPI = _APICaller.PutArchiveOrder(orderToBeArchived);
+            if (archiveOrderOnWebAPI.Item1 == false) CreateAndShowMessageDialog(archiveOrderOnWebAPI.Item2);
+        }
+
+        internal void DeleteOrder(Order orderToBeDeleted)
+        {
+            var deleteOrderOnWebAPI = _APICaller.PutDeleteOrder(orderToBeDeleted);
+            if (deleteOrderOnWebAPI.Item1 == false) CreateAndShowMessageDialog(deleteOrderOnWebAPI.Item2);
         }
 
         public void FilterViewAcordingToRoles()
@@ -516,6 +524,13 @@ namespace DROM_Client.ViewModels
             foreach (ItemQuantity iq in orderToBeCoppied.ItemsAndQuantity) newOrder.ItemsAndQuantity.Add(iq);
 
             return newOrder;
+        }
+
+        private async void CreateAndShowMessageDialog(string message)
+        {
+            var messageDialog = new MessageDialog(message);
+            messageDialog.CancelCommandIndex = 0;
+            await messageDialog.ShowAsync();
         }
     }
 }
