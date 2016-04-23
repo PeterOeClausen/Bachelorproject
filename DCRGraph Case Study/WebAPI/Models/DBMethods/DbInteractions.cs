@@ -12,6 +12,7 @@ using System.Net.Http;
 using WebAPI.Models.DBObjects;
 using Group = DROM_Client.Models.BusinessObjects.Group;
 using Role = DROM_Client.Models.BusinessObjects.Role;
+using DBO = WebAPI.Models.DBObjects;
 
 namespace WebAPI.Models.DBMethods
 {
@@ -267,11 +268,21 @@ namespace WebAPI.Models.DBMethods
 
                 using (var db = new Database())
                 {
+
+
+                    
+
                     foreach (var i in data.Item2)
                     {
                         var status = await this.ExecuteEvent(i);
-                        if (status.Item2 != HttpStatusCode.OK) return status; //Preconditions were not meet
+                        if (status.Item2 != HttpStatusCode.OK)
+                            return status; //Preconditions were not meet
                     }
+
+                    var guid = new Guid();
+                    var tryLock = await this.LockGraph(guid, data.Item1.DCRGraph.Id, db);
+                    if (tryLock.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
 
                     var orderToBeUpdated = await db.Orders
                         .Include(o => o.OrderDetails.Select(od => od.Item))
@@ -336,8 +347,17 @@ namespace WebAPI.Models.DBMethods
 
                     orderToBeUpdated.OrderDetails = newOrderDetails;
 
+                    
+                    var checkLock = await this.CheckLock(guid, data.Item1.DCRGraph.Id, db);
+                    if (checkLock.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+
                     db.Entry(orderToBeUpdated).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+                    var unlock = await this.Unlock(guid, data.Item1.DCRGraph.Id, db);
+                    if (unlock.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+
                     return new Tuple<string, HttpStatusCode>("Success", HttpStatusCode.OK);
                 }
             }
@@ -383,10 +403,16 @@ namespace WebAPI.Models.DBMethods
                     }
 
                     //Preconditions have succeded!
+                    var guid = new Guid();
+                    var tryLock = await this.LockGraph(guid, eventToBeExecuted.DCRGraphId, db);
+                    if (tryLock.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+
 
                     //Setup postconditions:
                     eventToBeExecuted.Pending = false;
                     eventToBeExecuted.Executed = true;
+
 
                     //exclude related events
                     foreach (var e in eventToBeExecuted.Excludes)
@@ -408,7 +434,14 @@ namespace WebAPI.Models.DBMethods
 
                     //set state to modified and save.
                     db.Entry(eventToBeExecuted).State = EntityState.Modified;
+
+                    var checkLock = await this.CheckLock(guid, eventToBeExecuted.DCRGraphId, db);
+                    if (checkLock.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+
                     await db.SaveChangesAsync();
+
+                    
 
                     //get the modified order from the database to check whether it has gone into accepting state
                     var order = await (from o in db.Orders
@@ -418,6 +451,9 @@ namespace WebAPI.Models.DBMethods
 
                     if (order.DCRGraph.DCREvents.Any(dcrEvent => dcrEvent.Included && dcrEvent.Pending))
                     {
+                        var unlock1 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
+                        if (unlock1.Item1 == false)
+                            return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
                         return new Tuple<string, HttpStatusCode>("Success but not accepting state", HttpStatusCode.OK);
                     }
 
@@ -426,6 +462,10 @@ namespace WebAPI.Models.DBMethods
                     db.Entry(order.DCRGraph).State = EntityState.Modified;
                     db.Entry(order).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+
+                    var unlock2 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
+                    if (unlock2.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
 
                     return new Tuple<string, HttpStatusCode>("Success and accepting state", HttpStatusCode.OK);
                 }
@@ -468,11 +508,27 @@ namespace WebAPI.Models.DBMethods
             {
                 using (var db = new Database())
                 {
-                    var orderToBeArchived = await db.Orders.FindAsync(order);
+
+                    var orderToBeArchived = await db.Orders
+                        .Include(o => o.DCRGraph)
+                        .FirstOrDefaultAsync(o => o.Id == order);
                     if (orderToBeArchived == null) return new Tuple<string, HttpStatusCode>("The order did not exist in the Database", HttpStatusCode.InternalServerError);
+                    var guid = new Guid();
+                    var tryLock = await this.LockGraph(guid, orderToBeArchived.DCRGraph.Id, db);
+                    if (tryLock.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
                     orderToBeArchived.Archived = true;
                     db.Entry(orderToBeArchived).State = EntityState.Modified;
+
+                    var checkLock = await this.CheckLock(guid, orderToBeArchived.DCRGraph.Id, db);
+                    if (checkLock.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
                     await db.SaveChangesAsync();
+
+                    var unlock = await this.Unlock(guid, orderToBeArchived.DCRGraph.Id, db);
+                    if (unlock.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+
                     return new Tuple<string, HttpStatusCode>("Success", HttpStatusCode.OK);
 
                 }
@@ -482,6 +538,57 @@ namespace WebAPI.Models.DBMethods
                 return new Tuple<string, HttpStatusCode>(
                         ex.Message, HttpStatusCode.InternalServerError);
             }
+        }
+
+        public async Task<Tuple<bool, string>> LockGraph(Guid guid, int graphId, DBO.Database db)
+        {
+            var graph = await db.DCRGraphs.FindAsync(graphId);
+            //check if the graph exist
+            if(graph == null) return new Tuple<bool, string>(false,"The graph did not exist");
+            //Check that the graph is not locked, and if it is, check whether it's an old lock
+            if(graph.Lock && DateTime.Now.Subtract(graph.LockTime).Minutes < 10 ) return new Tuple<bool, string>(false, "The graph is already locked");
+            graph.Lock = true;
+            graph.LockTime = DateTime.Now;
+            graph.Guid = guid;
+
+            db.Entry(graph).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+            return new Tuple<bool, string>(true, "");
+
+
+            
+        }
+
+        public async Task<Tuple<bool, string>> CheckLock(Guid guid, int graphId, DBO.Database db)
+        {
+            
+            var graph = await db.DCRGraphs.FindAsync(graphId);
+            if (graph == null) return new Tuple<bool, string>(false, "The graph did not exist");
+            if (graph.Lock == false)
+                return new Tuple<bool, string>(false, "The graph was not locked when reaching the check lock phase");
+            if (graph.Guid != guid)
+                return new Tuple<bool, string>(false, "someone else has locked the graph. Should not be possible.");
+            return new Tuple<bool, string>(true, "");
+            
+        }
+
+        public async Task<Tuple<bool, string>> Unlock(Guid guid, int graphId, DBO.Database db)
+        {
+            
+            var graph = await db.DCRGraphs.FindAsync(graphId);
+            if (graph == null) return new Tuple<bool, string>(false, "The graph did not exist");
+            if (graph.Lock == false)
+                return new Tuple<bool, string>(false, "The graph was not locked when reaching the unlock phase");
+            if (graph.Guid != guid)
+                return new Tuple<bool, string>(false, "someone else has locked the graph. Should not be possible.");
+            graph.Lock = false;
+
+            db.Entry(graph).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+            return new Tuple<bool, string>(true, "");
+
+
+            
         }
 
         ////get orders from db

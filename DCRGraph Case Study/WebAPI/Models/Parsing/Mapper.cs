@@ -32,6 +32,8 @@ namespace WebAPI.Models.Parsing
                     var graph = new DCRGraph()
                     {
                         AcceptingState = false,
+                        Lock = false,
+                        LockTime = DateTime.Now,
                     };
                     graph.DCREvents = container.Events;
 
@@ -190,7 +192,7 @@ namespace WebAPI.Models.Parsing
                     {
                         db.Entry(e).State = EntityState.Modified;
                     }
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     //needs statuscode exception handling
                     switch (orderInfo.OrderType)

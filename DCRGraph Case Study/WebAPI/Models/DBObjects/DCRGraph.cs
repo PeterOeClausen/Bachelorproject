@@ -18,5 +18,11 @@ namespace WebAPI.Models.DBObjects
         public bool AcceptingState { get; set; }
         
         public virtual ICollection<DCREvent> DCREvents { get; set; }
+
+        public bool Lock { get; set; }
+
+        public Guid Guid { get; set; }
+
+        public DateTime LockTime { get; set; }
     }
 }
