@@ -10,10 +10,11 @@ using Newtonsoft.Json;
 using WebAPI.Models.DBMethods;
 using WebAPI.Models.DBObjects;
 using Item = DROM_Client.Models.BusinessObjects.Item;
-
+using System.Web.Http.Cors;
 
 namespace WebAPI.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class OrderController : ApiController
     {
         [Route("api/order/items")]
