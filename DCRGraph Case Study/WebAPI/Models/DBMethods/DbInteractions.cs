@@ -279,7 +279,7 @@ namespace WebAPI.Models.DBMethods
                             return status; //Preconditions were not meet
                     }
 
-                    var guid = new Guid();
+                    var guid = Guid.NewGuid();
                     var tryLock = await this.LockGraph(guid, data.Item1.DCRGraph.Id, db);
                     if (tryLock.Item1 == false)
                         return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
@@ -403,7 +403,7 @@ namespace WebAPI.Models.DBMethods
                     }
 
                     //Preconditions have succeded!
-                    var guid = new Guid();
+                    var guid = Guid.NewGuid();
                     var tryLock = await this.LockGraph(guid, eventToBeExecuted.DCRGraphId, db);
                     if (tryLock.Item1 == false)
                         return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
@@ -454,13 +454,20 @@ namespace WebAPI.Models.DBMethods
                         var unlock1 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
                         if (unlock1.Item1 == false)
                             return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                        if (order.DCRGraph.AcceptingState)
+                        {
+                            order.DCRGraph.AcceptingState = false;
+                            db.Entry(order.DCRGraph).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+
+                        }
+
                         return new Tuple<string, HttpStatusCode>("Success but not accepting state", HttpStatusCode.OK);
                     }
 
 
                     order.DCRGraph.AcceptingState = true;
                     db.Entry(order.DCRGraph).State = EntityState.Modified;
-                    db.Entry(order).State = EntityState.Modified;
                     await db.SaveChangesAsync();
 
                     var unlock2 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
@@ -513,7 +520,7 @@ namespace WebAPI.Models.DBMethods
                         .Include(o => o.DCRGraph)
                         .FirstOrDefaultAsync(o => o.Id == order);
                     if (orderToBeArchived == null) return new Tuple<string, HttpStatusCode>("The order did not exist in the Database", HttpStatusCode.InternalServerError);
-                    var guid = new Guid();
+                    var guid = Guid.NewGuid();
                     var tryLock = await this.LockGraph(guid, orderToBeArchived.DCRGraph.Id, db);
                     if (tryLock.Item1 == false)
                         return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
