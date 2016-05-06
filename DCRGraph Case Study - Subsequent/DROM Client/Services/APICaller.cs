@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using DROM_Client.Models.BusinessObjects;
+using DROM_Client.Models.SharedClientData;
 
 namespace DROM_Client.Services
 {
@@ -109,7 +110,7 @@ namespace DROM_Client.Services
         /// Receive all orders
         /// </summary>
         /// <returns></returns>
-        public Tuple<bool, string, List<Order>> GetOrders(int restaurantId)
+        public Tuple<bool, string, List<Order>> GetOrders()
         {
             #region testdata:
             //new List<Order>()
@@ -334,7 +335,7 @@ namespace DROM_Client.Services
                 try
                 {
                     client.BaseAddress = BaseAddress;
-                    var response = client.GetAsync("api/order/orderswithsortedevents/"+restaurantId, new CancellationToken()).Result;
+                    var response = client.GetAsync("api/order/orderswithsortedevents?restaurant=" + RestaurantLoginContainer.Instance.RestaurantId, new CancellationToken()).Result;
                     if (response.IsSuccessStatusCode)
                     {
                         var ordersReceived = response.Content.ReadAsAsync<List<Order>>().Result;

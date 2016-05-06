@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using DROM_Client.Models.SharedClientData;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -37,7 +38,8 @@ namespace DROM_Client.Views
             //Check login here
             if (_restaurantId != 0)
             {
-                Frame.Navigate(typeof(OrderPage),_restaurantId);
+                RestaurantLoginContainer.Instance.RestaurantId = _restaurantId;
+                Frame.Navigate(typeof(OrderPage));
             }
             else CreateAndShowMessageDialog("You must choose a restaurant before you can proceed.");
         }

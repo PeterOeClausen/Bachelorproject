@@ -33,7 +33,6 @@ namespace DROM_Client.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             var viewModel = DataContext as OrderPageViewModel;
-            viewModel.restaurantId = Convert.ToInt32(e.Parameter);
             viewModel.setupData();
         }
 

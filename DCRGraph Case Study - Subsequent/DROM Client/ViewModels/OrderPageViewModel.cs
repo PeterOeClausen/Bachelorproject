@@ -164,7 +164,6 @@ namespace DROM_Client.ViewModels
         //#endregion
 
         public List<Order> OrdersFromWebAPI { get; set; }
-        public int restaurantId { get; set; }
 
         public OrderPageViewModel()
         {
@@ -175,7 +174,7 @@ namespace DROM_Client.ViewModels
 
         public Tuple<bool, string, List<Order>> setupData()
         {
-            Tuple<bool, string, List<Order>> answerFromWebApi = _APICaller.GetOrders(restaurantId);
+            Tuple<bool, string, List<Order>> answerFromWebApi = _APICaller.GetOrders();
             if(answerFromWebApi.Item1 == false) CreateAndShowMessageDialog(answerFromWebApi.Item2); //Show fail message if not success
             OrdersFromWebAPI = answerFromWebApi.Item3;
             FilterViewAcordingToRoles();

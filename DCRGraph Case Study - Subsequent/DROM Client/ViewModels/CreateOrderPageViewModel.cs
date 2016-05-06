@@ -9,6 +9,7 @@ using DROM_Client.Services;
 using DROM_Client.Models.ObjectsOptimizedForUI;
 using System.Collections.ObjectModel;
 using Windows.UI.Popups;
+using DROM_Client.Models.SharedClientData;
 
 namespace DROM_Client.ViewModels
 {
@@ -136,7 +137,8 @@ namespace DROM_Client.ViewModels
                 Customer = OrderBeingCreated.Customer,
                 OrderDate = OrderBeingCreated.OrderDate,
                 Notes = OrderBeingCreated.Notes,
-                Table = OrderBeingCreated.Table
+                Table = OrderBeingCreated.Table,
+                Restaurant = RestaurantLoginContainer.Instance.RestaurantId
             };
             return _APICaller.PostOrderAsync(createdOrder);
         }
