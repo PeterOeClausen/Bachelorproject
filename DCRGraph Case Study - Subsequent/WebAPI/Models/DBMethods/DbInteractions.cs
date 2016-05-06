@@ -54,7 +54,7 @@ namespace WebAPI.Models.DBMethods
             }
         }
 
-        public async Task<Tuple<List<DROM_Client.Models.BusinessObjects.Order>, string, HttpStatusCode>> GetOrdersWithSortedEvents()
+        public async Task<Tuple<List<DROM_Client.Models.BusinessObjects.Order>, string, HttpStatusCode>> GetOrdersWithSortedEvents(int restaurant)
         {
             try
             {
@@ -67,6 +67,7 @@ namespace WebAPI.Models.DBMethods
 
                     var query = (from o in db.Orders
                                  where o.Archived == false
+                                 where o.RestaurantId == restaurant
                                  select
                                      new
                                      {
@@ -164,7 +165,8 @@ namespace WebAPI.Models.DBMethods
                             OrderDate = queryOrder.Order.OrderDate,
                             OrderType = queryOrder.Order.OrderType,
                             Table = queryOrder.Order.Table,
-                            AcceptingState = queryOrder.Graph.AcceptingState
+                            AcceptingState = queryOrder.Graph.AcceptingState,
+                            Restaurant = restaurant
                         };
 
                         //prepare a list to put reassembled events into, which will later be added to the DCRGraph

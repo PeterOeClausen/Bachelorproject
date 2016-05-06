@@ -24,7 +24,7 @@ namespace WebAPI.Controllers
 
             try
             {
-                await new Mapper().mapper(new DCRXmlParser().Parse(Properties.Resources.Bachelor2), info);
+                await new Mapper().CreateOrder(new DCRXmlParser().Parse(Properties.Resources.Bachelor2), info);
                 var response = Request.CreateResponse(HttpStatusCode.OK);
                 response.ReasonPhrase = "success";
                 return response;
