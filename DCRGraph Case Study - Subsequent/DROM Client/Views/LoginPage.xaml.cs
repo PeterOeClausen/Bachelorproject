@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,10 +28,31 @@ namespace DROM_Client.Views
             this.InitializeComponent();
         }
 
+        private int _restaurantId;
+
+
+
         private void LogInButtonClick(object sender, RoutedEventArgs e)
         {
             //Check login here
-            Frame.Navigate(typeof(OrderPage));
+            if (_restaurantId != 0)
+            {
+                Frame.Navigate(typeof(OrderPage),_restaurantId);
+            }
+            else CreateAndShowMessageDialog("You must choose a restaurant before you can proceed.");
+        }
+
+        private void Restaurant_Number_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var choosenRestaurantItem = e.AddedItems.First() as ComboBoxItem;
+            int.TryParse(choosenRestaurantItem.Content as string, out _restaurantId);
+        }
+
+        private async void CreateAndShowMessageDialog(string message)
+        {
+            var messageDialog = new MessageDialog(message);
+            messageDialog.CancelCommandIndex = 0;
+            await messageDialog.ShowAsync();
         }
     }
 }

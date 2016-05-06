@@ -109,7 +109,7 @@ namespace DROM_Client.Services
         /// Receive all orders
         /// </summary>
         /// <returns></returns>
-        public Tuple<bool, string, List<Order>> GetOrders()
+        public Tuple<bool, string, List<Order>> GetOrders(int restaurantId)
         {
             #region testdata:
             //new List<Order>()
@@ -334,7 +334,7 @@ namespace DROM_Client.Services
                 try
                 {
                     client.BaseAddress = BaseAddress;
-                    var response = client.GetAsync("api/order/orderswithsortedevents", new CancellationToken()).Result;
+                    var response = client.GetAsync("api/order/orderswithsortedevents/"+restaurantId, new CancellationToken()).Result;
                     if (response.IsSuccessStatusCode)
                     {
                         var ordersReceived = response.Content.ReadAsAsync<List<Order>>().Result;
