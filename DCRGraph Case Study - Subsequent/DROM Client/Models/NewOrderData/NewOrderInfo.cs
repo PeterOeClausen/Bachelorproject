@@ -16,5 +16,6 @@ namespace DROM_Client.Models.NewOrderData
         public string Notes { get; set; }
         public int Table { get; set; }
         public int GraphType { get; set; } //we do not use this yet, but it is for determining which dcrgraph is used for the order 
+        public int Restaurant { get; set; }
     }
 }

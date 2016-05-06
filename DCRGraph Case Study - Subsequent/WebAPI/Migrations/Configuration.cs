@@ -49,6 +49,11 @@ namespace WebAPI.Migrations
                 {
                     OrderType = 0,
                     Type = "For takeaway"
+                },
+                new DeliveryType()
+                {
+                    OrderType = 0,
+                    Type = "Bulk order"
                 }
             };
             foreach (var dt in deliveryTypes)

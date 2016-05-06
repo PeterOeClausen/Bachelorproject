@@ -29,10 +29,10 @@ namespace WebAPI.Controllers
 
         [Route("api/order/ordersWithSortedEvents")]
         [HttpGet]
-        public async Task<HttpResponseMessage> GetOrders()
+        public async Task<HttpResponseMessage> GetOrders(int restaurant)
         {
 
-            var result = await new DbInteractions().GetOrdersWithSortedEvents();
+            var result = await new DbInteractions().GetOrdersWithSortedEvents(restaurant);
             var response = Request.CreateResponse(result.Item3, result.Item1 ?? new List<DROM_Client.Models.BusinessObjects.Order>());
             response.ReasonPhrase = result.Item2;
             return response;

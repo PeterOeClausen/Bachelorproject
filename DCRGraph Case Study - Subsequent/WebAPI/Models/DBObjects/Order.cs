@@ -24,6 +24,8 @@ namespace WebAPI.Models.DBObjects
        
         public int Table { get; set; }
 
+        public int RestaurantId { get; set; }
+
         public bool Archived { get; set; }
 
         [Required]
