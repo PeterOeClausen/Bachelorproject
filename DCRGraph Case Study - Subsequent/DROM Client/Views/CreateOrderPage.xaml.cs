@@ -37,6 +37,36 @@ namespace DROM_Client.Views
         //From microsoft guide: https://msdn.microsoft.com/da-dk/library/windows/apps/xaml/br208674?cs-save-lang=1&cs-lang=csharp
         private async void Save_Click(object sender, RoutedEventArgs e)
         {
+            #region Checks if all information is entered correctly before asking for save:
+            var viewModel = DataContext as CreateOrderPageViewModel;
+            if (DeliveryCombobox.SelectedItem == null) //If no Delivery method is selected
+            {
+                CreateAndShowMessageDialog("Please select a delivery method.");
+                return;
+            }
+            if (viewModel.OrderBeingCreated.ItemsAndQuantity.Count == 0) //If no items are on order
+            {
+                CreateAndShowMessageDialog("Sorry, an order must have items on order.");
+                return;
+            }
+
+            switch (DeliveryCombobox.SelectedItem as string) // Check if all information is entered
+            {
+                case "For serving":
+                    if (!All_Information_Entered_For_Serving()) return;
+                    break;
+                case "For takeaway":
+                    if (!All_Information_Entered_For_Pickup()) return;
+                    break;
+                case "For delivery":
+                    if (!All_Information_Entered_For_Delivery()) return;
+                    break;
+                case "Bulk order":
+                    if (!All_Information_Entered_For_Delivery()) return; //Same requirements as delivery
+                    break;
+            }
+            #endregion
+
             // Create the message dialog and set its content
             var messageDialog = new MessageDialog("Do you want to save this order?");
 
@@ -56,31 +86,6 @@ namespace DROM_Client.Views
         private async void Save_Popup_Yes(IUICommand command)
         {
             var viewModel = DataContext as CreateOrderPageViewModel;
-            
-            if(DeliveryCombobox.SelectedItem == null) //If no Delivery method is selected
-            {
-                CreateAndShowMessageDialog("Please select a delivery method.");
-                return;
-            }
-            if(viewModel.OrderBeingCreated.ItemsAndQuantity.Count == 0)
-            {
-                CreateAndShowMessageDialog("Sorry, an order must have items on order.");
-                return;
-            }
-            //TODO: Check if all information is entered
-
-            switch (DeliveryCombobox.SelectedItem as string)
-            {
-                case "For serving":
-                    if (!All_Information_Entered_For_Serving()) return;
-                    break;
-                case "For takeaway":
-                    if (!All_Information_Entered_For_Pickup()) return;
-                    break;
-                case "For delivery":
-                    if (!All_Information_Entered_For_Delivery()) return;
-                    break;
-            }
             Tuple<bool,string> answer = viewModel.SaveOrder();
             if (answer.Item1 == false) CreateAndShowMessageDialog(answer.Item2);
             Frame.Navigate(typeof(OrderPage));

@@ -62,25 +62,25 @@
                     <StackPanel>
                         <TextBlock Text="Customer information:" FontWeight="Bold" Margin="0,20,0,0"/>
                         <TextBlock Text="First name:"/>
-                        <TextBox Text="{Binding OrderBeingEdited.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" MinWidth="300" HorizontalAlignment="Left"/>
+                        <TextBox Text="{Binding OrderBeingEdited.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" MinWidth="300" HorizontalAlignment="Left" x:Name="First_Name_Text_Box"/>
                         <TextBlock Text="Last name:" Margin="0,20,0,0"/>
-                        <TextBox Text="{Binding OrderBeingEdited.Customer.LastName, Mode=TwoWay, FallbackValue='N/A'}"/>
+                        <TextBox Text="{Binding OrderBeingEdited.Customer.LastName, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Last_Name_Text_Box"/>
                         <TextBlock Text="Email:" Margin="0,20,0,0"/>
-                        <TextBox Text="{Binding OrderBeingEdited.Customer.Email, Mode=TwoWay, FallbackValue='N/A'}"/>
+                        <TextBox Text="{Binding OrderBeingEdited.Customer.Email, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Email_Text_Box"/>
                         <TextBlock Text="Phone:" Margin="0,20,0,0"/>
-                        <TextBox Text="{Binding OrderBeingEdited.Customer.Phone, Mode=TwoWay, FallbackValue='N/A'}"/>
+                        <TextBox Text="{Binding OrderBeingEdited.Customer.Phone, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Phone_Text_Box"/>
                         <TextBlock Text="Street:" Margin="0,20,0,0"/>
-                        <TextBox Text="{Binding OrderBeingEdited.Customer.StreetAndNumber, Mode=TwoWay, FallbackValue='N/A'}"/>
+                        <TextBox Text="{Binding OrderBeingEdited.Customer.StreetAndNumber, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Street_And_Number_Text_Box"/>
                         <TextBlock Text="Zip:" Margin="0,20,0,0"/>
-                        <TextBox Text="{Binding OrderBeingEdited.Customer.ZipCode, Mode=TwoWay, FallbackValue='N/A'}"/>
+                        <TextBox Text="{Binding OrderBeingEdited.Customer.ZipCode, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Zip_Text_Box"/>
                         <TextBlock Text="City:" Margin="0,20,0,0"/>
-                        <TextBox Text="{Binding OrderBeingEdited.Customer.City, Mode=TwoWay, FallbackValue='N/A'}"/>
+                        <TextBox Text="{Binding OrderBeingEdited.Customer.City, Mode=TwoWay, FallbackValue='N/A'}" x:Name="City_Text_Box"/>
                     </StackPanel>
                     <!--Items and notes:-->
                     <StackPanel Padding="20,20,20,0" MinWidth="300">
                         <!--Table number:-->
                         <TextBlock Text="Table number:" FontWeight="Bold"/>
-                        <TextBox Text="{Binding OrderBeingEdited.Table, Mode=TwoWay, FallbackValue='N/A'}"/>
+                        <TextBox Text="{Binding OrderBeingEdited.Table, FallbackValue=N/A, Mode=TwoWay}" x:Name="Table_Number_Text_Box"/>
                         <!--Items list:-->
                         <StackPanel Background="Wheat" Margin="0,10,0,0">
                             <TextBlock Text="Items on order:" FontWeight="Bold" />
