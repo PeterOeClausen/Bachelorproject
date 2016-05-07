@@ -77,8 +77,7 @@ namespace WebAPI.Models.Parsing
 
                     //Determine if there should be a customer on the order
 
-                    if (orderInfo.OrderType != "For serving")
-                    {
+                    
                         var customer = 
                             await db.Customers
                                             .FirstOrDefaultAsync(c => c.Phone == orderInfo.Customer.Phone);
@@ -105,7 +104,7 @@ namespace WebAPI.Models.Parsing
                         }
                         order.Customer = customer;
 
-                    }
+                    
                     db.Orders.Add(order);
                     db.SaveChanges();
 
