@@ -207,13 +207,19 @@ namespace DROM_Client.Views
 
         private async void Add_Click(object sender, RoutedEventArgs e)
         {
+
             string quanAsString = this.Quantity_Box.Text;
             int quanAsInt;
             if(int.TryParse(quanAsString, out quanAsInt))
             {
-                var NewItem = this.Item_Box.SelectedItem as Item;
+                var selectedItem = this.Item_Box.SelectedItem as Item;
+                if(selectedItem == null)
+                {
+                    CreateAndShowMessageDialog("You must choose an item before you can add it!");
+                    return;
+                }
                 var viewModel = this.DataContext as CreateOrderPageViewModel;
-                viewModel.AddQuantityAndItem(quanAsInt, NewItem);
+                viewModel.AddQuantityAndItem(quanAsInt, selectedItem);
             }
             else
             {

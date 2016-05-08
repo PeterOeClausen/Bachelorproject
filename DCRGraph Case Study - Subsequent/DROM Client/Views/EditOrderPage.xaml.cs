@@ -248,7 +248,7 @@ namespace DROM_Client.Views
         {
             if(this.Item_Box.SelectedItem == null)
             {
-                CreateAndShowMessageDialog("You have to select an item to add.");
+                CreateAndShowMessageDialog("You need to select an item before you can add it.");
                 return;
             }
             var selectedItem = Item_Box.SelectedItem as Item;

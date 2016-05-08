@@ -7,24 +7,21 @@ using Windows.UI.Xaml.Data;
 
 namespace DROM_Client.Converters
 {
-    public class BoolToVisibilityConverter : IValueConverter
+    public class BoolToOpacityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            bool visible = (bool)value;
-            if (visible)
+            bool boolean = (bool)value;
+            if (boolean)
             {
-                return "Visible";
+                return "1";
             }
-            else return "Collapsed";
+            else return "0.1";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotImplementedException();
-            //string visible = (string)value;
-            //if (visible == "Visible") return true;
-            //else return false;
         }
     }
 }
