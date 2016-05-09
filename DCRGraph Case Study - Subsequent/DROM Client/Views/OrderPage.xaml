@@ -18,39 +18,56 @@
     <Page.Resources>
         <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
         <converters:PendingEventGroupNameToVisibilityConverter x:Key="PendingEventGroupNameToVisibilityConverter"/>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:ValueZeroToVisibilityConverter x:Key="ValueZeroToVisibilityConverter"/>
+        <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <!--Top menu bar-->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0">
-                <TextBlock Text="Views:" VerticalAlignment="Center"/>
-                <Button Content="Chef" Click="Chef_Click" Background="{Binding Chef, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"/>
-                <Button Content="Delivery" Click="Delivery_Click" Background="{Binding Delivery, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"/>
-                <Button Content="Manager" Click="Manger_Click" Background="{Binding Manager, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"/>
-                <Button Content="Waiter" Click="Waiter_Click" Background="{Binding Waiter, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!--Top menu bar-->
+        <VariableSizedWrapGrid Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Views:" 
+                           VerticalAlignment="Center"/>
+                <Button Content="Chef" 
+                        Click="Chef_Click" 
+                        Background="{Binding Chef, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"
+                        Margin="1,0,0,0"/>
+                <Button Content="Delivery"
+                        Click="Delivery_Click" 
+                        Background="{Binding Delivery, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"
+                        Margin="1,0,0,0"/>
+                <Button Content="Manager" 
+                        Click="Manger_Click" 
+                        Background="{Binding Manager, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"
+                        Margin="1,0,0,0"/>
+                <Button Content="Waiter" 
+                        Click="Waiter_Click" 
+                        Background="{Binding Waiter, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"
+                        Margin="1,0,0,0"/>
                 <Button Content="Show only pending orders" 
                         Click="Show_Only_Pending_Orders_Click" 
-                        Background="{Binding ShowOnlyPendingOrders, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}" 
+                        Background="{Binding ShowOnlyPendingOrders, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"
                         Margin="5,0,0,0"/>
-                <!--<ComboBox PlaceholderText="Choose sorting" Margin="100,0,0,0">
-                    <ComboBoxItem Content="Newest orders first"/>
-                    <ComboBoxItem Content="Oldest orders first"/>
-                    <ComboBoxItem Content="Order id ascending"/>
-                    <ComboBoxItem Content="Order id decending"/>
-                </ComboBox>
-                <Button Content="Sort"/>-->
-            <Button Content="Get orders from Web API" Margin="5,0,0,0" Click="GetOrdersFromWebAPI_Click"/>
-            <Button Content="Create new order" Margin="100,0,0,0" Click="Create_New_Order_Click"/>
-                <Button Content="Log out" HorizontalAlignment="Right" Click="Logout_Click" Margin="100,0,0,0"/>
-                <!--<Button Content="Add Order" Click="TempAddOrderClick"/>-->
             </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Actions:"
+                           VerticalAlignment="Center"/>
+                <Button Content="Get orders from Web API" 
+                        Margin="1,0,0,0" 
+                        Click="GetOrdersFromWebAPI_Click"/>
+                <Button Content="Create new order" 
+                        Margin="1,0,0,0" 
+                        Click="Create_New_Order_Click"/>
+                <Button Content="Log out"
+                        Click="Logout_Click" 
+                        Margin="1,0,0,0"/>
+            </StackPanel>
+        </VariableSizedWrapGrid>
             <Line X1="0" X2="3840" Stroke="Black" HorizontalAlignment="Center" Grid.Row="1"/>
         <Grid x:Name="OrderOverviewStackPanel" Grid.Row="2" HorizontalAlignment="Center">
             <!--Order view list-->
@@ -62,23 +79,21 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                            <VariableSizedWrapGrid Orientation="Horizontal" Grid.Row="0" ItemWidth="100">
                                 <!--Order id:-->
-                                <StackPanel MinWidth="100">
+                                <StackPanel MinHeight="77">
                                     <TextBlock Text="Order id"/>
                                     <TextBlock Text="{Binding Id, TargetNullValue='-1', FallbackValue='-2'}"/>
                                 </StackPanel>
                                 <!--Order date:-->
-                                <StackPanel MinWidth="200">
+                                <StackPanel VariableSizedWrapGrid.ColumnSpan="2">
                                     <TextBlock Text="Order date"/>
                                     <TextBlock Text="{Binding OrderDate, FallbackValue='Binding failed', TargetNullValue='No orderdate found'}"/>
                                 </StackPanel>
-                                <!--Status:-->
                                 <!--Order type:-->
                                 <StackPanel MinWidth="100">
                                     <TextBlock Text="Order type"/>
-                                    <TextBlock Text="{Binding OrderType, FallbackValue='Binding failed', TargetNullValue='No order type was found'}"
-                                                   />
+                                    <TextBlock Text="{Binding OrderType, FallbackValue='Binding failed', TargetNullValue='No order type was found'}"/>
                                 </StackPanel>
                                 <!--Table data:-->
                                 <StackPanel MinWidth="100">
@@ -86,7 +101,7 @@
                                     <TextBlock Text="{Binding Table, FallbackValue='N/A'}"/>
                                 </StackPanel>
                                 <!--Customer name:-->
-                                <StackPanel MinWidth="200">
+                                <StackPanel MinWidth="200" VariableSizedWrapGrid.ColumnSpan="2">
                                     <TextBlock Text="Customer name"/>
                                     <TextBlock>
                                             <Run Text="{Binding Customer.FirstAndMiddleNames}"/>
@@ -94,7 +109,7 @@
                                     </TextBlock>
                                 </StackPanel>
                                 <!--Email:-->
-                                <StackPanel MinWidth="200" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+                                <StackPanel MinWidth="200" VariableSizedWrapGrid.ColumnSpan="2">
                                     <TextBlock Text="Email"/>
                                     <TextBlock Text="{Binding Customer.Email, TargetNullValue='No email entered'}" TextWrapping="Wrap"/>
                                 </StackPanel>
@@ -104,54 +119,62 @@
                                     <TextBlock Text="{Binding Customer.Phone}" Visibility="{Binding Customer.Phone, Converter={StaticResource ValueZeroToVisibilityConverter}}"/>
                                 </StackPanel>
                                 <!--Address-->
-                                <StackPanel MinWidth="200">
+                                <StackPanel MinWidth="200" VariableSizedWrapGrid.ColumnSpan="2">
                                     <TextBlock Text="Address"/>
                                     <TextBlock Text="{Binding Customer.StreetAndNumber}"/>
                                     <TextBlock Text="{Binding Customer.ZipCode}" 
                                                    Visibility="{Binding Customer.ZipCode, Converter={StaticResource ValueZeroToVisibilityConverter}}"/>
                                     <TextBlock Text="{Binding Customer.City}"/>
                                 </StackPanel>
-                                <!--Archive button - shows only when order can be archived-->
-                                <Button Click="Archive_Click"
-                                            Tag="{Binding Mode=OneWay}" 
-                                            Visibility="{Binding AcceptingState, Converter={StaticResource BoolToVisibilityConverter}}"
+                                <!--Buttons-->
+                                <StackPanel Orientation="Horizontal" VariableSizedWrapGrid.ColumnSpan="2">
+                                    <!--Archive button - shows only when order can be archived-->
+                                    <Button Click="Archive_Click"
+                                            Tag="{Binding Mode=OneWay}"
+                                            Opacity="{Binding AcceptingState, Converter={StaticResource BoolToOpacityConverter}}"
                                             ToolTipService.ToolTip="Click to archive order when it's done"
                                             Background="#FF3F7F3F">
-                                    <Button.Content>
-                                        <StackPanel>
-                                            <SymbolIcon Symbol="Accept"/>
-                                            <TextBlock Text="Archive"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
-                                <!--Edit button-->
-                                <Button Click="Edit_Click" 
+                                        <Button.Content>
+                                            <StackPanel>
+                                                <SymbolIcon Symbol="Accept"/>
+                                                <TextBlock Text="Archive"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!--Edit button-->
+                                    <Button Click="Edit_Click" 
                                         Tag="{Binding Mode=OneWay}" 
                                         ToolTipService.ToolTip="Click to edit order"
-                                        MinWidth="70">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Vertical">
-                                            <SymbolIcon Symbol="Edit"/>
-                                            <TextBlock Text="Edit"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
-                                <!--Delete order button-->
-                                <Button Click="Delete_Order_Click" 
+                                        Width="63">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Vertical">
+                                                <SymbolIcon Symbol="Edit"/>
+                                                <TextBlock Text="Edit"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!--Delete order button-->
+                                    <Button Click="Delete_Order_Click" 
                                         Tag="{Binding Mode=OneWay}"
                                         ToolTipService.ToolTip="Click to delete the order"
-                                        Background="#FFF85151">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Vertical">
-                                            <SymbolIcon Symbol="Delete"/>
-                                            <TextBlock Text="Delete order"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,30" Grid.Row="1">
+                                        Background="#FFF85151"
+                                        Width="63">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Vertical">
+                                                <SymbolIcon Symbol="Delete"/>
+                                                <TextBlock Text="Delete"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
+                            </VariableSizedWrapGrid>
+                            <VariableSizedWrapGrid Orientation="Horizontal" 
+                                                   Margin="0,10,0,0"
+                                                   Grid.Row="1"
+                                                   ItemWidth="100"
+                                                   MinHeight="100">
                                 <!--Items on order-->
-                                <StackPanel MinWidth="150">
+                                <StackPanel VariableSizedWrapGrid.ColumnSpan="2">
                                     <TextBlock Text="Items on order:"/>
                                     <ListView ItemsSource="{Binding ItemsAndQuantity}" IsHitTestVisible="False">
                                         <ListView.ItemTemplate>
@@ -166,21 +189,22 @@
                                     </ListView>
                                 </StackPanel>
                                 <!--Notes-->
-                                <StackPanel MinWidth="200" MaxWidth="200">
+                                <StackPanel MinWidth="200" MaxWidth="200" VariableSizedWrapGrid.ColumnSpan="2">
                                     <TextBlock Text="Notes"/>
                                     <TextBlock Text="{Binding Notes, TargetNullValue=
                                         'Target value', FallbackValue='FallBackValue'}" TextWrapping="Wrap" MaxWidth="400"/>
                                 </StackPanel>
                                 <!--Execute events button-->
-                                <Grid>
+                                <Grid VariableSizedWrapGrid.ColumnSpan="3">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Text="Events to execute:" Grid.Row="0"/>
+                                    <TextBlock Text="Events to execute:" 
+                                               Grid.Row="0"/>
                                     <GridView ItemsSource="{Binding DCRGraph.Events}" 
-                                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                                  Grid.Row="1">
+                                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                              Grid.Row="1">
                                         <GridView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"/>
@@ -190,15 +214,15 @@
                                             <DataTemplate>
                                                 <Grid Visibility="{Binding Groups, Converter={StaticResource PendingEventGroupNameToVisibilityConverter}}">
                                                     <Button Content="{Binding Label}" 
-                                                                ToolTipService.ToolTip="{Binding Description, FallbackValue='No tooltip available'}" 
-                                                                Click="Execute_Event_Click" 
-                                                                Tag="{Binding Mode=OneWay}"/>
+                                                            ToolTipService.ToolTip="{Binding Description, FallbackValue='No tooltip available'}" 
+                                                            Click="Execute_Event_Click" 
+                                                            Tag="{Binding Mode=OneWay}"/>
                                                 </Grid>
                                             </DataTemplate>
                                         </GridView.ItemTemplate>
                                     </GridView>
                                 </Grid>
-                            </StackPanel>
+                            </VariableSizedWrapGrid>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -104,9 +104,13 @@ namespace DROM_Client.Views
         private void Archive_Click(object sender, RoutedEventArgs e)
         {
             var orderToBeArchived = ((Button)sender).Tag as Order;
-            var viewModel = DataContext as OrderPageViewModel;
-            viewModel.ArchiveOrder(orderToBeArchived);
-            viewModel.setupData();
+            if (orderToBeArchived.AcceptingState)
+            {
+                var viewModel = DataContext as OrderPageViewModel;
+                viewModel.ArchiveOrder(orderToBeArchived);
+                viewModel.setupData();
+            }
+            else CreateAndShowMessageDialog("The order process needs to be finnished before you can archive the order. Check to see if other views can execute these events.");
         }
 
         private void GetOrdersFromWebAPI_Click(object sender, RoutedEventArgs e)
