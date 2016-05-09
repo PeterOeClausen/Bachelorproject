@@ -46,8 +46,8 @@ namespace WebAPI.Models.Parsing
                         OrderDetails = new List<OrderDetail>(),
                         OrderType = orderInfo.OrderType,
                         RestaurantId = orderInfo.Restaurant
-                        
-                        
+
+
 
                     };
                     foreach (var iq in orderInfo.ItemsAndQuantity)
@@ -77,34 +77,34 @@ namespace WebAPI.Models.Parsing
 
                     //Determine if there should be a customer on the order
 
-                    
-                        var customer = 
-                            await db.Customers
-                                            .FirstOrDefaultAsync(c => c.Phone == orderInfo.Customer.Phone);
+
+                    var customer =
+                        await db.Customers
+                                        .FirstOrDefaultAsync(c => c.Phone == orderInfo.Customer.Phone);
 
 
 
-                        if (customer == null)
+                    if (customer == null)
+                    {
+                        customer = new Customer()
                         {
-                            customer = new Customer()
-                            {
-                                City = orderInfo.Customer.City ?? "n/a",
-                                Email = orderInfo.Customer.Email ?? "n/a",
-                                FirstName = orderInfo.Customer.FirstAndMiddleNames ?? "n/a",
-                                LastName = orderInfo.Customer.LastName ?? "n/a",
-                                Phone = orderInfo.Customer.Phone,
-                                StreetAndNumber = orderInfo.Customer.StreetAndNumber ?? "n/a",
-                                Zipcode = orderInfo.Customer.ZipCode
+                            City = orderInfo.Customer.City ?? "n/a",
+                            Email = orderInfo.Customer.Email ?? "n/a",
+                            FirstName = orderInfo.Customer.FirstAndMiddleNames ?? "n/a",
+                            LastName = orderInfo.Customer.LastName ?? "n/a",
+                            Phone = orderInfo.Customer.Phone,
+                            StreetAndNumber = orderInfo.Customer.StreetAndNumber ?? "n/a",
+                            Zipcode = orderInfo.Customer.ZipCode
 
 
-                            };
+                        };
 
-                            customer.Orders = new HashSet<Order>();
-                            customer.Orders.Add(order);
-                        }
-                        order.Customer = customer;
+                        customer.Orders = new HashSet<Order>();
+                        customer.Orders.Add(order);
+                    }
+                    order.Customer = customer;
 
-                    
+
                     db.Orders.Add(order);
                     db.SaveChanges();
 
@@ -194,24 +194,52 @@ namespace WebAPI.Models.Parsing
                     await db.SaveChangesAsync();
 
                     //needs statuscode exception handling
+                    DCREvent dcrEvent;
                     switch (orderInfo.OrderType)
                     {
                         case "For serving":
-                            await new DbInteractions().ExecuteEvent(
-                                    order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label == "Setup graph serving").Id);
-                            break;
+                            dcrEvent = order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label == "Setup graph serving");
+                            if (dcrEvent != null)
+                            {
+                                await new DbInteractions().ExecuteEvent(
+                                    dcrEvent.Id);
+                                break;
+                            }
+                            return new Tuple<string, HttpStatusCode>("The DCRGraph does not contain the relvant setup event",
+                            HttpStatusCode.InternalServerError);
                         case "For takeaway":
-                            await new DbInteractions().ExecuteEvent(
-                                    order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label == "Setup graph takeaway").Id);
-                            break;
+                            dcrEvent = order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label == "Setup graph takeaway");
+                            if (dcrEvent != null)
+                            {
+                                await new DbInteractions().ExecuteEvent(
+                                    dcrEvent.Id);
+                                break;
+                            }
+
+                            return new Tuple<string, HttpStatusCode>("The DCRGraph does not contain the relvant setup event",
+                            HttpStatusCode.InternalServerError);
                         case "For delivery":
-                            await new DbInteractions().ExecuteEvent(
-                                    order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label.Contains("Setup graph delivery")).Id);
-                            break;
+                            dcrEvent = order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label.Contains("Setup graph delivery"));
+                            if (dcrEvent != null)
+                            {
+                                await new DbInteractions().ExecuteEvent(
+                                    dcrEvent.Id);
+                                break;
+                            }
+                            return new Tuple<string, HttpStatusCode>("The DCRGraph does not contain the relvant setup event",
+                            HttpStatusCode.InternalServerError);
+
                         case "Bulk order":
-                            await new DbInteractions().ExecuteEvent(
-                                    order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label.Contains("Setup bulk order")).Id);
-                            break;
+                            dcrEvent = order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label.Contains("Setup bulk order"));
+                            if (dcrEvent != null)
+                            {
+                                await new DbInteractions().ExecuteEvent(
+                                    dcrEvent.Id);
+                                break;
+                            }
+                            return new Tuple<string, HttpStatusCode>("The DCRGraph does not contain the relvant setup event",
+                            HttpStatusCode.InternalServerError);
+
                         default:
                             return new Tuple<string, HttpStatusCode>("ordertype id not match - " + orderInfo.OrderType,
                                 HttpStatusCode.InternalServerError);
