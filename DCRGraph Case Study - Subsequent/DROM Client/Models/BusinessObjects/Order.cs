@@ -16,6 +16,6 @@ namespace DROM_Client.Models.BusinessObjects
         public string OrderType { get; set; }
         public bool AcceptingState { get; set; }
         public int Restaurant { get; set; }
-
+        public string Log { get; set; }
     }
 }
