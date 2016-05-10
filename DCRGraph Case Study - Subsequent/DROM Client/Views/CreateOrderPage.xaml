@@ -13,11 +13,15 @@
         <vm:CreateOrderPageViewModel/>
     </Page.DataContext>
 
+    <Page.Resources>
+        <converters:Dictionary_Item_intToTotalPriceConverter x:Key="Dictionary_Item_intToTotalPriceConverter"/>
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <TextBlock Text="Create new order" FontWeight="Bold" FontSize="30" Margin="10,0,0,0"/>
-                <VariableSizedWrapGrid Orientation="Horizontal" ItemHeight="460">
+                <VariableSizedWrapGrid Orientation="Horizontal" MinHeight="460">
                     <!--Delivery method, table number and items on order-->
                     <StackPanel Padding="10">
                         <TextBlock Text="Order information:" FontWeight="Bold"/>
@@ -70,6 +74,11 @@
                                 <Button Content="Add" Click="Add_Click" VerticalAlignment="Bottom"/>
                                 <Button Content="Remove" Click="Remove_Click" VerticalAlignment="Bottom"/>
                             </StackPanel>
+                        </StackPanel>
+                        <!--Total price-->
+                        <StackPanel Margin="0,10,0,0">
+                            <TextBlock Text="Total price:"/>
+                            <TextBlock Text="{Binding OrderBeingCreated.ItemsAndQuantity, Converter={StaticResource Dictionary_Item_intToTotalPriceConverter}, FallbackValue='Could not calculate total price'}"/>
                         </StackPanel>
                         <!--Notes-->
                         <TextBlock Text="Notes:" Margin="0,10,0,0"/>

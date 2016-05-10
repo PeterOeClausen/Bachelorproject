@@ -184,8 +184,12 @@ namespace DROM_Client.Views
             }
             return true;
         }
-
         #endregion
+
+        private void Save_Popup_No(IUICommand command)
+        {
+            //Do nothing
+        }
 
         private async void CreateAndShowMessageDialog(string message)
         {
@@ -193,12 +197,7 @@ namespace DROM_Client.Views
             messageDialog.CancelCommandIndex = 0;
             await messageDialog.ShowAsync();
         }
-        
-        private void Save_Popup_No(IUICommand command)
-        {
-            //Do nothing
-        }
-        
+
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(OrderPage));

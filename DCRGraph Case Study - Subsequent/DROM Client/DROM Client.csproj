@@ -104,8 +104,9 @@
     </Compile>
     <Compile Include="Converters\BoolToColorConverter.cs" />
     <Compile Include="Converters\BoolToOpacityConverter.cs" />
-    <Compile Include="Converters\EditEventGroupNameToVisibilityConverter.cs" />
-    <Compile Include="Converters\PendingEventGroupNameToVisibilityConverter.cs" />
+    <Compile Include="Converters\Dictionary_Item_intToTotalPriceConverter.cs" />
+    <Compile Include="Converters\DoubleToStringConverter.cs" />
+    <Compile Include="Converters\OrderToTotalPriceConverter.cs" />
     <Compile Include="Converters\ValueZeroToVisibilityConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -127,7 +128,6 @@
     <Compile Include="Services\APICaller.cs" />
     <Compile Include="ViewModels\CreateOrderPageViewModel.cs" />
     <Compile Include="ViewModels\EditOrderPageViewModel.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\OrderPageViewModel.cs" />
     <Compile Include="Views\CreateOrderPage.xaml.cs">
       <DependentUpon>CreateOrderPage.xaml</DependentUpon>

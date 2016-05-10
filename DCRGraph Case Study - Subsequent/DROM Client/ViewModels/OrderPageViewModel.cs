@@ -74,7 +74,7 @@ namespace DROM_Client.ViewModels
 
         public ObservableCollection<Order> OrderList { get { return _OrderList; } }
         private readonly ObservableCollection<Order> _OrderList = new ObservableCollection<Order>();
-        //#region Easy to insert test data:
+        //#region Easy to insert design data:
         //{
         //    new Order()
         //{

@@ -8,24 +8,24 @@ using Windows.UI.Xaml.Data;
 
 namespace DROM_Client.Converters
 {
-    public class EditEventGroupNameToVisibilityConverter : IValueConverter
+    public class Dictionary_Item_intToTotalPriceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            List<Group> groups = (List<Group>)value;
-            bool visible = false;
-            foreach(Group g in groups)
+            var dictionary = value as Dictionary<Item, int>;
+            if (dictionary == null)
             {
-                if (g.Name == "Edit events")
+                return "0";
+            }
+            else
+            {
+                double totalPrice = 0.0;
+                foreach (var itemQuantity in dictionary)
                 {
-                    visible = true;
+                    totalPrice += ((itemQuantity.Key as Item).Price * itemQuantity.Value);
                 }
+                return totalPrice.ToString();
             }
-            if (visible)
-            {
-                return "Visible";
-            }
-            else return "Collapsed";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

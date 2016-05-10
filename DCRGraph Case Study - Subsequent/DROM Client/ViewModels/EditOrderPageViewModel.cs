@@ -33,6 +33,7 @@ namespace DROM_Client.ViewModels
                     Quantity = 2
                 }
             },
+            TotalPrice = 60.0,
             Customer = new Customer()
             {
                 Id = 4,
@@ -138,11 +139,13 @@ namespace DROM_Client.ViewModels
         internal void AddItemQuantity(Item item, int quantity)
         {
             OrderBeingEdited.ItemsAndQuantity.Add(new ItemQuantity { Item = item, Quantity = quantity });
+            OrderBeingEdited.TotalPrice = OrderBeingEdited.TotalPrice + (item.Price * quantity); //Updating totalprice
         }
 
         internal void RemoveItemQuantity(ItemQuantity itemQuantity)
         {
             OrderBeingEdited.ItemsAndQuantity.Remove(itemQuantity);
+            OrderBeingEdited.TotalPrice = OrderBeingEdited.TotalPrice - (itemQuantity.Item.Price * itemQuantity.Quantity); //Updating totalprice
         }
 
         /// <summary>

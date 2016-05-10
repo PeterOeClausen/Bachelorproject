@@ -46,45 +46,13 @@ namespace DROM_Client.ViewModels
                 FirstAndMiddleNames = "",
                 LastName = "",
                 Email = "",
-                //Phone = 0,
                 StreetAndNumber = "",
-                //ZipCode = 0,
                 City = "",
             },
             OrderDate = DateTime.Now,
-            Notes = "",
-            //Table = 0
+            Notes = ""
         };
-        //{
-        //    //Id = 2,
-        //    ItemsAndQuantity = new Dictionary<Item, int>() {
-        //            {
-        //                new Item() {
-        //                    Id = 3,
-        //                    Name = "Sprite",
-        //                    Category = "Drink",
-        //                    Price = 30.0,
-        //                    Description = "Soda"
-        //                },2
-        //            }
-        //        },
-        //    Customer = new Customer()
-        //    {
-        //        Id = 4,
-        //        FirstAndMiddleNames = "Fjong",
-        //        LastName = "Fjongson",
-        //        Email = "Fjong@Fjongson.com",
-        //        Phone = 22222222,
-        //        StreetAndNumber = "Qwerty Road 66",
-        //        ZipCode = 1234,
-        //        City = "Amsterdam"
-        //    },
-        //    OrderDate = DateTime.Now,
-        //    Notes = "With extra ice please",
-        //    Table = 1,
-        //    OrderType = "To be served"            
-        //};
-
+        
         /// <summary>
         /// RemoveItem takes a key item specified in OrderBeingCreated.ItemsAndQuatity and copies all values from old dictionary into a new dictionary, and replaces the reference.
         /// Note: This causes PropertyChanged update in UI.

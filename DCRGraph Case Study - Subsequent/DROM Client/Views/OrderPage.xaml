@@ -17,9 +17,9 @@
     
     <Page.Resources>
         <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
-        <converters:PendingEventGroupNameToVisibilityConverter x:Key="PendingEventGroupNameToVisibilityConverter"/>
         <converters:ValueZeroToVisibilityConverter x:Key="ValueZeroToVisibilityConverter"/>
         <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
+        <converters:OrderToTotalPriceConverter x:Key="OrderToTotalPriceConverter"/>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -116,14 +116,15 @@
                                 <!--Phone:-->
                                 <StackPanel MinWidth="100">
                                     <TextBlock Text="Phone"/>
-                                    <TextBlock Text="{Binding Customer.Phone}" Visibility="{Binding Customer.Phone, Converter={StaticResource ValueZeroToVisibilityConverter}}"/>
+                                    <TextBlock Text="{Binding Customer.Phone}" 
+                                               Visibility="{Binding Customer.Phone, Converter={StaticResource ValueZeroToVisibilityConverter}}"/>
                                 </StackPanel>
                                 <!--Address-->
                                 <StackPanel MinWidth="200" VariableSizedWrapGrid.ColumnSpan="2">
                                     <TextBlock Text="Address"/>
                                     <TextBlock Text="{Binding Customer.StreetAndNumber}"/>
                                     <TextBlock Text="{Binding Customer.ZipCode}" 
-                                                   Visibility="{Binding Customer.ZipCode, Converter={StaticResource ValueZeroToVisibilityConverter}}"/>
+                                               Visibility="{Binding Customer.ZipCode, Converter={StaticResource ValueZeroToVisibilityConverter}}"/>
                                     <TextBlock Text="{Binding Customer.City}"/>
                                 </StackPanel>
                                 <!--Buttons-->
@@ -212,7 +213,7 @@
                                         </GridView.ItemsPanel>
                                         <GridView.ItemTemplate>
                                             <DataTemplate>
-                                                <Grid Visibility="{Binding Groups, Converter={StaticResource PendingEventGroupNameToVisibilityConverter}}">
+                                                <Grid>
                                                     <Button Content="{Binding Label}" 
                                                             ToolTipService.ToolTip="{Binding Description, FallbackValue='No tooltip available'}" 
                                                             Click="Execute_Event_Click" 
@@ -222,6 +223,10 @@
                                         </GridView.ItemTemplate>
                                     </GridView>
                                 </Grid>
+                                <StackPanel>
+                                    <TextBlock Text="Total price:"/>
+                                    <TextBlock Text="{Binding Converter={StaticResource OrderToTotalPriceConverter}, FallbackValue='Could not calculate total price'}"/>
+                                </StackPanel>
                             </VariableSizedWrapGrid>
                         </Grid>
                     </DataTemplate>

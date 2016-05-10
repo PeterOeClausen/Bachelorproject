@@ -30,9 +30,7 @@ namespace DROM_Client.Views
         }
 
         private int _restaurantId;
-
-
-
+        
         private void LogInButtonClick(object sender, RoutedEventArgs e)
         {
             //Check login here

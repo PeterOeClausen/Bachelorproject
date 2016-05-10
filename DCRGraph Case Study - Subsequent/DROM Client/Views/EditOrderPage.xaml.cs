@@ -44,10 +44,11 @@ namespace DROM_Client.Views
                 Customer = orderReceived.Customer,
                 OrderDate = orderReceived.OrderDate,
                 Notes = orderReceived.Notes,
-                DCRGraph = new UIDCRGraph { Events = new ObservableCollection<Event>()},
+                DCRGraph = new UIDCRGraph { Events = new ObservableCollection<Event>() },
                 ItemsAndQuantity = new ObservableCollection<ItemQuantity>(),
                 Table = orderReceived.Table,
                 OrderType = orderReceived.OrderType,
+                TotalPrice = 0
             };
 
             if(orderReceived.Customer == null)
@@ -78,10 +79,11 @@ namespace DROM_Client.Views
                     Item = entry.Item,
                     Quantity = entry.Quantity
                 });
+                viewModel.OrderBeingEdited.TotalPrice += entry.Item.Price * entry.Quantity;
             }
+            
         }
-
-        //From microsoft guide: https://msdn.microsoft.com/da-dk/library/windows/apps/xaml/br208674?cs-save-lang=1&cs-lang=csharp
+        
         /// <summary>
         /// Event handler for 'Save' button.
         /// </summary>
@@ -89,8 +91,9 @@ namespace DROM_Client.Views
         /// <param name="e"></param>
         private async void Save_Click(object sender, RoutedEventArgs e)
         {
-            #region Checks if all information is entered correctly before asking for save:
             var viewModel = this.DataContext as EditOrderPageViewModel;
+
+            // Checks if all information is entered correctly before asking for save:
             if (viewModel.OrderBeingEdited.ItemsAndQuantity.Count == 0)
             {
                 CreateAndShowMessageDialog("Sorry, an order must have items on order.");
@@ -108,7 +111,6 @@ namespace DROM_Client.Views
                     if (!All_Information_Entered_For_Delivery()) return;
                     break;
             }
-            #endregion
 
             // Create the message dialog and set its content
             var messageDialog = new MessageDialog("Do you want to save this order?");
@@ -290,18 +292,6 @@ namespace DROM_Client.Views
             viewModel.OrderBeingEdited.OrderType = eventToExecute.Label; //ConvertEventToOrdertypeString(eventToExecute);
             CreateAndShowMessageDialog("Order type will be saved as: '" + eventToExecute.Label + "' when you save.");
         }
-
-        //To be deleted:
-        //private string ConvertEventToOrdertypeString (Event e)
-        //{
-        //    switch (e.Label)
-        //    {
-        //        case "Change to takeaway": return "For takeaway";
-        //        case "Change to delivery": return "For delivery";
-        //        case "Change to serve": return "For serving";
-        //        default: return null;
-        //    }
-        //}
         
         private async void CreateAndShowMessageDialog(string message)
         {

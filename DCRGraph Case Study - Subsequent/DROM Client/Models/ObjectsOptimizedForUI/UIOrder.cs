@@ -20,6 +20,13 @@ namespace DROM_Client.Models.ObjectsOptimizedForUI
             set { Set(ref _ItemsAndQuantity, value); }
         }
 
+        public double TotalPrice
+        {
+            get { return _totalPrice; }
+            set { Set(ref _totalPrice, value); }
+        }
+        private double _totalPrice;
+
         public int Id { get; set; }
         public Customer Customer { get; set; }
         public DateTime OrderDate { get; set; }

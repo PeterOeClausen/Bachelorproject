@@ -121,12 +121,6 @@ namespace DROM_Client.Views
             else if (answerFromViewModel.Item3.Count == 0) CreateAndShowMessageDialog("No orders were found on the Web API. Please 'Create new order', or click 'Get orders from Web API' again later.");
         }
 
-        //private void TempAddOrderClick(object sender, RoutedEventArgs e)
-        //{
-        //    var ViewModel = DataContext as OrderPageViewModel;
-        //    ViewModel.OrderList.Add(new Order { Id = 9001});
-        //}
-
         private async void CreateAndShowMessageDialog(string message)
         {
             var messageDialog = new MessageDialog(message);
@@ -134,10 +128,10 @@ namespace DROM_Client.Views
             await messageDialog.ShowAsync();
         }
 
-        private Order orderToBeDeleted;
+        private Order _orderToBeDeleted;
         private async void Delete_Order_Click(object sender, RoutedEventArgs e)
         {
-            orderToBeDeleted = ((Button)sender).Tag as Order;
+            _orderToBeDeleted = ((Button)sender).Tag as Order;
             // Create the message dialog and set its content
             var messageDialog = new MessageDialog("Are you sure you want to delete this order?");
 
@@ -157,7 +151,7 @@ namespace DROM_Client.Views
         private async void delete_Popup_Yes(IUICommand command)
         {
             var viewModel = DataContext as OrderPageViewModel;
-            viewModel.DeleteOrder(orderToBeDeleted);
+            viewModel.DeleteOrder(_orderToBeDeleted);
             viewModel.setupData();
         }
 

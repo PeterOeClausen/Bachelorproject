@@ -12,11 +12,15 @@
         <vm:EditOrderPageViewModel/>
     </Page.DataContext>
 
+    <Page.Resources>
+        <converters:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ScrollViewer>
             <StackPanel>
                 <TextBlock Text="Edit order" FontWeight="Bold" FontSize="30" Margin="10,0,0,0"/>
-                <VariableSizedWrapGrid Orientation="Horizontal" ItemHeight="550">
+                <VariableSizedWrapGrid Orientation="Horizontal">
                     <!--Order information:-->
                     <StackPanel Margin="10,10,0,0" MinWidth="300">
                         <TextBlock Text="Order information" FontWeight="Bold"/>
@@ -84,6 +88,11 @@
                                 <Button Content="Add" Click="Add_Click" VerticalAlignment="Bottom"/>
                                 <Button Content="Remove" Click="Remove_Click" VerticalAlignment="Bottom"/>
                             </StackPanel>
+                        </StackPanel>
+                        <!--Total price:-->
+                        <StackPanel Margin="0,10,0,0">
+                            <TextBlock Text="Total price:"/>
+                            <TextBlock Text="{Binding OrderBeingEdited.TotalPrice, Converter={StaticResource DoubleToStringConverter}, FallbackValue='Could not calculate a total price'}"/>
                         </StackPanel>
                         <!--Notes:-->
                         <TextBlock Text="Notes:" Margin="0,10,0,0"/>
