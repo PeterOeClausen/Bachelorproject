@@ -24,10 +24,8 @@ namespace DROM_Client.Models.ObjectsOptimizedForUI
         public DateTime OrderDate { get; set; } //Client side sets this
         public string Notes { get; set; }
         public int Table { get; set; } // -1 if order is for pickup or delivery
-        
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         public bool Set<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
             if (Equals(storage, value))

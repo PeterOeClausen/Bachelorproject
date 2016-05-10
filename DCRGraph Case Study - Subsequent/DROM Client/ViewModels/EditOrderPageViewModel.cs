@@ -19,63 +19,84 @@ namespace DROM_Client.ViewModels
         public UIOrder OrderBeingEdited { get; set; } = new UIOrder()
         {
             Id = 2,
-                ItemsAndQuantity = new ObservableCollection<ItemQuantity>() {
-                    
-                        new ItemQuantity()
+            ItemsAndQuantity = new ObservableCollection<ItemQuantity>() {
+                new ItemQuantity()
+                {
+                    Item = new Item()
+                    {
+                        Id = 3,
+                        Name = "Sprite",
+                        Category = "Drink",
+                        Price = 30.0,
+                        Description = "Soda"
+                    },
+                    Quantity = 2
+                }
+            },
+            Customer = new Customer()
+            {
+                Id = 4,
+                FirstAndMiddleNames = "Test",
+                LastName = "Testensen",
+                Email = "Test@Testensen.com",
+                Phone = 12345678,
+                StreetAndNumber = "Test road 123",
+                ZipCode = 1234,
+                City = "Testcity"
+            },
+            OrderDate = DateTime.Now,
+            Notes = "With extra ice please",
+            DCRGraph = new UIDCRGraph
+            {
+                Events = new ObservableCollection<Event>() {
+                        new Event()
                         {
-                            Item = new Item()
-                            {
-                                Id = 3,
-                                Name = "Sprite",
-                                Category = "Drink",
-                                Price = 30.0,
-                                Description = "Soda"
-                            },
-                            Quantity = 2
-                        }
-                        
-                    
-                },
-                Customer = new Customer()
-                {
-                    Id = 4,
-                    FirstAndMiddleNames = "Fjong",
-                    LastName = "Fjongson",
-                    Email = "Fjong@Fjongson.com",
-                    Phone = 22222222,
-                    StreetAndNumber = "Qwerty Road 66",
-                    ZipCode = 1234,
-                    City = "Amsterdam"
-                },
-                OrderDate = DateTime.Now,
-                Notes = "With extra ice please",
-                DCRGraph = new UIDCRGraph
-                {
-                    Events = new ObservableCollection<Event>() {
-                        new Event() {
                             Id = 1,
-                            Label = "Cook order for serving",
-                            Description = "Execute to confirm cooking",
+                            Label = "For takeaway",
                             Included = true, Pending = true, Executed = false,
-                            Roles = new List<Role> {
-                                new Role() {
+                            Roles = new List<Role>
+                            {
+                                new Role
+                                {
                                     Id = 1,
-                                    Name = "Chef"
+                                    Name = "Waiter"
                                 }
                             },
                             Groups = new List<Group>
                             {
-                                new Group()
+                                new Group
                                 {
-                                    Id = 1,
-                                    Name = "only pending"
+                                    Id = 2,
+                                    Name = "Edit events"
                                 }
                             }
                         },
                         new Event()
                         {
                             Id = 2,
-                            Label = "Change to takeaway",
+                            Label = "For delivery",
+                            Included = true, Pending = true, Executed = false,
+                            Roles = new List<Role>
+                            {
+                                new Role
+                                {
+                                    Id = 1,
+                                    Name = "Waiter"
+                                }
+                            },
+                            Groups = new List<Group>
+                            {
+                                new Group
+                                {
+                                    Id = 2,
+                                    Name = "Edit events"
+                                }
+                            }
+                        },
+                        new Event()
+                        {
+                            Id = 3,
+                            Label = "For serving",
                             Included = true, Pending = true, Executed = false,
                             Roles = new List<Role>
                             {
@@ -95,10 +116,10 @@ namespace DROM_Client.ViewModels
                             }
                         }
                     }
-                },
-                Table = 1,
-                OrderType = "To be served"
-            };
+            },
+            Table = 1,
+            OrderType = "For takeaway"
+        }; //The testdata is for design and will be overwritten when running the program.
 
         public Event ItemsOnOrderHasBeenChangedEvent;
         public bool ItemsOnOrderHasBeenChanged;
@@ -151,16 +172,6 @@ namespace DROM_Client.ViewModels
             foreach (Event e in EditEventsToExecute) EventIdsToExecute.Add(e.Id);
             return _APICaller.PutUpdateOrder(ChangedOrder, EventIdsToExecute);
         }
-
-        //Code is not in use:
-        //public void FilterEvents()
-        //{
-        //    IEnumerable<Event> eventsToRemove = OrderBeingEdited.DCRGraph.Events.Where(ev => ev.Groups.Exists(g => g.Name == "only pending" || g.Name == "Hidden edit events"));
-        //    foreach(Event e in eventsToRemove)
-        //    {
-        //        OrderBeingEdited.DCRGraph.Events.Remove(e);
-        //    }
-        //}
 
         #region Property changed implementation
         public event PropertyChangedEventHandler PropertyChanged;

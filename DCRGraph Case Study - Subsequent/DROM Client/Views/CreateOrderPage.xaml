@@ -13,30 +13,29 @@
         <vm:CreateOrderPageViewModel/>
     </Page.DataContext>
 
-    <Page.Resources>
-        <converters:DeliveryOptionToVisibilityConverter x:Key="DeliveryOptionToVisibilityConverter"/>
-    </Page.Resources>
-
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <TextBlock Text="Create new order" FontWeight="Bold" FontSize="30" Margin="10,0,0,0"/>
-                <VariableSizedWrapGrid Orientation="Horizontal">
+            <StackPanel>
+                <TextBlock Text="Create new order" FontWeight="Bold" FontSize="30" Margin="10,0,0,0"/>
+                <VariableSizedWrapGrid Orientation="Horizontal" ItemHeight="460">
                     <!--Delivery method, table number and items on order-->
-                    <StackPanel Padding="10" MinHeight="460">
+                    <StackPanel Padding="10">
                         <TextBlock Text="Order information:" FontWeight="Bold"/>
                         <!--Delivery method-->
                         <TextBlock Text="Order type:"/>
                         <ComboBox x:Name="DeliveryCombobox" 
                               ItemsSource="{Binding DeliveryMethodsList}" 
                               SelectionChanged="DeliveryCombobox_SelectionChanged" 
-                              HorizontalAlignment="Stretch" />
+                              HorizontalAlignment="Stretch"
+                              PlaceholderText="Click to choose an order type..."/>
                         <!--Table number-->
                         <TextBlock Text="Table number:" Margin="0,10,0,0"/>
-                        <TextBox Text="{Binding OrderBeingCreated.Table, Mode=TwoWay}" x:Name="Table_Number_Text_Box"/>
+                        <TextBox Text="{Binding OrderBeingCreated.Table, Mode=TwoWay}" 
+                                 x:Name="Table_Number_Text_Box"
+                                 PlaceholderText="Necessary for serving"/>
                         <!--Items on order-->
                         <StackPanel Background="Wheat" Margin="0,10,0,0">
-                            <TextBlock Text="Items on order:" FontWeight="Bold" />
+                            <TextBlock Text="Items on order:"/>
                             <!--Items list:-->
                             <ListView ItemsSource="{Binding OrderBeingCreated.ItemsAndQuantity}" 
                                   Background="AntiqueWhite" 
@@ -60,7 +59,7 @@
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="Item:"/>
-                                    <ComboBox ItemsSource="{Binding ItemCollection}" x:Name="Item_Box" >
+                                    <ComboBox ItemsSource="{Binding ItemCollection}" x:Name="Item_Box" PlaceholderText="Choose an item...">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Name}"/>
@@ -72,15 +71,16 @@
                                 <Button Content="Remove" Click="Remove_Click" VerticalAlignment="Bottom"/>
                             </StackPanel>
                         </StackPanel>
-                    <!--Notes-->
-                    <TextBlock Text="Notes:" Margin="0,10,0,0"/>
-                    <TextBox Text="{Binding OrderBeingCreated.Notes, Mode=TwoWay}" 
+                        <!--Notes-->
+                        <TextBlock Text="Notes:" Margin="0,10,0,0"/>
+                        <TextBox Text="{Binding OrderBeingCreated.Notes, Mode=TwoWay}" 
                              TextWrapping="Wrap" 
                              AcceptsReturn="True"
-                             MinHeight="60"/>
+                             MinHeight="60"
+                             PlaceholderText="You can write a note here..."/>
                     </StackPanel>
                     <!--Customer information:-->
-                    <StackPanel Padding="10" x:Name="CustomerInformationStackPanel" Visibility="{Binding OrderBeingCreated.OrderType, Converter={StaticResource DeliveryOptionToVisibilityConverter}, Mode=TwoWay}" MinHeight="450">
+                    <StackPanel Padding="10" x:Name="CustomerInformationStackPanel" MinHeight="450">
                         <TextBlock Text="Customer information:" FontWeight="Bold"/>
                         <TextBlock Text="First name:"/>
                         <TextBox Text="{Binding OrderBeingCreated.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" x:Name="First_Name_Text_Box"/>
@@ -98,32 +98,32 @@
                         <TextBox Text="{Binding OrderBeingCreated.Customer.City, Mode=TwoWay, FallbackValue='N/A'}" x:Name="City_Text_Box"/>
                     </StackPanel>
                     <!--Save and cancel buttons-->
-                <StackPanel Padding="10">
-                    <TextBlock Text="Save or cancel order:" FontWeight="Bold"/>
-                    <!--Buttons-->
-                    <StackPanel Orientation="Horizontal">
-                        <!--Save button:-->
-                        <Button Click="Save_Click" MinWidth="64">
-                            <Button.Content>
-                                <StackPanel Orientation="Vertical">
-                                    <SymbolIcon Symbol="Save"/>
-                                    <TextBlock Text="Save"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                        <!--Cancel button:-->
-                        <Button Click="Cancel_Click" Margin="5,0,0,0" MinWidth="64">
-                            <Button.Content>
-                                <StackPanel Orientation="Vertical">
-                                    <SymbolIcon Symbol="Cancel"/>
-                                    <TextBlock Text="Cancel"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
+                    <StackPanel Padding="10">
+                        <TextBlock Text="Save or cancel order:" FontWeight="Bold"/>
+                        <!--Buttons-->
+                        <StackPanel Orientation="Horizontal">
+                            <!--Save button:-->
+                            <Button Click="Save_Click" MinWidth="64">
+                                <Button.Content>
+                                    <StackPanel Orientation="Vertical">
+                                        <SymbolIcon Symbol="Save"/>
+                                        <TextBlock Text="Save"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            <!--Cancel button:-->
+                            <Button Click="Cancel_Click" Margin="5,0,0,0" MinWidth="64">
+                                <Button.Content>
+                                    <StackPanel Orientation="Vertical">
+                                        <SymbolIcon Symbol="Cancel"/>
+                                        <TextBlock Text="Cancel"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </VariableSizedWrapGrid>
-        </StackPanel>
+                </VariableSizedWrapGrid>
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 </Page>

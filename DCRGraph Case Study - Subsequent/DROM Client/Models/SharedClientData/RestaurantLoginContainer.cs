@@ -9,17 +9,17 @@ namespace DROM_Client.Models.SharedClientData
     public class RestaurantLoginContainer
     {
         #region Singleton pattern
-        private static RestaurantLoginContainer instance;
+        private static RestaurantLoginContainer _instance;
         private RestaurantLoginContainer() { }
         public static RestaurantLoginContainer Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new RestaurantLoginContainer();
+                    _instance = new RestaurantLoginContainer();
                 }
-                return instance;
+                return _instance;
             }
         }
         #endregion

@@ -10,28 +10,8 @@ using System.Threading.Tasks;
 
 namespace DROM_Client.Models.ObjectsOptimizedForUI
 {
-    public class UIDCRGraph : INotifyPropertyChanged
+    public class UIDCRGraph
     {
         public ObservableCollection<Event> Events { get; set; }
-
-
-
-        #region PropertyChangedEvent stuff
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public bool Set<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (Equals(storage, value))
-                return false;
-            storage = value;
-            RaisePropertyChanged(propertyName);
-            return true;
-        }
-
-        public void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }
