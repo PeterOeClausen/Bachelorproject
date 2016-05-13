@@ -292,36 +292,35 @@ namespace WebAPI.Models.DBMethods
                         .FirstOrDefaultAsync(o => o.Id == data.Item1.Id);
 
                     //update related customer
-                    if (data.Item1.OrderType != "For serving")
+                    
+                    if (orderToBeUpdated.Customer == null)
                     {
-                        if (orderToBeUpdated.Customer == null)
+                        orderToBeUpdated.Customer = new DBObjects.Customer()
                         {
-                            orderToBeUpdated.Customer = new DBObjects.Customer()
-                            {
-                                City = data.Item1.Customer.City,
-                                Email = data.Item1.Customer.Email,
-                                FirstName = data.Item1.Customer.FirstAndMiddleNames,
-                                LastName = data.Item1.Customer.LastName,
-                                Phone = data.Item1.Customer.Phone,
-                                StreetAndNumber = data.Item1.Customer.StreetAndNumber,
-                                Zipcode = data.Item1.Customer.ZipCode
-                            };
-                            db.Entry(orderToBeUpdated.Customer).State = EntityState.Added;
+                            City = data.Item1.Customer.City,
+                            Email = data.Item1.Customer.Email,
+                            FirstName = data.Item1.Customer.FirstAndMiddleNames,
+                            LastName = data.Item1.Customer.LastName,
+                            Phone = data.Item1.Customer.Phone,
+                            StreetAndNumber = data.Item1.Customer.StreetAndNumber,
+                            Zipcode = data.Item1.Customer.ZipCode
+                        };
+                        db.Entry(orderToBeUpdated.Customer).State = EntityState.Added;
 
-                        }
-                        else
-                        {
-                            orderToBeUpdated.Customer.City = data.Item1.Customer.City;
-                            orderToBeUpdated.Customer.Email = data.Item1.Customer.Email;
-                            orderToBeUpdated.Customer.FirstName = data.Item1.Customer.FirstAndMiddleNames;
-                            orderToBeUpdated.Customer.LastName = data.Item1.Customer.LastName;
-                            orderToBeUpdated.Customer.Phone = data.Item1.Customer.Phone;
-                            orderToBeUpdated.Customer.StreetAndNumber = data.Item1.Customer.StreetAndNumber;
-                            orderToBeUpdated.Customer.Zipcode = data.Item1.Customer.ZipCode;
-                        }
-                        
-                        
                     }
+                    else
+                    {
+                        orderToBeUpdated.Customer.City = data.Item1.Customer.City;
+                        orderToBeUpdated.Customer.Email = data.Item1.Customer.Email;
+                        orderToBeUpdated.Customer.FirstName = data.Item1.Customer.FirstAndMiddleNames;
+                        orderToBeUpdated.Customer.LastName = data.Item1.Customer.LastName;
+                        orderToBeUpdated.Customer.Phone = data.Item1.Customer.Phone;
+                        orderToBeUpdated.Customer.StreetAndNumber = data.Item1.Customer.StreetAndNumber;
+                        orderToBeUpdated.Customer.Zipcode = data.Item1.Customer.ZipCode;
+                    }
+                        
+                        
+                    
 
                     //update the order
                     orderToBeUpdated.Notes = data.Item1.Notes;
