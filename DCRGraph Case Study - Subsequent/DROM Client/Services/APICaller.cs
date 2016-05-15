@@ -34,7 +34,7 @@ namespace DROM_Client.Services
                 try
                 {
                     client.BaseAddress = BaseAddress;
-                    var response = client.PostAsXmlAsync("api/parse", newOrder, new CancellationToken()).Result;
+                    var response = client.PostAsXmlAsync("api/order/create", newOrder, new CancellationToken()).Result;
                     if (response.IsSuccessStatusCode)
                     {
                         var answer = new Tuple<bool, string>(true, response.StatusCode.ToString());
