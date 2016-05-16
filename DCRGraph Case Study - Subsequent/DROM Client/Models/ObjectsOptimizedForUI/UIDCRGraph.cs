@@ -12,6 +12,7 @@ namespace DROM_Client.Models.ObjectsOptimizedForUI
 {
     public class UIDCRGraph
     {
+        public int DCRGraphId { get; set; }
         public ObservableCollection<Event> Events { get; set; }
     }
 }

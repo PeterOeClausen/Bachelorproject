@@ -44,7 +44,7 @@ namespace DROM_Client.Views
                 Customer = orderReceived.Customer,
                 OrderDate = orderReceived.OrderDate,
                 Notes = orderReceived.Notes,
-                DCRGraph = new UIDCRGraph { Events = new ObservableCollection<Event>() },
+                DCRGraph = new UIDCRGraph { DCRGraphId = orderReceived.DCRGraph.Id, Events = new ObservableCollection<Event>() },
                 ItemsAndQuantity = new ObservableCollection<ItemQuantity>(),
                 Table = orderReceived.Table,
                 OrderType = orderReceived.OrderType,

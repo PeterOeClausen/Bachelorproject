@@ -161,7 +161,7 @@ namespace DROM_Client.ViewModels
                 Customer = OrderBeingEdited.Customer,
                 OrderDate = OrderBeingEdited.OrderDate,
                 Notes = OrderBeingEdited.Notes,
-                DCRGraph = new DCRGraph() { Id = OrderBeingEdited.Id, Events = new List<Event>() },
+                DCRGraph = new DCRGraph() { Id = OrderBeingEdited.DCRGraph.DCRGraphId, Events = new List<Event>() },
                 Table = OrderBeingEdited.Table,
                 OrderType = OrderBeingEdited.OrderType
             };
