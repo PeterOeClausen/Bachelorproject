@@ -196,7 +196,7 @@
                                         'Target value', FallbackValue='FallBackValue'}" TextWrapping="Wrap" MaxWidth="400"/>
                                 </StackPanel>
                                 <!--Execute events button-->
-                                <Grid VariableSizedWrapGrid.ColumnSpan="3">
+                                <Grid VariableSizedWrapGrid.ColumnSpan="4">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
