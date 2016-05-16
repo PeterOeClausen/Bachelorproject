@@ -19,6 +19,10 @@ namespace WebAPI.Models.DBMethods
     public class DbInteractions
     {
 
+        /// <summary>
+        /// Medhod to get items from the database.
+        /// </summary>
+        /// <returns></returns>
         public async Task<Tuple<List<DROM_Client.Models.BusinessObjects.Item>, string, HttpStatusCode>> GetItems()
         {
             try
@@ -54,6 +58,11 @@ namespace WebAPI.Models.DBMethods
             }
         }
 
+        /// <summary>
+        /// Method to find orders in the database, while filtering events so that only pending and edit events are loaded.
+        /// </summary>
+        /// <param name="restaurant"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<DROM_Client.Models.BusinessObjects.Order>, string, HttpStatusCode>> GetOrdersWithSortedEvents(int restaurant)
         {
             try
@@ -262,6 +271,11 @@ namespace WebAPI.Models.DBMethods
             }
         }
 
+        /// <summary>
+        /// Method to update an order in the database. 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public async Task<Tuple<string, HttpStatusCode>> UpdateOrder(Tuple<DROM_Client.Models.BusinessObjects.Order, List<int>> data)
         {
             try
@@ -291,36 +305,40 @@ namespace WebAPI.Models.DBMethods
                         .Include(o => o.Customer)
                         .FirstOrDefaultAsync(o => o.Id == data.Item1.Id);
 
-                    //update related customer
-                    
-                    if (orderToBeUpdated.Customer == null)
-                    {
-                        orderToBeUpdated.Customer = new DBObjects.Customer()
-                        {
-                            City = data.Item1.Customer.City,
-                            Email = data.Item1.Customer.Email,
-                            FirstName = data.Item1.Customer.FirstAndMiddleNames,
-                            LastName = data.Item1.Customer.LastName,
-                            Phone = data.Item1.Customer.Phone,
-                            StreetAndNumber = data.Item1.Customer.StreetAndNumber,
-                            Zipcode = data.Item1.Customer.ZipCode
-                        };
-                        db.Entry(orderToBeUpdated.Customer).State = EntityState.Added;
 
-                    }
-                    else
+                    //update related customer
+
+                    if (data.Item1.Customer.Phone != 0)
                     {
-                        orderToBeUpdated.Customer.City = data.Item1.Customer.City;
-                        orderToBeUpdated.Customer.Email = data.Item1.Customer.Email;
-                        orderToBeUpdated.Customer.FirstName = data.Item1.Customer.FirstAndMiddleNames;
-                        orderToBeUpdated.Customer.LastName = data.Item1.Customer.LastName;
-                        orderToBeUpdated.Customer.Phone = data.Item1.Customer.Phone;
-                        orderToBeUpdated.Customer.StreetAndNumber = data.Item1.Customer.StreetAndNumber;
-                        orderToBeUpdated.Customer.Zipcode = data.Item1.Customer.ZipCode;
+                        if (orderToBeUpdated.Customer == null)
+                        {
+                            orderToBeUpdated.Customer = new DBObjects.Customer()
+                            {
+                                City = data.Item1.Customer.City,
+                                Email = data.Item1.Customer.Email,
+                                FirstName = data.Item1.Customer.FirstAndMiddleNames,
+                                LastName = data.Item1.Customer.LastName,
+                                Phone = data.Item1.Customer.Phone,
+                                StreetAndNumber = data.Item1.Customer.StreetAndNumber,
+                                Zipcode = data.Item1.Customer.ZipCode
+                            };
+                            db.Entry(orderToBeUpdated.Customer).State = EntityState.Added;
+
+                        }
+                        else
+                        {
+                            orderToBeUpdated.Customer.City = data.Item1.Customer.City;
+                            orderToBeUpdated.Customer.Email = data.Item1.Customer.Email;
+                            orderToBeUpdated.Customer.FirstName = data.Item1.Customer.FirstAndMiddleNames;
+                            orderToBeUpdated.Customer.LastName = data.Item1.Customer.LastName;
+                            orderToBeUpdated.Customer.Phone = data.Item1.Customer.Phone;
+                            orderToBeUpdated.Customer.StreetAndNumber = data.Item1.Customer.StreetAndNumber;
+                            orderToBeUpdated.Customer.Zipcode = data.Item1.Customer.ZipCode;
+                        }
                     }
-                        
-                        
-                    
+
+
+
 
                     //update the order
                     orderToBeUpdated.Notes = data.Item1.Notes;
@@ -368,6 +386,12 @@ namespace WebAPI.Models.DBMethods
             }
         }
 
+        /// <summary>
+        /// Medthod to execute an event in the database. Will only execute the event if its relations allow it.
+        /// If the execution results in the DCRGraph which the event belongs to, entered or exiting acceting state, the state will be updated accordingly.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Tuple<string, HttpStatusCode>> ExecuteEvent(int id)
         {
             try
@@ -485,6 +509,11 @@ namespace WebAPI.Models.DBMethods
             }
         }
 
+        /// <summary>
+        /// Method to get delivery types from the database.
+        /// </summary>
+        /// <param name="orderType"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<string>, string, HttpStatusCode>> DeliveryTypes(int orderType)
         {
             try
@@ -510,6 +539,11 @@ namespace WebAPI.Models.DBMethods
             }
         }
 
+        /// <summary>
+        /// Method to archive an order in the database.
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
         public async Task<Tuple<string, HttpStatusCode>> AchiveOrder(int order)
         {
             try
@@ -548,6 +582,13 @@ namespace WebAPI.Models.DBMethods
             }
         }
 
+        /// <summary>
+        /// Method to lock a DCRGraph in the database. This is a helper method which is used by all methods which change data in the database.
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="graphId"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
         public async Task<Tuple<bool, string>> LockGraph(Guid guid, int graphId, DBO.Database db)
         {
             var graph = await db.DCRGraphs.FindAsync(graphId);
@@ -567,6 +608,13 @@ namespace WebAPI.Models.DBMethods
             
         }
 
+        /// <summary>
+        /// Method to check if a DCRGraph in the database is locked. This is a helper method which is used by all methods which change data in the database.
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="graphId"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
         public async Task<Tuple<bool, string>> CheckLock(Guid guid, int graphId, DBO.Database db)
         {
             
@@ -580,6 +628,13 @@ namespace WebAPI.Models.DBMethods
             
         }
 
+        /// <summary>
+        /// Method to unlock a DCRGraph in the database. This is a helper method which is used by all methods which change data in the database.
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="graphId"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
         public async Task<Tuple<bool, string>> Unlock(Guid guid, int graphId, DBO.Database db)
         {
             
@@ -599,133 +654,5 @@ namespace WebAPI.Models.DBMethods
             
         }
 
-        ////get orders from db
-        //var orders = db.Orders
-        //    .Include(o => o.DCRGraph.DCREvents.Select(e => e.Groups))
-        //    .Include(o => o.DCRGraph.DCREvents.Select(e => e.Roles))
-        //    .Include(o => o.Customer)
-        //    .Include(o => o.OrderDetails.Select(od => od.Item.Category))
-        //    ;
-
-
-
-
-
-
-
-
-        ////var orders = db.Orders;
-        //List<DROM_Client.Models.BusinessObjects.Order> orderList = new List<DROM_Client.Models.BusinessObjects.Order>();
-
-        ////convert db orders to serializable transfer orders
-        //foreach (var o in orders)
-        //{
-
-        //    var order = new DROM_Client.Models.BusinessObjects.Order()
-        //    {
-        //        Id = o.Id,
-        //        OrderType = o.OrderType,
-        //        Notes = o.Notes ?? "",
-        //        OrderDate = o.OrderDate,
-        //        Table = o.Table
-        //    };
-
-        //    //if db customer not null, put it on the order, otherwise attach an empty customer to the order
-        //    if (o.Customer != null)
-        //    {
-        //        var customer = new DROM_Client.Models.BusinessObjects.Customer()
-        //        {
-        //            Id = o.Customer.Id,
-        //            Phone = o.Customer.Phone,
-        //            ZipCode = o.Customer.Zipcode,
-        //            StreetAndNumber = o.Customer.StreetAndNumber,
-        //            City = o.Customer.City,
-        //            Email = o.Customer.Email,
-        //            FirstAndMiddleNames = o.Customer.FirstName,
-        //            LastName = o.Customer.LastName
-
-        //        };
-        //        order.Customer = customer;
-        //    }
-        //    else order.Customer = new DROM_Client.Models.BusinessObjects.Customer();
-
-        //    //attach DCRGraph to the order
-        //    order.DCRGraph = new DROM_Client.Models.BusinessObjects.DCRGraph()
-        //    {
-        //        Id = o.DCRGraph.Id,
-        //        Events = new List<Event>()
-        //    };
-
-        //    //convert events and attach them to the graph
-        //    foreach (var dcrEvent in o.DCRGraph.DCREvents)
-        //    {
-        //        if (dcrEvent.Included == true) // only add included events
-        //        {
-        //            foreach (var g in dcrEvent.Groups)
-        //            {
-        //                if ((dcrEvent.Pending == true || g.Name == "Edit events")) // we only want to give pending events and edit events
-        //                {
-        //                    var businessEvent = new Event
-        //                    {
-        //                        Id = dcrEvent.Id,
-        //                        Description = dcrEvent.Description ?? "",
-        //                        Executed = dcrEvent.Executed,
-        //                        Included = dcrEvent.Included,
-        //                        Label = dcrEvent.Label,
-        //                        Pending = dcrEvent.Pending,
-        //                        Roles = null,
-        //                        Groups = new List<DROM_Client.Models.BusinessObjects.Group>()
-        //                    };
-
-        //                    //get groups onto the event
-        //                    foreach (var groupList in dcrEvent.Groups)
-        //                    {
-        //                        var group = new DROM_Client.Models.BusinessObjects.Group();
-        //                        group.Id = groupList.Id;
-        //                        group.Name = groupList.Name;
-        //                        businessEvent.Groups.Add(group);
-        //                    }
-
-        //                    //get roles onto the event
-        //                    businessEvent.Roles = new List<DROM_Client.Models.BusinessObjects.Role>();
-        //                    foreach (var r in dcrEvent.Roles)
-        //                    {
-        //                        var role = new DROM_Client.Models.BusinessObjects.Role();
-        //                        role.Id = r.Id;
-        //                        role.Name = r.Name;
-        //                        businessEvent.Roles.Add(role);
-        //                    }
-
-        //                    order.DCRGraph.Events.Add(businessEvent);
-        //                }
-        //            }
-        //        }
-
-        //    }
-
-        //    //put items and quantity on the order
-        //    var itemsAndQuantity = new List<DROM_Client.Models.BusinessObjects.ItemQuantity>();
-        //    foreach (var od in o.OrderDetails)
-        //    {
-        //        var itemQuantity = new ItemQuantity()
-        //        {
-        //            Item = new DROM_Client.Models.BusinessObjects.Item()
-        //            {
-        //                Id = od.Item.Id,
-        //                Category = od.Item.Category.Name,
-        //                Name = od.Item.Name,
-        //                Description = od.Item.Description,
-        //                Price = od.Item.Price
-
-        //            },
-        //            Quantity = od.Quantity
-
-        //        };
-
-
-
-        //        itemsAndQuantity.Add(itemQuantity);
-        //    }
-        //    order.ItemsAndQuantity = itemsAndQuantity;
     }
 }
