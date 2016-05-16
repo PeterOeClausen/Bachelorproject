@@ -11,6 +11,9 @@ using WebAPI.Models.DBMethods;
 using WebAPI.Models.DBObjects;
 using Item = DROM_Client.Models.BusinessObjects.Item;
 using System.Web.Http.Cors;
+using DROM_Client.Models.NewOrderData;
+using WebAPI.Models.Parsing;
+using WebAPI.XMLParser;
 
 namespace WebAPI.Controllers
 {
@@ -76,6 +79,25 @@ namespace WebAPI.Controllers
             var response = Request.CreateResponse(result.Item2);
             response.ReasonPhrase = result.Item1;
             return response;
+        }
+
+        [Route("api/order/create")]
+        [HttpPost]
+        public async Task<HttpResponseMessage> Post([FromBody] NewOrderInfo info)
+        {
+            try
+            {
+                await new Mapper().CreateOrder(new DCRXmlParser().Parse(Properties.Resources.Bachelor2), info);
+                var response = Request.CreateResponse(HttpStatusCode.OK);
+                response.ReasonPhrase = "success";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                var response = Request.CreateResponse(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+                return response;
+            }
         }
 
 

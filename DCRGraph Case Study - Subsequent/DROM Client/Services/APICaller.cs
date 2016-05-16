@@ -22,6 +22,90 @@ namespace DROM_Client.Services
         }
 
         /// <summary>
+        /// Save order on web api.
+        /// </summary>
+        /// <param name="newOrder">New Order to be saved.</param>
+        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
+        public Tuple<bool,string> PostOrderAsync(NewOrderInfo newOrder)
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = _baseAddress;
+                    var response = client.PostAsXmlAsync("api/order/create", newOrder, new CancellationToken()).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var answer = new Tuple<bool, string>(true, response.StatusCode.ToString());
+                        return answer;
+                    }
+                    else //do failure thing
+                    {
+                        var answer = new Tuple<bool, string>(false, "Could not save the created order: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
+                        return answer;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Calls API to update order.
+        /// </summary>
+        /// <param name="updatedOrder">Updated order to be saved</param>
+        /// <param name="editEvents">List of id's of edit events to be executed</param>
+        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
+        public Tuple<bool, string> PutUpdateOrder(Order updatedOrder, List<int> editEvents)
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    var dto = new Tuple<Order, List<int>>(updatedOrder, editEvents);
+                    client.BaseAddress = _baseAddress;
+                    var response = client.PutAsXmlAsync("api/order/updateorder", dto).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return new Tuple<bool, string>(true, response.StatusCode.ToString());
+                    }
+                    else //do failure thing
+                    {
+                        return new Tuple<bool, string>(false, "Could not save updated order: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Execute event on API
+        /// </summary>
+        /// <param name="eventToExecute">Event to execute</param>
+        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
+        public Tuple<bool, string> PutExecuteEvent(Event eventToExecute)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = _baseAddress;
+                var response = client.PutAsXmlAsync("api/order/executeevent", eventToExecute).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    return new Tuple<bool, string>(true, response.StatusCode.ToString());
+                }
+                else //do failure thing
+                {
+                    return new Tuple<bool, string>(false, "Could not execute event: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
+                }
+            }
+        }
+
+        /// <summary>
         /// Receive all orders
         /// </summary>
         /// <returns></returns>
@@ -318,90 +402,6 @@ namespace DROM_Client.Services
                 catch (Exception ex)
                 {
                     throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Save order on web api.
-        /// </summary>
-        /// <param name="newOrder">New Order to be saved.</param>
-        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
-        public Tuple<bool,string> PostOrderAsync(NewOrderInfo newOrder)
-        {
-            using (var client = new HttpClient())
-            {
-                try
-                {
-                    client.BaseAddress = _baseAddress;
-                    var response = client.PostAsXmlAsync("api/parse", newOrder, new CancellationToken()).Result;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var answer = new Tuple<bool, string>(true, response.StatusCode.ToString());
-                        return answer;
-                    }
-                    else //do failure thing
-                    {
-                        var answer = new Tuple<bool, string>(false, "Could not save the created order: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
-                        return answer;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Calls API to update order.
-        /// </summary>
-        /// <param name="updatedOrder">Updated order to be saved</param>
-        /// <param name="editEvents">List of id's of edit events to be executed</param>
-        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
-        public Tuple<bool, string> PutUpdateOrder(Order updatedOrder, List<int> editEvents)
-        {
-            using (var client = new HttpClient())
-            {
-                try
-                {
-                    var dto = new Tuple<Order, List<int>>(updatedOrder, editEvents);
-                    client.BaseAddress = _baseAddress;
-                    var response = client.PutAsXmlAsync("api/order/updateorder", dto).Result;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return new Tuple<bool, string>(true, response.StatusCode.ToString());
-                    }
-                    else //do failure thing
-                    {
-                        return new Tuple<bool, string>(false, "Could not save updated order: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Execute event on API
-        /// </summary>
-        /// <param name="eventToExecute">Event to execute</param>
-        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
-        public Tuple<bool, string> PutExecuteEvent(Event eventToExecute)
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = _baseAddress;
-                var response = client.PutAsXmlAsync("api/order/executeevent", eventToExecute).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return new Tuple<bool, string>(true, response.StatusCode.ToString());
-                }
-                else //do failure thing
-                {
-                    return new Tuple<bool, string>(false, "Could not execute event: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
                 }
             }
         }
