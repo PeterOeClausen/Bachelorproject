@@ -14,96 +14,11 @@ namespace DROM_Client.Services
 {
     public class APICaller
     {
-
-        public Uri BaseAddress { get; set; }
+        private Uri _baseAddress { get; set; }
 
         public APICaller()
         {
-            BaseAddress = new Uri("http://localhost:57815/"); //set the address of the api here
-        }
-
-        /// <summary>
-        /// Save order on web api.
-        /// </summary>
-        /// <param name="newOrder">New Order to be saved.</param>
-        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
-        public Tuple<bool,string> PostOrderAsync(NewOrderInfo newOrder)
-        {
-            using (var client = new HttpClient())
-            {
-                try
-                {
-                    client.BaseAddress = BaseAddress;
-                    var response = client.PostAsXmlAsync("api/parse", newOrder, new CancellationToken()).Result;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var answer = new Tuple<bool, string>(true, response.StatusCode.ToString());
-                        return answer;
-                    }
-                    else //do failure thing
-                    {
-                        var answer = new Tuple<bool, string>(false, "Could not save the created order: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
-                        return answer;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Calls API to update order.
-        /// </summary>
-        /// <param name="updatedOrder">Updated order to be saved</param>
-        /// <param name="editEvents">List of id's of edit events to be executed</param>
-        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
-        public Tuple<bool, string> PutUpdateOrder(Order updatedOrder, List<int> editEvents)
-        {
-            using (var client = new HttpClient())
-            {
-                try
-                {
-                    var dto = new Tuple<Order, List<int>>(updatedOrder, editEvents);
-                    client.BaseAddress = BaseAddress;
-                    var response = client.PutAsXmlAsync("api/order/updateorder", dto).Result;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return new Tuple<bool, string>(true, response.StatusCode.ToString());
-                    }
-                    else //do failure thing
-                    {
-                        return new Tuple<bool, string>(false, "Could not save updated order: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Execute event on API
-        /// </summary>
-        /// <param name="eventToExecute">Event to execute</param>
-        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
-        public Tuple<bool, string> PutExecuteEvent(Event eventToExecute)
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = BaseAddress;
-                var response = client.PutAsXmlAsync("api/order/executeevent", eventToExecute).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return new Tuple<bool, string>(true, response.StatusCode.ToString());
-                }
-                else //do failure thing
-                {
-                    return new Tuple<bool, string>(false, "Could not execute event: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
-                }
-            }
+            _baseAddress = new Uri("http://localhost:57815/"); //set the address of the api here
         }
 
         /// <summary>
@@ -334,7 +249,7 @@ namespace DROM_Client.Services
             {
                 try
                 {
-                    client.BaseAddress = BaseAddress;
+                    client.BaseAddress = _baseAddress;
                     var response = client.GetAsync("api/order/orderswithsortedevents?restaurant=" + RestaurantLoginContainer.Instance.RestaurantId, new CancellationToken()).Result;
                     if (response.IsSuccessStatusCode)
                     {
@@ -354,13 +269,13 @@ namespace DROM_Client.Services
             }
         }
 
-        public Tuple<bool, string, List<Item>> GetItems() //Needs to be called only one time.
+        public Tuple<bool, string, List<Item>> GetItems()
         {
             using (var client = new HttpClient())
             {
                 try
                 {
-                    client.BaseAddress = BaseAddress;
+                    client.BaseAddress = _baseAddress;
                     var response = client.GetAsync("api/order/items", new CancellationToken()).Result;
                     if (response.IsSuccessStatusCode)
                     {
@@ -387,7 +302,7 @@ namespace DROM_Client.Services
             {
                 try
                 {
-                    client.BaseAddress = BaseAddress;
+                    client.BaseAddress = _baseAddress;
                     var response = client.GetAsync("api/order/deliveryTypes/" + orderGraphType, new CancellationToken()).Result;
                     if (response.IsSuccessStatusCode)
                     {
@@ -407,13 +322,97 @@ namespace DROM_Client.Services
             }
         }
 
+        /// <summary>
+        /// Save order on web api.
+        /// </summary>
+        /// <param name="newOrder">New Order to be saved.</param>
+        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
+        public Tuple<bool,string> PostOrderAsync(NewOrderInfo newOrder)
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = _baseAddress;
+                    var response = client.PostAsXmlAsync("api/parse", newOrder, new CancellationToken()).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var answer = new Tuple<bool, string>(true, response.StatusCode.ToString());
+                        return answer;
+                    }
+                    else //do failure thing
+                    {
+                        var answer = new Tuple<bool, string>(false, "Could not save the created order: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
+                        return answer;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Calls API to update order.
+        /// </summary>
+        /// <param name="updatedOrder">Updated order to be saved</param>
+        /// <param name="editEvents">List of id's of edit events to be executed</param>
+        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
+        public Tuple<bool, string> PutUpdateOrder(Order updatedOrder, List<int> editEvents)
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    var dto = new Tuple<Order, List<int>>(updatedOrder, editEvents);
+                    client.BaseAddress = _baseAddress;
+                    var response = client.PutAsXmlAsync("api/order/updateorder", dto).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return new Tuple<bool, string>(true, response.StatusCode.ToString());
+                    }
+                    else //do failure thing
+                    {
+                        return new Tuple<bool, string>(false, "Could not save updated order: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Execute event on API
+        /// </summary>
+        /// <param name="eventToExecute">Event to execute</param>
+        /// <returns>Tuple of bool and string, bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
+        public Tuple<bool, string> PutExecuteEvent(Event eventToExecute)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = _baseAddress;
+                var response = client.PutAsXmlAsync("api/order/executeevent", eventToExecute).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    return new Tuple<bool, string>(true, response.StatusCode.ToString());
+                }
+                else //do failure thing
+                {
+                    return new Tuple<bool, string>(false, "Could not execute event: Error from Web api: " + response.StatusCode.ToString() + ": " + response.ReasonPhrase);
+                }
+            }
+        }
+
         public Tuple<bool, string> PutArchiveOrder(Order order)
         {
             using (var client = new HttpClient())
             {
                 try
                 {
-                    client.BaseAddress = BaseAddress;
+                    client.BaseAddress = _baseAddress;
                     var response = client.PutAsXmlAsync("api/order/archive", order).Result;
                     if (response.IsSuccessStatusCode)
                     {
@@ -439,7 +438,7 @@ namespace DROM_Client.Services
             {
                 try
                 {
-                    client.BaseAddress = BaseAddress;
+                    client.BaseAddress = _baseAddress;
                     var response = client.PutAsXmlAsync("api/order/archive", order).Result; //Actually we just archive the order
                     if (response.IsSuccessStatusCode)
                     {

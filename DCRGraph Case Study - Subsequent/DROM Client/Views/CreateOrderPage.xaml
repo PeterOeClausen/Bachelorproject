@@ -21,7 +21,7 @@
         <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <TextBlock Text="Create new order" FontWeight="Bold" FontSize="30" Margin="10,0,0,0"/>
-                <VariableSizedWrapGrid Orientation="Horizontal" MinHeight="460">
+                <VariableSizedWrapGrid Orientation="Horizontal" ItemHeight="460">
                     <!--Delivery method, table number and items on order-->
                     <StackPanel Padding="10">
                         <TextBlock Text="Order information:" FontWeight="Bold"/>
@@ -89,7 +89,7 @@
                              PlaceholderText="You can write a note here..."/>
                     </StackPanel>
                     <!--Customer information:-->
-                    <StackPanel Padding="10" x:Name="CustomerInformationStackPanel" MinHeight="450">
+                    <StackPanel Padding="10" x:Name="CustomerInformationStackPanel">
                         <TextBlock Text="Customer information:" FontWeight="Bold"/>
                         <TextBlock Text="First name:"/>
                         <TextBox Text="{Binding OrderBeingCreated.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" x:Name="First_Name_Text_Box"/>
