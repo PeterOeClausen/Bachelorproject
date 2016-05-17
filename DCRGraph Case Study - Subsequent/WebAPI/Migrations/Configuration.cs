@@ -15,20 +15,13 @@ namespace WebAPI.Migrations
             AutomaticMigrationsEnabled = true;
         }
 
+        /// <summary>
+        /// This is the seed method which creates all the needed static data in the datbase, such as items, categories, groups, roles and delivery types.
+        /// If it is run, it will also delete all currently existing data in the database.
+        /// </summary>
+        /// <param name="context"></param>
         protected override void Seed(WebAPI.Models.DBObjects.Database context)
         {
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
             context.Database.ExecuteSqlCommand("sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'");
             context.Database.ExecuteSqlCommand("sp_MSForEachTable 'IF OBJECT_ID(''?'') NOT IN (ISNULL(OBJECT_ID(''[dbo].[__MigrationHistory]''),0)) DELETE FROM ?'");
             context.Database.ExecuteSqlCommand("EXEC sp_MSForEachTable 'ALTER TABLE ? CHECK CONSTRAINT ALL'");

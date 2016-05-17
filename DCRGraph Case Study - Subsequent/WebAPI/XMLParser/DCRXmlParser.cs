@@ -16,11 +16,11 @@ namespace WebAPI.XMLParser
     public class DCRXmlParser
     {
         /// <summary>
-        /// Parses a given XML string that repressents a process model extracted from DCRGraphs.net.
-        /// Returns an XmlWorkflowData object with all the data that is needed to map and create a process model.
+        /// Parses a given xml string that repressents a DCRGraph from DCRGraphs.net.
+        /// Returns all the informaton needed to create a DCRGraph.
         /// </summary>
         /// <param name="xmlString"></param>
-        /// <returns>XmlWorkFlowData containing parsed data</returns>
+        /// <returns></returns>
         public EventAndRolesContainer Parse(string xmlString)
         {
             XDocument doc = XDocument.Parse(xmlString);
@@ -43,11 +43,21 @@ namespace WebAPI.XMLParser
             return container;
         }
 
+        /// <summary>
+        /// Method to get the workflow title from an xml file
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
         private string ParseWorkflowTitle(XDocument doc)
         {
             return doc.Descendants("dcrgraph").First().FirstAttribute.Value;
         }
 
+        /// <summary>
+        /// Method to parse a DCRGraph from an xml file. It will read all the informaion and put into lists.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
         private EventAndRolesContainer ParseNodes(XDocument doc)
         {
             //Mapper constraints:
@@ -119,22 +129,11 @@ namespace WebAPI.XMLParser
             return Container;
         }
 
-        private List<Constraint> ParseConditions(XDocument doc)
-        {
-            var ConditionList = new List<Constraint>();
-
-            foreach (var condition in doc.Descendants("conditions").Elements())
-            {
-                ConditionList.Add(new Constraint()
-                {
-                    fromNodeId = condition.Attribute("sourceId").Value,
-                    toNodeId = condition.Attribute("targetId").Value
-                });
-            }
-
-            return ConditionList;
-        }
-
+        /// <summary>
+        /// Method to parse responses from an xml file.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
         private List<Constraint> ParseResponses(XDocument doc)
         {
             var ResponseList = new List<Constraint>();
@@ -151,6 +150,11 @@ namespace WebAPI.XMLParser
             return ResponseList;
         }
 
+        /// <summary>
+        /// Method to parse exclusions from an xml file.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
         private List<Constraint> ParseExclusions(XDocument doc)
         {
             var ExcludesList = new List<Constraint>();
@@ -165,6 +169,11 @@ namespace WebAPI.XMLParser
             return ExcludesList;
         }
 
+        /// <summary>
+        /// Method to parse includes from an xml file.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
         private List<Constraint> ParseIncludes(XDocument doc)
         {
             var IncludesList = new List<Constraint>();
@@ -179,20 +188,14 @@ namespace WebAPI.XMLParser
             return IncludesList;
         }
 
-        private List<Constraint> ParseMilestones(XDocument doc)
-        {
-            var MilestonesList = new List<Constraint>();
-            foreach (var milestone in doc.Descendants("milestones").Elements())
-            {
-                MilestonesList.Add(new Constraint()
-                {
-                    fromNodeId = milestone.Attribute("sourceId").Value,
-                    toNodeId = milestone.Attribute("targetId").Value
-                });
-            }
-            return MilestonesList;
-        }
-
+        /// <summary>
+        /// Method to parse conditions from an xml file.
+        /// Conditions are parsed in reverse, because it is easier to work with if an event which is being executed,
+        /// knows which other events have conditions to it, instead of having to go through all events to see if there
+        /// are any with conditions to an event.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
         private List<Constraint> ParseConditionsReversed(XDocument doc)
         {
             var ConditionList = new List<Constraint>();
@@ -209,50 +212,14 @@ namespace WebAPI.XMLParser
             return ConditionList;
         }
 
-        private List<Constraint> ParseResponsesReversed(XDocument doc)
-        {
-            var ResponseList = new List<Constraint>();
-
-            foreach (var response in doc.Descendants("responses").Elements())
-            {
-                ResponseList.Add(new Constraint()
-                {
-                    fromNodeId = response.Attribute("targetId").Value,
-                    toNodeId = response.Attribute("sourceId").Value
-                });
-            }
-
-            return ResponseList;
-        }
-
-        private List<Constraint> ParseExclusionsReversed(XDocument doc)
-        {
-            var ExcludesList = new List<Constraint>();
-            foreach (var exclude in doc.Descendants("excludes").Elements())
-            {
-                ExcludesList.Add(new Constraint()
-                {
-                    fromNodeId = exclude.Attribute("targetId").Value,
-                    toNodeId = exclude.Attribute("sourceId").Value
-                });
-            }
-            return ExcludesList;
-        }
-
-        private List<Constraint> ParseIncludesReversed(XDocument doc)
-        {
-            var IncludesList = new List<Constraint>();
-            foreach (var include in doc.Descendants("includes").Elements())
-            {
-                IncludesList.Add(new Constraint()
-                {
-                    fromNodeId = include.Attribute("targetId").Value,
-                    toNodeId = include.Attribute("sourceId").Value
-                });
-            }
-            return IncludesList;
-        }
-
+        /// <summary>
+        /// Method to parse milestones from an xml file.
+        /// Milestones are parsed in reverse, because it is easier to work with if an event which is being executed,
+        /// knows which other events have milestones to it, instead of having to go through all events to see if there
+        /// are any with milestones to an event.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
         private List<Constraint> ParseMilestonesReversed(XDocument doc)
         {
             var MilestonesList = new List<Constraint>();

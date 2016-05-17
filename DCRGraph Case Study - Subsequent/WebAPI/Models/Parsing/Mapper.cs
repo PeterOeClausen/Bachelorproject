@@ -18,6 +18,13 @@ namespace WebAPI.Models.Parsing
     class Mapper
     {
 
+        /// <summary>
+        /// Method to create new orders in the database.
+        /// It will create a new order with the information it receives and with the DCRGraph which is currently in the xml file which the API reads from.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="orderInfo"></param>
+        /// <returns></returns>
         public async Task<Tuple<string, HttpStatusCode>> CreateOrder(EventAndRolesContainer container, NewOrderInfo orderInfo)
         {
             using (var db = new WebAPI.Models.DBObjects.Database())
@@ -77,32 +84,36 @@ namespace WebAPI.Models.Parsing
 
                     //Determine if there should be a customer on the order
 
-
-                    var customer =
-                        await db.Customers
-                                        .FirstOrDefaultAsync(c => c.Phone == orderInfo.Customer.Phone);
-
-
-
-                    if (customer == null)
+                    if(orderInfo.Customer.Phone != 0)
                     {
-                        customer = new Customer()
+
+
+                        var customer =
+                            await db.Customers
+                                .FirstOrDefaultAsync(c => c.Phone == orderInfo.Customer.Phone);
+
+
+
+                        if (customer == null)
                         {
-                            City = orderInfo.Customer.City ?? "n/a",
-                            Email = orderInfo.Customer.Email ?? "n/a",
-                            FirstName = orderInfo.Customer.FirstAndMiddleNames ?? "n/a",
-                            LastName = orderInfo.Customer.LastName ?? "n/a",
-                            Phone = orderInfo.Customer.Phone,
-                            StreetAndNumber = orderInfo.Customer.StreetAndNumber ?? "n/a",
-                            Zipcode = orderInfo.Customer.ZipCode
+                            customer = new Customer()
+                            {
+                                City = orderInfo.Customer.City ?? "n/a",
+                                Email = orderInfo.Customer.Email ?? "n/a",
+                                FirstName = orderInfo.Customer.FirstAndMiddleNames ?? "n/a",
+                                LastName = orderInfo.Customer.LastName ?? "n/a",
+                                Phone = orderInfo.Customer.Phone,
+                                StreetAndNumber = orderInfo.Customer.StreetAndNumber ?? "n/a",
+                                Zipcode = orderInfo.Customer.ZipCode
 
 
-                        };
+                            };
 
-                        customer.Orders = new HashSet<Order>();
-                        customer.Orders.Add(order);
+                            customer.Orders = new HashSet<Order>();
+                            customer.Orders.Add(order);
+                        }
+                        order.Customer = customer;
                     }
-                    order.Customer = customer;
 
 
                     db.Orders.Add(order);
