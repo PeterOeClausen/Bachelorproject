@@ -9,42 +9,51 @@
     xmlns:converters="using:DROM_Client.Converters"
     mc:Ignorable="d">
 
+    <!--Data context. Viewmodel is specified here.-->
     <Page.DataContext>
         <vm:CreateOrderPageViewModel/>
     </Page.DataContext>
 
+    <!--Ressource dictionary for static ressources that can be used later-->
     <Page.Resources>
         <converters:Dictionary_Item_intToTotalPriceConverter x:Key="Dictionary_Item_intToTotalPriceConverter"/>
     </Page.Resources>
 
+    <!--Page layout-->
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <TextBlock Text="Create new order" FontWeight="Bold" FontSize="30" Margin="10,0,0,0"/>
-                <VariableSizedWrapGrid Orientation="Horizontal" ItemHeight="460">
+                <TextBlock Text="Create new order" 
+                           FontWeight="Bold" 
+                           FontSize="30" 
+                           Margin="10,0,0,0"/>
+                <VariableSizedWrapGrid Orientation="Horizontal" 
+                                       ItemHeight="460">
                     <!--Delivery method, table number and items on order-->
                     <StackPanel Padding="10">
-                        <TextBlock Text="Order information:" FontWeight="Bold"/>
+                        <TextBlock Text="Order information:" 
+                                   FontWeight="Bold"/>
                         <!--Delivery method-->
                         <TextBlock Text="Order type:"/>
                         <ComboBox x:Name="DeliveryCombobox" 
-                              ItemsSource="{Binding DeliveryMethodsList}" 
-                              SelectionChanged="DeliveryCombobox_SelectionChanged" 
-                              HorizontalAlignment="Stretch"
-                              PlaceholderText="Click to choose an order type..."/>
+                                  ItemsSource="{Binding DeliveryMethodsList}" 
+                                  SelectionChanged="DeliveryCombobox_SelectionChanged" 
+                                  HorizontalAlignment="Stretch"
+                                  PlaceholderText="Click to choose an order type..."/>
                         <!--Table number-->
                         <TextBlock Text="Table number:" Margin="0,10,0,0"/>
                         <TextBox Text="{Binding OrderBeingCreated.Table, Mode=TwoWay}" 
                                  x:Name="Table_Number_Text_Box"
                                  PlaceholderText="Necessary for serving"/>
                         <!--Items on order-->
-                        <StackPanel Background="Wheat" Margin="0,10,0,0">
+                        <StackPanel Background="Wheat" 
+                                    Margin="0,10,0,0">
                             <TextBlock Text="Items on order:"/>
                             <!--Items list:-->
                             <ListView ItemsSource="{Binding OrderBeingCreated.ItemsAndQuantity}" 
-                                  Background="AntiqueWhite" 
-                                  x:Name="Items_On_Order_List_View"
-                                  MinHeight="30">
+                                      Background="AntiqueWhite" 
+                                      x:Name="Items_On_Order_List_View"
+                                      MinHeight="30">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -63,7 +72,9 @@
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="Item:"/>
-                                    <ComboBox ItemsSource="{Binding ItemCollection}" x:Name="Item_Box" PlaceholderText="Choose an item...">
+                                    <ComboBox ItemsSource="{Binding ItemCollection}" 
+                                              x:Name="Item_Box" 
+                                              PlaceholderText="Choose an item...">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Name}"/>
@@ -71,8 +82,12 @@
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
                                 </StackPanel>
-                                <Button Content="Add" Click="Add_Click" VerticalAlignment="Bottom"/>
-                                <Button Content="Remove" Click="Remove_Click" VerticalAlignment="Bottom"/>
+                                <Button Content="Add" 
+                                        Click="Add_Click" 
+                                        VerticalAlignment="Bottom"/>
+                                <Button Content="Remove" 
+                                        Click="Remove_Click" 
+                                        VerticalAlignment="Bottom"/>
                             </StackPanel>
                         </StackPanel>
                         <!--Total price-->
@@ -81,34 +96,37 @@
                             <TextBlock Text="{Binding OrderBeingCreated.ItemsAndQuantity, Converter={StaticResource Dictionary_Item_intToTotalPriceConverter}, FallbackValue='Could not calculate total price'}"/>
                         </StackPanel>
                         <!--Notes-->
-                        <TextBlock Text="Notes:" Margin="0,10,0,0"/>
+                        <TextBlock Text="Notes:" 
+                                   Margin="0,10,0,0"/>
                         <TextBox Text="{Binding OrderBeingCreated.Notes, Mode=TwoWay}" 
-                             TextWrapping="Wrap" 
-                             AcceptsReturn="True"
-                             MinHeight="60"
-                             PlaceholderText="You can write a note here..."/>
+                                 TextWrapping="Wrap" 
+                                 AcceptsReturn="True"
+                                 MinHeight="60"
+                                 PlaceholderText="You can write a note here..."/>
                     </StackPanel>
                     <!--Customer information:-->
-                    <StackPanel Padding="10" x:Name="CustomerInformationStackPanel">
+                    <StackPanel Padding="10" 
+                                x:Name="CustomerInformationStackPanel">
                         <TextBlock Text="Customer information:" FontWeight="Bold"/>
                         <TextBlock Text="First name:"/>
-                        <TextBox Text="{Binding OrderBeingCreated.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" x:Name="First_Name_Text_Box"/>
+                        <TextBox Text="{Binding OrderBeingCreated.Customer.FirstAndMiddleNames, Mode=TwoWay, FallbackValue='N/A'}" x:Name="First_Name_Text_Box" IsSpellCheckEnabled="False"/>
                         <TextBlock Text="Last name:" Margin="0,10,0,0"/>
-                        <TextBox Text="{Binding OrderBeingCreated.Customer.LastName, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Last_Name_Text_Box"/>
+                        <TextBox Text="{Binding OrderBeingCreated.Customer.LastName, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Last_Name_Text_Box" IsSpellCheckEnabled="False"/>
                         <TextBlock Text="Email:" Margin="0,10,0,0"/>
-                        <TextBox Text="{Binding OrderBeingCreated.Customer.Email, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Email_Text_Box"/>
+                        <TextBox Text="{Binding OrderBeingCreated.Customer.Email, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Email_Text_Box" IsSpellCheckEnabled="False"/>
                         <TextBlock Text="Phone:" Margin="0,10,0,0"/>
-                        <TextBox Text="{Binding OrderBeingCreated.Customer.Phone, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Phone_Text_Box"/>
+                        <TextBox Text="{Binding OrderBeingCreated.Customer.Phone, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Phone_Text_Box" IsSpellCheckEnabled="False"/>
                         <TextBlock Text="Street and number:" Margin="0,10,0,0"/>
-                        <TextBox Text="{Binding OrderBeingCreated.Customer.StreetAndNumber, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Street_And_Number_Text_Box"/>
+                        <TextBox Text="{Binding OrderBeingCreated.Customer.StreetAndNumber, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Street_And_Number_Text_Box" IsSpellCheckEnabled="False"/>
                         <TextBlock Text="Zip:" Margin="0,10,0,0"/>
-                        <TextBox Text="{Binding OrderBeingCreated.Customer.ZipCode, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Zip_Text_Box"/>
+                        <TextBox Text="{Binding OrderBeingCreated.Customer.ZipCode, Mode=TwoWay, FallbackValue='N/A'}" x:Name="Zip_Text_Box" IsSpellCheckEnabled="False"/>
                         <TextBlock Text="City:" Margin="0,10,0,0"/>
-                        <TextBox Text="{Binding OrderBeingCreated.Customer.City, Mode=TwoWay, FallbackValue='N/A'}" x:Name="City_Text_Box"/>
+                        <TextBox Text="{Binding OrderBeingCreated.Customer.City, Mode=TwoWay, FallbackValue='N/A'}" x:Name="City_Text_Box" IsSpellCheckEnabled="False"/>
                     </StackPanel>
                     <!--Save and cancel buttons-->
                     <StackPanel Padding="10">
-                        <TextBlock Text="Save or cancel order:" FontWeight="Bold"/>
+                        <TextBlock Text="Save or cancel order:" 
+                                   FontWeight="Bold"/>
                         <!--Buttons-->
                         <StackPanel Orientation="Horizontal">
                             <!--Save button:-->

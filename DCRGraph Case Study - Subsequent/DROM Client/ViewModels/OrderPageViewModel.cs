@@ -14,10 +14,13 @@ using Windows.UI.Popups;
 
 namespace DROM_Client.ViewModels
 {
+    /// <summary>
+    /// OrderPage ViewModel.
+    /// </summary>
     public class OrderPageViewModel : INotifyPropertyChanged
     {
         private APICaller _APICaller { get; set; }
-
+        
         public bool Chef
         {
             get { return _chef; }
@@ -74,104 +77,22 @@ namespace DROM_Client.ViewModels
 
         public ObservableCollection<Order> OrderList { get { return _OrderList; } }
         private readonly ObservableCollection<Order> _OrderList = new ObservableCollection<Order>();
-        //#region Easy to insert design data:
-        //{
-        //    new Order()
-        //{
-        //    Id = 1,
-        //            ItemsAndQuantity = new List<ItemQuantity>() {
-        //                new ItemQuantity() {
-        //                    Item = new Item() {
-        //                            Id = 1,
-        //                            Name = "Chiliburger",
-        //                            Price = 69.9,
-        //                            Category = "Burger",
-        //                            Description = "Chiliburger med pommes frites"
-        //                        },
-        //                    Quantity = 1
-        //                }
-        //            },
-        //            Customer = new Customer()
-        //            {
-        //                Id = 1,
-        //                FirstAndMiddleNames = "John",
-        //                LastName = "Doe",
-        //                Email = "John@Doe.com",
-        //                Phone = 88888888,
-        //                StreetAndNumber = "Rued Langaardsvej 7",
-        //                ZipCode = 2300,
-        //                City = "København S"
-        //            },
-        //            OrderDate = DateTime.Now,
-        //            Notes = "Minus tomatoes please",
-        //            DCRGraph = new DCRGraph
-        //            {
-        //                Id = 1,
-        //                Events = new List<Event>() {
-        //                    new Event() {
-        //                        Id = 1,
-        //                        Label = "Confirm web order",
-        //                        Description = "Execute to confirm",
-        //                        Included = true, Pending = true, Executed = false,
-        //                        Roles = new List<Role> {
-        //                            new Role() {
-        //                                Id = 1,
-        //                                Name = "Waiter"
-        //                            }
-        //                        },
-        //                        Groups = new List<Group>
-        //                        {
-        //                            new Group()
-        //                            {
-        //                                Id = 1,
-        //                                Name = "only pending"
-        //                            }
-        //                        },
-        //                    },
-        //                    new Event()
-        //                    {
-        //                        Id = 2,
-        //                        Label = "Change to takeaway",
-        //                        Included = true, Pending = true, Executed = false,
-        //                        Roles = new List<Role>
-        //                        {
-        //                            new Role
-        //                            {
-        //                                Id = 1,
-        //                                Name = "Waiter"
-        //                            },
-        //                            new Role
-        //                            {
-        //                                Id = 2,
-        //                                Name = "Manager"
-        //                            }
-        //                        },
-        //                        Groups = new List<Group>
-        //                        {
-        //                            new Group
-        //                            {
-        //                                Id = 2,
-        //                                Name = "Edit events"
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            },
-        //            Table = 0,
-        //            OrderType = "To be delivered"
-        //        }
-        //};
-        //#endregion
 
         public List<Order> OrdersFromWebAPI { get; set; }
 
+        /// <summary>
+        /// Constructor for OrderPageViewModel. Gets data that view can bind to.
+        /// </summary>
         public OrderPageViewModel()
         {
             _APICaller = new APICaller();
             setupData();
-            //setupDesignerData();
         }
 
+        /// <summary>
+        /// Gets data from web api and sets up collections.
+        /// </summary>
+        /// <returns>Tuple of bool and string, Item1 == true if success, Item2 == false if not success and Item2 contains errormessage.</returns>
         public Tuple<bool, string, List<Order>> setupData()
         {
             Tuple<bool, string, List<Order>> answerFromWebApi = _APICaller.GetOrders();
@@ -179,280 +100,41 @@ namespace DROM_Client.ViewModels
             OrdersFromWebAPI = answerFromWebApi.Item3;
             FilterViewAcordingToRoles();
             return answerFromWebApi;
-            #region old code (to be deleted)
-            //var query = from Order o in OrdersFromWebAPI
-            //            where from Event e in o.DCRGraph.Events
-            //                  where from Group g in e.Groups
-            //                        where g.Name == "only Pending"
-            //                        select o;
-
-            //Orders = new ObservableCollection<UIOrder>();
-            //foreach(Order o in OrdersFromWebAPI)
-            //{
-            //    var newUIOrder = new UIOrder
-            //    {
-            //        Id = o.Id,
-            //        Customer = o.Customer,
-            //        OrderDate = o.OrderDate,
-            //        Notes = o.Notes,
-            //        DCRGraph = new UIDCRGraph(),
-            //        Table = o.Table,
-            //        OrderType = o.OrderType,
-            //        ItemsAndQuantity = new Dictionary<Item, int>()
-            //    };
-            //}
-            #endregion
         }
 
         /// <summary>
-        /// This method sets up collections for designing view using XAML, only run when designing.
+        /// Call to execute event.
         /// </summary>
-        public void setupDesignerData()
-        {
-            OrdersFromWebAPI = new List<Order>();
-
-            #region Test data
-            OrdersFromWebAPI.Add(
-                new Order()
-                {
-                    Id = 1,
-                    ItemsAndQuantity = new List<ItemQuantity>() {
-                        new ItemQuantity() {
-                            Item = new Item() {
-                                    Id = 1,
-                                    Name = "Chiliburger",
-                                    Price = 69.9,
-                                    Category = "Burger",
-                                    Description = "Chiliburger med pommes frites"
-                                },
-                            Quantity = 1
-                        }
-                    },
-                    Customer = new Customer()
-                    {
-                        Id = 1,
-                        FirstAndMiddleNames = "John",
-                        LastName = "Doe",
-                        Email = "John@Doe.com",
-                        Phone = 88888888,
-                        StreetAndNumber = "Rued Langaardsvej 7",
-                        ZipCode = 2300,
-                        City = "København S"
-                    },
-                    OrderDate = DateTime.Now,
-                    Notes = "Minus tomatoes please",
-                    DCRGraph = new DCRGraph
-                    {
-                        Id = 1,
-                        Events = new List<Event>() {
-                            new Event() {
-                                Id = 1,
-                                Label = "Confirm web order",
-                                Description = "Execute to confirm",
-                                Included = true, Pending = true, Executed = false,
-                                Roles = new List<Role> {
-                                    new Role() {
-                                        Id = 1,
-                                        Name = "Waiter"
-                                    }
-                                },
-                                Groups = new List<Group>
-                                {
-                                    new Group()
-                                    {
-                                        Id = 1,
-                                        Name = "only pending"
-                                    }
-                                },
-                            },
-                            new Event()
-                            {
-                                Id = 2,
-                                Label = "Change to takeaway",
-                                Included = true, Pending = true, Executed = false,
-                                Roles = new List<Role>
-                                {
-                                    new Role
-                                    {
-                                        Id = 1,
-                                        Name = "Waiter"
-                                    },
-                                    new Role
-                                    {
-                                        Id = 2,
-                                        Name = "Manager"
-                                    }
-                                },
-                                Groups = new List<Group>
-                                {
-                                    new Group
-                                    {
-                                        Id = 2,
-                                        Name = "Edit events"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    Table = 0,
-                    OrderType = "To be delivered"
-                });
-
-            OrdersFromWebAPI.Add(new Order()
-            {
-                Id = 2,
-                ItemsAndQuantity = new List<ItemQuantity>() {
-                        new ItemQuantity()
-                        {
-                            Item = new Item(){
-                            Id = 2,
-                            Name = "Cola",
-                            Price = 69.9,
-                            Category = "Drink",
-                            Description = "Cola"
-                        }, Quantity = 2}
-                    },
-                Customer = new Customer()
-                {
-                    Id = 2,
-                    FirstAndMiddleNames = "Alice",
-                    LastName = "Allen",
-                    Email = "Alice@Allen.com",
-                    Phone = 77777777,
-                    StreetAndNumber = "Langaardsvej Rued 7",
-                    ZipCode = 2300,
-                    City = "København S"
-                },
-                OrderDate = DateTime.Now,
-                Notes = "Minus ice please",
-                DCRGraph = new DCRGraph
-                {
-                    Id = 2,
-                    Events = new List<Event>() {
-                            new Event() {
-                                Id = 1,
-                                Label = "Cook order to eat in restaurant",
-                                Description = "Execute and begin cooking order for eating in restaurant",
-                                Included = true, Pending = true, Executed = false,
-                                Roles = new List<Role> {
-                                    new Role() {
-                                        Id = 1,
-                                        Name = "Chef"
-                                    }
-                                },
-                                Groups = new List<Group>
-                                {
-                                    new Group()
-                                    {
-                                        Id = 1,
-                                        Name = "only pending"
-                                    }
-                                }
-                            },
-                            new Event() {
-                                Id = 2,
-                                Label = "Pay",
-                                Description = "Execute after customer has paid",
-                                Included = true, Pending = true, Executed = false,
-                                Roles = new List<Role> {
-                                    new Role() {
-                                        Id = 1,
-                                        Name = "Waiter"
-                                    }
-                                },
-                                Groups = new List<Group>
-                                {
-                                    new Group()
-                                    {
-                                        Id = 1,
-                                        Name = "only pending"
-                                    }
-                                }
-                            }
-                        }
-                },
-                Table = 1,
-                OrderType = "For delivery"
-            });
-
-            OrdersFromWebAPI.Add(new Order()
-            {
-                Id = 2,
-                ItemsAndQuantity = new List<ItemQuantity>() {
-                        new ItemQuantity()
-                        { Item= new Item(){
-                            Id = 2,
-                            Name = "Cola",
-                            Price = 69.9,
-                            Category = "Drink",
-                            Description = "Cola"
-                        },Quantity = 2}
-                    },
-                Customer = new Customer()
-                {
-                    Id = 2,
-                    FirstAndMiddleNames = "Peter Øvergård",
-                    LastName = "Clausen",
-                    Email = "PeterOeClausen@gmail.com",
-                    Phone = 77777777,
-                    StreetAndNumber = "Langaardsvej Rued 7",
-                    ZipCode = 2300,
-                    City = "København S"
-                },
-                OrderDate = DateTime.Now,
-                Notes = "Blablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablabla",
-                DCRGraph = new DCRGraph
-                {
-                    Id = 2,
-                    Events = new List<Event>() {
-                            new Event() {
-                                Id = 1,
-                                Label = "Cook order for serving",
-                                Description = "Execute to confirm cooking",
-                                Included = true, Pending = true, Executed = false,
-                                Roles = new List<Role> {
-                                    new Role() {
-                                        Id = 1,
-                                        Name = "Chef"
-                                    }
-                                },
-                                Groups = new List<Group>
-                                {
-                                    new Group()
-                                    {
-                                        Id = 1,
-                                        Name = "only pending"
-                                    }
-                                }
-                            }
-                        }
-                },
-                Table = 1,
-                OrderType = "To be served"
-            });
-
-            #endregion
-            
-            FilterViewAcordingToRoles();
-        }
-
+        /// <param name="eventToExecute">Event to execute</param>
+        /// <returns>Tuple of bool and string, Item1 == true if success, Item2 == false if not success and Item2 contains errormessage.</returns>
         public Tuple<bool, string> ExecuteEvent(Event eventToExecute)
         {
             return _APICaller.PutExecuteEvent(eventToExecute);
         }
 
+        /// <summary>
+        /// Archives order on Web API.
+        /// </summary>
+        /// <param name="orderToBeArchived">Order to archive</param>
         internal void ArchiveOrder(Order orderToBeArchived)
         {
             var archiveOrderOnWebAPI = _APICaller.PutArchiveOrder(orderToBeArchived);
-            if (archiveOrderOnWebAPI.Item1 == false) CreateAndShowMessageDialog(archiveOrderOnWebAPI.Item2);
+            if (archiveOrderOnWebAPI.Item1 == false) CreateAndShowMessageDialog(archiveOrderOnWebAPI.Item2); //Shows error message if someting went wrong
         }
 
+        /// <summary>
+        /// Deletes order on Web API.
+        /// </summary>
+        /// <param name="orderToBeDeleted"></param>
         internal void DeleteOrder(Order orderToBeDeleted)
         {
             var deleteOrderOnWebAPI = _APICaller.PutDeleteOrder(orderToBeDeleted);
-            if (deleteOrderOnWebAPI.Item1 == false) CreateAndShowMessageDialog(deleteOrderOnWebAPI.Item2);
+            if (deleteOrderOnWebAPI.Item1 == false) CreateAndShowMessageDialog(deleteOrderOnWebAPI.Item2); //Shows error message if someting went wrong
         }
 
+        /// <summary>
+        /// Method for filtering view.
+        /// </summary>
         public void FilterViewAcordingToRoles()
         {
             OrderList.Clear();
@@ -465,7 +147,7 @@ namespace DROM_Client.ViewModels
                     {
                         foreach (Role r in e.Roles)
                         {
-                            if (Manager) //If manager is checked off, we just add all events. (Talk about this with Johan)
+                            if (Manager) //If manager is checked off, we just add all events.
                             {
                                 if (!newOrder.DCRGraph.Events.Contains(e))
                                 {
@@ -500,7 +182,7 @@ namespace DROM_Client.ViewModels
                         }
                     }
                 }
-                if(_ShowOnlyPendingOrders && newOrder.DCRGraph.Events.Count == 0)
+                if(_ShowOnlyPendingOrders && newOrder.DCRGraph.Events.Count == 0) //If no event are to be shown in order, don't add it. It is not relevant.
                 {
                     continue;
                 }
@@ -508,6 +190,11 @@ namespace DROM_Client.ViewModels
             }
         }
 
+        /// <summary>
+        /// Copies order into new order object but omits the Events. Used when filtering to only add events relevant.
+        /// </summary>
+        /// <param name="orderToBeCoppied">Order to be coppied</param>
+        /// <returns>Coppied order without events.</returns>
         private Order CopyOrderExceptEvents(Order orderToBeCoppied)
         {
             var newOrder = new Order()
@@ -517,7 +204,7 @@ namespace DROM_Client.ViewModels
                 Customer = orderToBeCoppied.Customer,
                 OrderDate = orderToBeCoppied.OrderDate,
                 Notes = orderToBeCoppied.Notes,
-                DCRGraph = new DCRGraph() { Id = orderToBeCoppied.Id, Events = new List<Event>()},
+                DCRGraph = new DCRGraph() { Id = orderToBeCoppied.DCRGraph.Id, Events = new List<Event>()}, //Empty events list.
                 Table = orderToBeCoppied.Table,
                 OrderType = orderToBeCoppied.OrderType,
                 AcceptingState = orderToBeCoppied.AcceptingState
@@ -527,6 +214,10 @@ namespace DROM_Client.ViewModels
             return newOrder;
         }
 
+        /// <summary>
+        /// Creates and shows a message dialog.
+        /// </summary>
+        /// <param name="message">Message for message log</param>
         private async void CreateAndShowMessageDialog(string message)
         {
             var messageDialog = new MessageDialog(message);

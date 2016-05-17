@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 namespace DROM_Client.Models.BusinessObjects
 {
-    //HEY! Please talk to Peter/Johan before changing!
+    /// <summary>
+    /// Container for Order data. Also used as a transferobject between client and Web API.
+    /// </summary>
     public class Order
     {
         public int Id { get; set; }

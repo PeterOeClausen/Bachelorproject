@@ -11,10 +11,12 @@
     NavigationCacheMode="Enabled"
     >
 
+    <!--Specifying ViewModel-->
     <Page.DataContext>
         <vm:OrderPageViewModel/>
     </Page.DataContext>
     
+    <!--Specifying converters-->
     <Page.Resources>
         <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
         <converters:ValueZeroToVisibilityConverter x:Key="ValueZeroToVisibilityConverter"/>
@@ -22,6 +24,7 @@
         <converters:OrderToTotalPriceConverter x:Key="OrderToTotalPriceConverter"/>
     </Page.Resources>
 
+    <!--Page layout-->
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -30,6 +33,7 @@
         </Grid.RowDefinitions>
         <!--Top menu bar-->
         <VariableSizedWrapGrid Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0">
+            <!--Views:-->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock Text="Views:" 
                            VerticalAlignment="Center"/>
@@ -54,6 +58,7 @@
                         Background="{Binding ShowOnlyPendingOrders, Converter={StaticResource BoolToColorConverter}, FallbackValue='Red', TargetNullValue='Yellow'}"
                         Margin="5,0,0,0"/>
             </StackPanel>
+            <!--Actions:-->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock Text="Actions:"
                            VerticalAlignment="Center"/>
@@ -68,7 +73,8 @@
                         Margin="1,0,0,0"/>
             </StackPanel>
         </VariableSizedWrapGrid>
-            <Line X1="0" X2="3840" Stroke="Black" HorizontalAlignment="Center" Grid.Row="1"/>
+        <!--Horizontal line devider:-->
+        <Line X1="0" X2="3840" Stroke="Black" HorizontalAlignment="Center" Grid.Row="1"/>
         <Grid x:Name="OrderOverviewStackPanel" Grid.Row="2" HorizontalAlignment="Center">
             <!--Order view list-->
             <ListView ItemsSource="{Binding OrderList, FallbackValue='Binding failed', Mode=OneWay}" x:Name="OrderListView">
@@ -195,7 +201,7 @@
                                     <TextBlock Text="{Binding Notes, TargetNullValue=
                                         'Target value', FallbackValue='FallBackValue'}" TextWrapping="Wrap" MaxWidth="400"/>
                                 </StackPanel>
-                                <!--Execute events button-->
+                                <!--Execute events buttons-->
                                 <Grid VariableSizedWrapGrid.ColumnSpan="4">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -204,7 +210,6 @@
                                     <TextBlock Text="Events to execute:" 
                                                Grid.Row="0"/>
                                     <GridView ItemsSource="{Binding DCRGraph.Events}" 
-                                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                               Grid.Row="1">
                                         <GridView.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -223,6 +228,7 @@
                                         </GridView.ItemTemplate>
                                     </GridView>
                                 </Grid>
+                                <!--Total price:-->
                                 <StackPanel>
                                     <TextBlock Text="Total price:"/>
                                     <TextBlock Text="{Binding Converter={StaticResource OrderToTotalPriceConverter}, FallbackValue='Could not calculate total price'}"/>

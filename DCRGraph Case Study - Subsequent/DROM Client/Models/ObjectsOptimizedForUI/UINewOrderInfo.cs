@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace DROM_Client.Models.ObjectsOptimizedForUI
 {
+    /// <summary>
+    /// UI optimized class for the NewOrderInfo object. Observable collection notifies view when items are added or removed. Property changed implmented for some fields.
+    /// </summary>
     public class UINewOrderInfo : INotifyPropertyChanged
     {
         private Dictionary<Item, int> _ItemsAndQuantity;
@@ -23,7 +26,7 @@ namespace DROM_Client.Models.ObjectsOptimizedForUI
         public Customer Customer { get; set; } //Null if Serving, Phone if pickup, All if delivery
         public DateTime OrderDate { get; set; } //Client side sets this
         public string Notes { get; set; }
-        public int Table { get; set; } // -1 if order is for pickup or delivery
+        public int Table { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public bool Set<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
