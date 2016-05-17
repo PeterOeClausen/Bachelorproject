@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using DROM_Client.Models.BusinessObjects;
 using WebAPI.Models.DBMethods;
-using Item = DROM_Client.Models.BusinessObjects.Item;
+using Item = DROM_Client.Models.BusinessObjects.Item; //make it easier to refer to this
 using System.Web.Http.Cors;
 using DROM_Client.Models.NewOrderData;
 using WebAPI.Models.Parsing;
@@ -14,7 +14,7 @@ using WebAPI.XMLParser;
 
 namespace WebAPI.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")] //allows any origin to access the api
     public class OrderController : ApiController
     {
 
@@ -76,7 +76,7 @@ namespace WebAPI.Controllers
         [HttpPut]
         public async Task<HttpResponseMessage> ExecuteEvent(Event e)
         {
-            var result = await new DbInteractions().ExecuteEvent(e.Id);
+            var result = await new DbInteractions().ExecuteEvent(e.Id, false);
             var response = Request.CreateResponse(result.Item2);
             response.ReasonPhrase = result.Item1;
             return response;

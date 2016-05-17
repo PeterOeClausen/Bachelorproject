@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 using WebAPI.XMLParser;
 using DROM_Client.Models.NewOrderData;
 using WebAPI.Models.DBObjects;
@@ -29,23 +26,20 @@ namespace WebAPI.Models.Parsing
         {
             using (var db = new WebAPI.Models.DBObjects.Database())
             {
-
-
-                //using (TransactionScope scope = new TransactionScope())
-                //{
                 try
                 {
-                    var graph = new DCRGraph()
+                    //setup a new dcrgraph
+                    var graph = new DCRGraph
                     {
                         AcceptingState = false,
                         Lock = false,
                         LockTime = DateTime.Now,
+                        DCREvents = container.Events,
                     };
-                    graph.DCREvents = container.Events;
 
+                    //setup a new order
                     var order = new Order()
                     {
-
                         DCRGraph = graph,
                         OrderDate = orderInfo.OrderDate,
                         Notes = orderInfo.Notes,
@@ -53,16 +47,16 @@ namespace WebAPI.Models.Parsing
                         OrderDetails = new List<OrderDetail>(),
                         OrderType = orderInfo.OrderType,
                         RestaurantId = orderInfo.Restaurant
-
-
-
                     };
+
+                    //put items on the order. Can only put items that exists in the database on.
                     foreach (var iq in orderInfo.ItemsAndQuantity)
                     {
 
                         var item =
                             db.Items
                                 .FirstOrDefaultAsync(i => i.Name == iq.Key.Name).Result;
+                      
                         if (!iq.Key.Name.ToLower().Equals(item.Name.ToLower()))
                         {
                             throw new Exception("Item '" + iq.Key.Name + "' did not exist in the database");
@@ -76,46 +70,31 @@ namespace WebAPI.Models.Parsing
                                 Order = order,
                                 Quantity = iq.Value
                             });
-
                     }
 
 
 
-
-                    //Determine if there should be a customer on the order
-
+                    //Determine if there should be a customer on the order. We do not want cutstomers with the phone number 0.
                     if(orderInfo.Customer.Phone != 0)
                     {
-
-
+                        //see if we already have customer with the same phone number, otherwise create a new one.
                         var customer =
                             await db.Customers
-                                .FirstOrDefaultAsync(c => c.Phone == orderInfo.Customer.Phone);
+                                .FirstOrDefaultAsync(c => c.Phone == orderInfo.Customer.Phone) ?? new Customer
+                                {
+                                    City = orderInfo.Customer.City ?? "n/a",
+                                    Email = orderInfo.Customer.Email ?? "n/a",
+                                    FirstName = orderInfo.Customer.FirstAndMiddleNames ?? "n/a",
+                                    LastName = orderInfo.Customer.LastName ?? "n/a",
+                                    Phone = orderInfo.Customer.Phone,
+                                    StreetAndNumber = orderInfo.Customer.StreetAndNumber ?? "n/a",
+                                    Zipcode = orderInfo.Customer.ZipCode,
+                                    Orders = new HashSet<Order> {order}
+                                };
 
-
-
-                        if (customer == null)
-                        {
-                            customer = new Customer()
-                            {
-                                City = orderInfo.Customer.City ?? "n/a",
-                                Email = orderInfo.Customer.Email ?? "n/a",
-                                FirstName = orderInfo.Customer.FirstAndMiddleNames ?? "n/a",
-                                LastName = orderInfo.Customer.LastName ?? "n/a",
-                                Phone = orderInfo.Customer.Phone,
-                                StreetAndNumber = orderInfo.Customer.StreetAndNumber ?? "n/a",
-                                Zipcode = orderInfo.Customer.ZipCode
-
-
-                            };
-
-                            customer.Orders = new HashSet<Order>();
-                            customer.Orders.Add(order);
-                        }
                         order.Customer = customer;
                     }
-
-
+                    
                     db.Orders.Add(order);
                     db.SaveChanges();
 
@@ -212,8 +191,7 @@ namespace WebAPI.Models.Parsing
                             dcrEvent = order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label == "Setup graph serving");
                             if (dcrEvent != null)
                             {
-                                await new DbInteractions().ExecuteEvent(
-                                    dcrEvent.Id);
+                                await new DbInteractions().ExecuteEvent(dcrEvent.Id, false);
                                 break;
                             }
                             return new Tuple<string, HttpStatusCode>("The DCRGraph does not contain the relvant setup event",
@@ -222,8 +200,7 @@ namespace WebAPI.Models.Parsing
                             dcrEvent = order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label == "Setup graph takeaway");
                             if (dcrEvent != null)
                             {
-                                await new DbInteractions().ExecuteEvent(
-                                    dcrEvent.Id);
+                                await new DbInteractions().ExecuteEvent(dcrEvent.Id, false);
                                 break;
                             }
 
@@ -233,8 +210,7 @@ namespace WebAPI.Models.Parsing
                             dcrEvent = order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label.Contains("Setup graph delivery"));
                             if (dcrEvent != null)
                             {
-                                await new DbInteractions().ExecuteEvent(
-                                    dcrEvent.Id);
+                                await new DbInteractions().ExecuteEvent(dcrEvent.Id, false);
                                 break;
                             }
                             return new Tuple<string, HttpStatusCode>("The DCRGraph does not contain the relvant setup event",
@@ -244,8 +220,7 @@ namespace WebAPI.Models.Parsing
                             dcrEvent = order.DCRGraph.DCREvents.FirstOrDefault(e => e.Label.Contains("Setup bulk order"));
                             if (dcrEvent != null)
                             {
-                                await new DbInteractions().ExecuteEvent(
-                                    dcrEvent.Id);
+                                await new DbInteractions().ExecuteEvent(dcrEvent.Id, false);
                                 break;
                             }
                             return new Tuple<string, HttpStatusCode>("The DCRGraph does not contain the relvant setup event",

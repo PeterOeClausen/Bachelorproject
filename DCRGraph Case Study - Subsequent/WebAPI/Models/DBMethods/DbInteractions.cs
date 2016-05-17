@@ -5,13 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using DROM_Client.Models.BusinessObjects;
-using Database = WebAPI.Models.DBObjects.Database;
-using System.Data.SqlClient;
-using System.Data;
-using System.Net.Http;
+using Database = WebAPI.Models.DBObjects.Database; //ease of reference
 using WebAPI.Models.DBObjects;
-using Group = DROM_Client.Models.BusinessObjects.Group;
-using Role = DROM_Client.Models.BusinessObjects.Role;
+using Group = DROM_Client.Models.BusinessObjects.Group;  //ease of reference
+using Role = DROM_Client.Models.BusinessObjects.Role;  //ease of reference
 using DBO = WebAPI.Models.DBObjects;
 
 namespace WebAPI.Models.DBMethods
@@ -31,8 +28,9 @@ namespace WebAPI.Models.DBMethods
 
                 using (var db = new Database())
                 {
-                    var items = db.Items
-                            .Include(i => i.Category);
+                    var items = await db.Items
+                            .Include(i => i.Category).ToListAsync();
+                    
                     List<DROM_Client.Models.BusinessObjects.Item> itemList = new List<DROM_Client.Models.BusinessObjects.Item>();
                     foreach (var i in items)
                     {
@@ -72,16 +70,16 @@ namespace WebAPI.Models.DBMethods
                 using (var db = new Database())
                 {
                     //get non arcihved orders from database, with only relevant events.
-                    //Projection is used to get the data, since filtering on child collections is not availeble in lazy and eager loading https://msdn.microsoft.com/en-us/magazine/hh205756.aspx
+                    //Projection is used to get the data, since filtering on child collections is not availeble in eager loading https://msdn.microsoft.com/en-us/magazine/hh205756.aspx
 
-                    var query = (from o in db.Orders
+                    var query = await (from o in db.Orders
                                  where o.Archived == false
                                  where o.RestaurantId == restaurant
                                  select
                                      new
                                      {
                                          Order = o,
-                                         //child collections aren't loaded, and have to be slected seperately
+                                         //child collections aren't loaded, and have to be selected seperately
 
                                          Graph = o.DCRGraph,
                                          Events = (from e in o.DCRGraph.DCREvents
@@ -118,49 +116,9 @@ namespace WebAPI.Models.DBMethods
                                                       Quantity = od.Quantity
                                                   }
                                          ),
-                                     });
-
-
-
-
-
-                    //var query = from o in db.Orders
-                    //            where o.Archived == false
-                    //            select
-                    //                new
-                    //                {
-                    //                    Order = o,
-                    //                   //child collections aren't loaded, and have to be slected seperately
-                    //                   Graph = o.DCRGraph,
-                    //                    PendingEvents = o.DCRGraph.DCREvents.Where(
-                    //                        e => e.Pending
-                    //                        && e.Included
-                    //                        && !e.Conditions.Any(
-                    //                            c => c.Included
-                    //                            && c.Executed == false)
-                    //                        && !e.Milestones.Any(
-                    //                            m => m.Included
-                    //                            && m.Pending)
-                    //                    ),
-
-
-                    //                    PendingEventsGroups = o.DCRGraph.DCREvents.Where(
-                    //                        e => e.Pending
-                    //                        && e.Included).Select(e => e.Groups),
-                    //                    PendingEventsRoles = o.DCRGraph.DCREvents.Where(e => e.Pending && e.Included).Select(e => e.Roles),
-                    //                    EditEvents = o.DCRGraph.DCREvents.Where(e => e.Groups.Any(g => g.Name == "Edit events")).Select(e => e),
-                    //                    EditEventsGroups = o.DCRGraph.DCREvents.Where(e => e.Groups.Any(g => g.Name == "Edit events")).Select(e => e.Groups),
-                    //                    EditEventsRoles = o.DCRGraph.DCREvents.Where(e => e.Groups.Any(g => g.Name == "Edit events")).Select(e => e.Roles),
-                    //                    Customer = o.Customer,
-                    //                    OrderDetails = o.OrderDetails,
-                    //                    Items = o.OrderDetails.Select(od => od.Item),
-                    //                    Categories = o.OrderDetails.Select(od => od.Item).Select(i => i.Category)
-                    //                };
-
-
-
-
-
+                                     }).ToListAsync();
+                    
+                    
                     var orders = new List<DROM_Client.Models.BusinessObjects.Order>();
 
                     //go through all the orders loaded from the database ad make DTOs
@@ -177,22 +135,22 @@ namespace WebAPI.Models.DBMethods
                             AcceptingState = queryOrder.Graph.AcceptingState,
                             Restaurant = restaurant
                         };
-
-                        //prepare a list to put reassembled events into, which will later be added to the DCRGraph
+                        
                         var events = new List<Event>();
 
+                        //Assemble events - meaning put the disjointed information together in one object.
                         foreach (var e in queryOrder.Events)
                         {
-                            var assemblyEvent = new Event()
+                            var assemblyEvent = new Event
                             {
                                 Description = e.Event.Description,
                                 Executed = e.Event.Executed,
                                 Id = e.Event.Id,
                                 Included = e.Event.Included,
                                 Label = e.Event.Label,
-                                Pending = e.Event.Pending
+                                Pending = e.Event.Pending,
+                                Groups = new List<Group>()
                             };
-                            assemblyEvent.Groups = new List<Group>();
                             foreach (var g in e.Groups)
                             {
                                 assemblyEvent.Groups.Add(new Group()
@@ -213,7 +171,7 @@ namespace WebAPI.Models.DBMethods
                             events.Add(assemblyEvent);
                         }
 
-                        //make the DCRGraph to be put onto the order, with all the newly assembled events in it
+                        //make the DCRGraph, to be put onto the order, with all the newly assembled events in it
                         order.DCRGraph = new DROM_Client.Models.BusinessObjects.DCRGraph()
                         {
                             Id = queryOrder.Graph.Id,
@@ -284,21 +242,22 @@ namespace WebAPI.Models.DBMethods
 
                 using (var db = new Database())
                 {
-
-
+                    
                     
 
-                    foreach (var i in data.Item2)
-                    {
-                        var status = await this.ExecuteEvent(i);
-                        if (status.Item2 != HttpStatusCode.OK)
-                            return status; //Preconditions were not meet
-                    }
-
+                    //try to lock the order
                     var guid = Guid.NewGuid();
                     var tryLock = await this.LockGraph(guid, data.Item1.DCRGraph.Id, db);
                     if (tryLock.Item1 == false)
                         return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+
+                    //Execute edit events
+                    foreach (var i in data.Item2)
+                    {
+                        var status = await this.ExecuteEvent(i, true);
+                        if (status.Item2 != HttpStatusCode.OK)
+                            return status; //Preconditions were not meet
+                    }
 
                     var orderToBeUpdated = await db.Orders
                         .Include(o => o.OrderDetails.Select(od => od.Item))
@@ -306,7 +265,7 @@ namespace WebAPI.Models.DBMethods
                         .FirstOrDefaultAsync(o => o.Id == data.Item1.Id);
 
 
-                    //update related customer
+                    //update related customer - it is not possible to have the phone number 0.
 
                     if (data.Item1.Customer.Phone != 0)
                     {
@@ -344,7 +303,6 @@ namespace WebAPI.Models.DBMethods
                     orderToBeUpdated.Notes = data.Item1.Notes;
                     orderToBeUpdated.Table = data.Item1.Table;
                     orderToBeUpdated.OrderType = data.Item1.OrderType;
-                    //data.Item1.ItemsAndQuantity = data.Item1.ItemsAndQuantity;
                     db.OrderDetails.RemoveRange(orderToBeUpdated.OrderDetails);
                     var newOrderDetails = new HashSet<OrderDetail>();
                     foreach (var iq in data.Item1.ItemsAndQuantity)
@@ -362,17 +320,21 @@ namespace WebAPI.Models.DBMethods
                         });
                     }
 
+
                     db.OrderDetails.AddRange(orderToBeUpdated.OrderDetails);
 
                     orderToBeUpdated.OrderDetails = newOrderDetails;
 
-                    
+                    //Check if we have a lock before saving to db
                     var checkLock = await this.CheckLock(guid, data.Item1.DCRGraph.Id, db);
                     if (checkLock.Item1 == false)
                         return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
 
+                    //we have a lock! Saving to db
                     db.Entry(orderToBeUpdated).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+
+                    //unlock after are done saving
                     var unlock = await this.Unlock(guid, data.Item1.DCRGraph.Id, db);
                     if (unlock.Item1 == false)
                         return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
@@ -392,7 +354,7 @@ namespace WebAPI.Models.DBMethods
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Tuple<string, HttpStatusCode>> ExecuteEvent(int id)
+        public async Task<Tuple<string, HttpStatusCode>> ExecuteEvent(int id, bool preLocked)
         {
             try
             {
@@ -428,10 +390,20 @@ namespace WebAPI.Models.DBMethods
                     }
 
                     //Preconditions have succeded!
+
+                    //Better see if we can lock before we do anything else.
+                    //If we were called by an update order, the order is already locked for us.
                     var guid = Guid.NewGuid();
-                    var tryLock = await this.LockGraph(guid, eventToBeExecuted.DCRGraphId, db);
-                    if (tryLock.Item1 == false)
-                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                    Tuple<bool, string> tryLock = null;
+                    if (!preLocked)
+                    {
+                        tryLock = await this.LockGraph(guid, eventToBeExecuted.DCRGraphId, db);
+                        if (tryLock.Item1 == false)
+                            return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                    }
+
+                    
+                   
 
 
                     //Setup postconditions:
@@ -460,9 +432,13 @@ namespace WebAPI.Models.DBMethods
                     //set state to modified and save.
                     db.Entry(eventToBeExecuted).State = EntityState.Modified;
 
-                    var checkLock = await this.CheckLock(guid, eventToBeExecuted.DCRGraphId, db);
-                    if (checkLock.Item1 == false)
-                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                    if (!preLocked)
+                    {
+                        var checkLock = await this.CheckLock(guid, eventToBeExecuted.DCRGraphId, db);
+                        if (checkLock.Item1 == false)
+                            return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                    }
+                    
 
                     await db.SaveChangesAsync();
 
@@ -474,37 +450,56 @@ namespace WebAPI.Models.DBMethods
                                        where o.DCRGraph.Id == eventToBeExecuted.DCRGraphId
                                        select o).FirstOrDefaultAsync();
 
+                    //remove accepting state if we have left it.
                     if (order.DCRGraph.DCREvents.Any(dcrEvent => dcrEvent.Included && dcrEvent.Pending))
                     {
-                        var unlock1 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
-                        if (unlock1.Item1 == false)
-                            return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+
                         if (order.DCRGraph.AcceptingState)
                         {
                             order.DCRGraph.AcceptingState = false;
                             db.Entry(order.DCRGraph).State = EntityState.Modified;
                             await db.SaveChangesAsync();
-
                         }
 
+                        if (!preLocked)
+                        {
+                            var unlock1 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
+                            if (unlock1.Item1 == false)
+                                return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                        }
+                        
                         return new Tuple<string, HttpStatusCode>("Success but not accepting state", HttpStatusCode.OK);
                     }
 
+                    //if already accepting, leave it as is. 
+                    if (order.DCRGraph.AcceptingState)
+                    {
+                        if (!preLocked)
+                        {
+                            var unlock2 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
+                            if (unlock2.Item1 == false)
+                                return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                        }
 
+                        return new Tuple<string, HttpStatusCode>("Success and accepting state", HttpStatusCode.OK);
+                    }
+
+                    //if not already accepting, set accepting
                     order.DCRGraph.AcceptingState = true;
                     db.Entry(order.DCRGraph).State = EntityState.Modified;
                     await db.SaveChangesAsync();
-
-                    var unlock2 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
-                    if (unlock2.Item1 == false)
-                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
-
+                    if (!preLocked)
+                    {
+                        var unlock2 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
+                        if (unlock2.Item1 == false)
+                            return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                    }
+                    
                     return new Tuple<string, HttpStatusCode>("Success and accepting state", HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)
             {
-
                 return new Tuple<string, HttpStatusCode>(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
@@ -518,22 +513,18 @@ namespace WebAPI.Models.DBMethods
         {
             try
             {
-
-
                 using (var db = new Database())
                 {
-                    var deliveryTypes = db.DeliveryTypes.Where(dt => dt.OrderType == orderType);
-                    var result = new List<string>();
-                    foreach (var dt in deliveryTypes)
-                    {
-                        result.Add(dt.Type);
-                    }
+                    var deliveryTypes = await db.DeliveryTypes.Where(dt => dt.OrderType == orderType).ToListAsync();
+
+                    //Get the delivery type names from the objects.
+                    var result = deliveryTypes.Select(dt => dt.Type).ToList();
+
                     return new Tuple<List<string>, string, HttpStatusCode>(result, "Success", HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)
             {
-
                 return new Tuple<List<string>, string, HttpStatusCode>(null,
                         ex.Message, HttpStatusCode.InternalServerError);
             }
@@ -554,19 +545,30 @@ namespace WebAPI.Models.DBMethods
                     var orderToBeArchived = await db.Orders
                         .Include(o => o.DCRGraph)
                         .FirstOrDefaultAsync(o => o.Id == order);
-                    if (orderToBeArchived == null) return new Tuple<string, HttpStatusCode>("The order did not exist in the Database", HttpStatusCode.InternalServerError);
+
+                    //this order did not exist
+                    if (orderToBeArchived == null)
+                        return new Tuple<string, HttpStatusCode>("The order did not exist in the Database", HttpStatusCode.InternalServerError);
+
+                    //the order exists, better lock before we change anything.
                     var guid = Guid.NewGuid();
                     var tryLock = await this.LockGraph(guid, orderToBeArchived.DCRGraph.Id, db);
                     if (tryLock.Item1 == false)
                         return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+
+                    //change to archived
                     orderToBeArchived.Archived = true;
                     db.Entry(orderToBeArchived).State = EntityState.Modified;
 
+                    //lets be absolutely sure we have the lock before we change the db
                     var checkLock = await this.CheckLock(guid, orderToBeArchived.DCRGraph.Id, db);
                     if (checkLock.Item1 == false)
                         return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+
+                    //save to db
                     await db.SaveChangesAsync();
 
+                    //we're done, better unlock
                     var unlock = await this.Unlock(guid, orderToBeArchived.DCRGraph.Id, db);
                     if (unlock.Item1 == false)
                         return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
@@ -594,8 +596,11 @@ namespace WebAPI.Models.DBMethods
             var graph = await db.DCRGraphs.FindAsync(graphId);
             //check if the graph exist
             if(graph == null) return new Tuple<bool, string>(false,"The graph did not exist");
-            //Check that the graph is not locked, and if it is, check whether it's an old lock
-            if(graph.Lock && DateTime.Now.Subtract(graph.LockTime).Minutes < 10 ) return new Tuple<bool, string>(false, "The graph is already locked");
+
+            //Check that the graph is not locked, and if it is, check whether it's an old lock. Locks older than 1minute we do no care about.
+            if(graph.Lock && DateTime.Now.Subtract(graph.LockTime).Minutes < 1 ) return new Tuple<bool, string>(false, "The graph is already locked");
+
+            //lock this 
             graph.Lock = true;
             graph.LockTime = DateTime.Now;
             graph.Guid = guid;
@@ -619,11 +624,15 @@ namespace WebAPI.Models.DBMethods
         {
             
             var graph = await db.DCRGraphs.FindAsync(graphId);
+
             if (graph == null) return new Tuple<bool, string>(false, "The graph did not exist");
+
             if (graph.Lock == false)
                 return new Tuple<bool, string>(false, "The graph was not locked when reaching the check lock phase");
+
             if (graph.Guid != guid)
-                return new Tuple<bool, string>(false, "someone else has locked the graph. Should not be possible.");
+                return new Tuple<bool, string>(false, "someone else has locked the graph.");
+
             return new Tuple<bool, string>(true, "");
             
         }
@@ -639,18 +648,22 @@ namespace WebAPI.Models.DBMethods
         {
             
             var graph = await db.DCRGraphs.FindAsync(graphId);
+
             if (graph == null) return new Tuple<bool, string>(false, "The graph did not exist");
+
             if (graph.Lock == false)
                 return new Tuple<bool, string>(false, "The graph was not locked when reaching the unlock phase");
+
             if (graph.Guid != guid)
                 return new Tuple<bool, string>(false, "someone else has locked the graph. Should not be possible.");
+
+            //unlock and save to db.
             graph.Lock = false;
 
             db.Entry(graph).State = EntityState.Modified;
             await db.SaveChangesAsync();
+
             return new Tuple<bool, string>(true, "");
-
-
             
         }
 
