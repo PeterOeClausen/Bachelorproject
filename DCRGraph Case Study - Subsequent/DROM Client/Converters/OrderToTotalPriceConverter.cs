@@ -8,6 +8,9 @@ using Windows.UI.Xaml.Data;
 
 namespace DROM_Client.Converters
 {
+    /// <summary>
+    /// Class for converting an Order object to a total price.
+    /// </summary>
     public class OrderToTotalPriceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
@@ -20,7 +23,7 @@ namespace DROM_Client.Converters
             else
             {
                 double totalPrice = 0.0;
-                foreach(var itemQuantity in order.ItemsAndQuantity)
+                foreach(var itemQuantity in order.ItemsAndQuantity) //Loop summing total price.
                 {
                     totalPrice += (itemQuantity.Item.Price * itemQuantity.Quantity);
                 }

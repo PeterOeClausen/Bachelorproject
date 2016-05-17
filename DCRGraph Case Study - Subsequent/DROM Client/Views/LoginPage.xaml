@@ -7,32 +7,45 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <!--Page layout:-->
     <Grid Background="#e0e0e0">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" CornerRadius="20" Padding="20">
-            <TextBlock Text="Welcome to the DCRGraph Order Management System" FontWeight="Bold" HorizontalAlignment="Center"/>
-            <TextBlock Text="Please choose the restaurant in which this program is used:" HorizontalAlignment="Center" FontStyle="Italic"  ></TextBlock>
+        <StackPanel HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Background="White" 
+                    CornerRadius="20" 
+                    Padding="20">
+            <!--Welcome message:-->
+            <TextBlock Text="Welcome to the DCRGraph Order Management System" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center"/>
+            <!--Info message:-->
+            <TextBlock Text="Please choose the restaurant in which this program is used:" 
+                       HorizontalAlignment="Center" 
+                       FontStyle="Italic"/>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
-                    <!--<TextBlock Text="Username:" Grid.Row="0" HorizontalAlignment="Left"></TextBlock>
-                    <TextBox Grid.Row="0" IsSpellCheckEnabled="False"></TextBox>-->
                     <TextBlock Text="Restaurant number:"/>
+                    <!--Combobox for choosing a restaurant-->
                     <ComboBox HorizontalAlignment="Stretch" 
                               PlaceholderText="Click here to pick a restaurant" 
                               SelectionChanged="Restaurant_Number_ComboBox_SelectionChanged">
                         <ComboBoxItem Content="1"/>
                         <ComboBoxItem Content="2"/>
+                        <!--Items can be added to add more restaurants. Use ints only.-->
                     </ComboBox>
                 </StackPanel>
-                <!--<StackPanel Grid.Row="1" Margin="0,5,0,0">
-                    <TextBlock Text="Password:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left"/>
-                    <PasswordBox Grid.Column="1" Grid.Row="1"/>
-                </StackPanel>-->
             </Grid>
-            <Button Content="Log in" Foreground="White" Background="#428bca" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LogInButtonClick"/>
+            <!--Login button-->
+            <Button Content="Log in" 
+                    Foreground="White" 
+                    Background="#428bca" 
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch" 
+                    Click="LogInButtonClick"/>
         </StackPanel>
     </Grid>
 </Page>

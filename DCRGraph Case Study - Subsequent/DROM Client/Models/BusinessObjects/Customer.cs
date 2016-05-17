@@ -4,7 +4,9 @@ using System.Linq;
 
 namespace DROM_Client.Models.BusinessObjects
 {
-    //HEY! Please talk to Peter/Johan before changing!
+    /// <summary>
+    /// Object for storing customer information. Used as a transfer object between client and Web API.
+    /// </summary>
     public class Customer
     {
         public int Id { get; set; } //Id = -1 as unknown.

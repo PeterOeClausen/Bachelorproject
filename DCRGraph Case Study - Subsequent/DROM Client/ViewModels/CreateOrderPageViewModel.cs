@@ -13,12 +13,18 @@ using DROM_Client.Models.SharedClientData;
 
 namespace DROM_Client.ViewModels
 {
+    /// <summary>
+    /// View model class for CreateOrderPage view.
+    /// </summary>
     public class CreateOrderPageViewModel
     {
         private APICaller _APICaller { get; set; }
         public ObservableCollection<Item> ItemCollection {get; set;}
         public List<string> DeliveryMethodsList { get; set; }
 
+        /// <summary>
+        /// Constructor gets data for showing in the view.
+        /// </summary>
         public CreateOrderPageViewModel()
         {
             ItemCollection = new ObservableCollection<Item>();
@@ -38,7 +44,10 @@ namespace DROM_Client.ViewModels
             DeliveryMethodsList = deliveryTypesFromWebAPI.Item3;
         }
 
-        public UINewOrderInfo OrderBeingCreated { get; set; } = new UINewOrderInfo() //Just bindable data for design
+        /// <summary>
+        /// Bindable order that updates view.
+        /// </summary>
+        public UINewOrderInfo OrderBeingCreated { get; set; } = new UINewOrderInfo() //Data for design. This is overwritten in runtime.
         {
             ItemsAndQuantity = new Dictionary<Item, int>(),
             Customer = new Customer()
@@ -57,7 +66,7 @@ namespace DROM_Client.ViewModels
         /// RemoveItem takes a key item specified in OrderBeingCreated.ItemsAndQuatity and copies all values from old dictionary into a new dictionary, and replaces the reference.
         /// Note: This causes PropertyChanged update in UI.
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">Item to remove</param>
         internal void RemoveItem(Item key)
         {
             Dictionary<Item, int> replacementDictionary = new Dictionary<Item, int>();
@@ -70,11 +79,11 @@ namespace DROM_Client.ViewModels
         }
 
         /// <summary>
-        /// AddQuantityAndItem takes an int quantity and an Item (this needs to exist on webserver), copies all values from old dictionary into a new dictionary, adds the new item, and replaces the refference.
+        /// AddQuantityAndItem takes an int quantity and an Item (this needs to exist on Web API), copies all values from old dictionary into a new dictionary, adds the new item, and replaces the refference.
         /// Note: This causes PropertyChanged update in UI.
         /// </summary>
-        /// <param name="quantity"></param>
-        /// <param name="item"></param>
+        /// <param name="quantity">Quantity to add</param>
+        /// <param name="item">Item to add</param>
         internal void AddQuantityAndItem(int quantity, Item item)
         {
             Dictionary<Item, int> replacementDictionary = new Dictionary<Item, int>();
@@ -96,6 +105,10 @@ namespace DROM_Client.ViewModels
             OrderBeingCreated.ItemsAndQuantity = replacementDictionary;
         }
 
+        /// <summary>
+        /// Call to save order
+        /// </summary>
+        /// <returns>Tuple of bool and string. bool == true if success, bool == false if it fails. String == message to show in UI if fail.</returns>
         internal Tuple<bool, string> SaveOrder()
         {
             NewOrderInfo createdOrder = new NewOrderInfo()
@@ -111,6 +124,10 @@ namespace DROM_Client.ViewModels
             return _APICaller.PostOrderAsync(createdOrder);
         }
 
+        /// <summary>
+        /// Method for creating pop up message dialogs.
+        /// </summary>
+        /// <param name="message">Diaglog message</param>
         private async void CreateAndShowMessageDialog(string message)
         {
             var messageDialog = new MessageDialog(message);

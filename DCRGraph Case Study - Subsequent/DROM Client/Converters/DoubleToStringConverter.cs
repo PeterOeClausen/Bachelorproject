@@ -7,6 +7,9 @@ using Windows.UI.Xaml.Data;
 
 namespace DROM_Client.Converters
 {
+    /// <summary>
+    /// Class for converting double value to string type. Used in view.
+    /// </summary>
     public class DoubleToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

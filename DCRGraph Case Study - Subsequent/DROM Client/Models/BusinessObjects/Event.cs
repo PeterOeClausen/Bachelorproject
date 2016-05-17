@@ -4,7 +4,9 @@ using System.Linq;
 
 namespace DROM_Client.Models.BusinessObjects
 {
-    //HEY! Please talk to Peter/Johan before changing!
+    /// <summary>
+    /// Class for containing Event data. Also used as transfer object between Client and Web API.
+    /// </summary>
     public class Event
     {
         public int Id { get; set; }

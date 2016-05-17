@@ -12,13 +12,17 @@ using DROM_Client.Models.SharedClientData;
 
 namespace DROM_Client.Services
 {
+    /// <summary>
+    /// Class for interacting with DROM system Web API.
+    /// Methods return Tuple with data, bool if the request went well, and error message if it did not.
+    /// </summary>
     public class APICaller
     {
         private Uri _baseAddress { get; set; }
 
         public APICaller()
         {
-            _baseAddress = new Uri("http://localhost:57815/"); //set the address of the api here
+            _baseAddress = new Uri("http://localhost:57815/"); //set the address of the Web API here
         }
 
         /// <summary>
@@ -108,7 +112,7 @@ namespace DROM_Client.Services
         /// <summary>
         /// Receive all orders
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Tuple of bool and string, and list of orders. bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
         public Tuple<bool, string, List<Order>> GetOrders()
         {
             #region testdata:
@@ -353,6 +357,10 @@ namespace DROM_Client.Services
             }
         }
 
+        /// <summary>
+        /// Gets items from Web API.
+        /// </summary>
+        /// <returns>Tuple of bool and string and list of items, and list of orders. bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
         public Tuple<bool, string, List<Item>> GetItems()
         {
             using (var client = new HttpClient())
@@ -379,6 +387,10 @@ namespace DROM_Client.Services
             }
         }
 
+        /// <summary>
+        /// Get delivery types from Web API.
+        /// </summary>
+        /// <returns>Tuple of bool and string, and list of strings with delivery types. bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
         public Tuple<bool, string, List<string>> GetDeliveryTypes()
         {
             var orderGraphType = 0; //this is not really used atm., but will be used in case more than one type of dcrgraphs is in the system
@@ -388,7 +400,7 @@ namespace DROM_Client.Services
                 {
                     client.BaseAddress = _baseAddress;
                     var response = client.GetAsync("api/order/deliveryTypes/" + orderGraphType, new CancellationToken()).Result;
-                    if (response.IsSuccessStatusCode)
+                    if (response.IsSuccessStatusCode) //Success
                     {
                         var deliveryTypesReceived = response.Content.ReadAsAsync<List<string>>().Result;
                         return new Tuple<bool, string, List<string>>(true, response.StatusCode.ToString(), deliveryTypesReceived);
@@ -406,6 +418,11 @@ namespace DROM_Client.Services
             }
         }
 
+        /// <summary>
+        /// Archive order in Web API.
+        /// </summary>
+        /// <param name="order">Order to be archived</param>
+        /// <returns>Tuple of bool and string. bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
         public Tuple<bool, string> PutArchiveOrder(Order order)
         {
             using (var client = new HttpClient())
@@ -432,6 +449,11 @@ namespace DROM_Client.Services
             }
         }
 
+        /// <summary>
+        /// Archives order on Web API (Does not delete order on Web API)
+        /// </summary>
+        /// <param name="order">Order to be deleted</param>
+        /// <returns>Tuple of bool and string. bool == true when API succeded, bool == false when API did not succeed, string == fail message.</returns>
         public Tuple<bool, string> PutDeleteOrder(Order order)
         {
             using (var client = new HttpClient())
@@ -439,7 +461,7 @@ namespace DROM_Client.Services
                 try
                 {
                     client.BaseAddress = _baseAddress;
-                    var response = client.PutAsXmlAsync("api/order/archive", order).Result; //Actually we just archive the order
+                    var response = client.PutAsXmlAsync("api/order/archive", order).Result; //Archiving, not deleting
                     if (response.IsSuccessStatusCode)
                     {
                         return new Tuple<bool, string>(true, response.StatusCode.ToString());

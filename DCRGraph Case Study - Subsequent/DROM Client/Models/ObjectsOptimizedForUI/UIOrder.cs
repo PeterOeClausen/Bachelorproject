@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace DROM_Client.Models.ObjectsOptimizedForUI
 {
+    /// <summary>
+    /// UI optimized class for the Order object. Observable collection notifies view when items are added or removed. Property changed implemented in some properties to notify view when updated.
+    /// </summary>
     public class UIOrder : INotifyPropertyChanged
     {
         private ObservableCollection<ItemQuantity> _ItemsAndQuantity;

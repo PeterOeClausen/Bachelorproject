@@ -4,7 +4,9 @@ using System.Linq;
 
 namespace DROM_Client.Models.BusinessObjects
 {
-    //HEY! Please talk to Peter/Johan before changing!
+    /// <summary>
+    /// Container for Item data (food on order). Also used as a transferobject between client and Web API.
+    /// </summary>
     public class Item
     {
         public int Id { get; set; }

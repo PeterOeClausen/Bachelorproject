@@ -14,9 +14,12 @@ using Windows.UI.Popups;
 
 namespace DROM_Client.ViewModels
 {
+    /// <summary>
+    /// ViewModel for EditOrder view.
+    /// </summary>
     public class EditOrderPageViewModel : INotifyPropertyChanged
     {
-        public UIOrder OrderBeingEdited { get; set; } = new UIOrder()
+        public UIOrder OrderBeingEdited { get; set; } = new UIOrder() //Design data. Will be overwritten in runtime.
         {
             Id = 2,
             ItemsAndQuantity = new ObservableCollection<ItemQuantity>() {
@@ -123,25 +126,41 @@ namespace DROM_Client.ViewModels
         }; //The testdata is for design and will be overwritten when running the program.
 
         public Event ItemsOnOrderHasBeenChangedEvent;
+
+        /// <summary>
+        /// Change if items on order has changed
+        /// </summary>
         public bool ItemsOnOrderHasBeenChanged;
         public List<Event> EditEventsToExecute = new List<Event>();
         private APICaller _APICaller;
         public ObservableCollection<Item> ItemCollection { get; set; } = new ObservableCollection<Item>();
         public ObservableCollection<Event> EditEvents;
 
+        /// <summary>
+        /// Constructor that makes data ready for view.
+        /// </summary>
         public EditOrderPageViewModel() {
             _APICaller = new APICaller();
-            Tuple<bool, string, List<Item>> answerFromWebAPI = _APICaller.GetItems();
+            Tuple<bool, string, List<Item>> answerFromWebAPI = _APICaller.GetItems(); //Gets items available from Web API.
             if (answerFromWebAPI.Item1 == false) CreateAndShowMessageDialog(answerFromWebAPI.Item2); //Show message popup if API call fails
             foreach (Item item in answerFromWebAPI.Item3) ItemCollection.Add(item);
         }
 
+        /// <summary>
+        /// Add item to order
+        /// </summary>
+        /// <param name="item">Item to add</param>
+        /// <param name="quantity">Quantity to add</param>
         internal void AddItemQuantity(Item item, int quantity)
         {
             OrderBeingEdited.ItemsAndQuantity.Add(new ItemQuantity { Item = item, Quantity = quantity });
             OrderBeingEdited.TotalPrice = OrderBeingEdited.TotalPrice + (item.Price * quantity); //Updating totalprice
         }
 
+        /// <summary>
+        /// Removes item from order
+        /// </summary>
+        /// <param name="itemQuantity">ItemQuantity containing Item and Quantity of item to add.</param>
         internal void RemoveItemQuantity(ItemQuantity itemQuantity)
         {
             OrderBeingEdited.ItemsAndQuantity.Remove(itemQuantity);
@@ -195,6 +214,10 @@ namespace DROM_Client.ViewModels
         }
         #endregion
 
+        /// <summary>
+        /// Method for creating message dialogs.
+        /// </summary>
+        /// <param name="message">Message to show</param>
         private async void CreateAndShowMessageDialog(string message)
         {
             var messageDialog = new MessageDialog(message);

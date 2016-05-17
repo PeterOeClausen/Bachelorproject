@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace DROM_Client.Models.ObjectsOptimizedForUI
 {
+    /// <summary>
+    /// UI optimized class for the DCRGraph object. Observable collection notifies view when items are added or removed.
+    /// </summary>
     public class UIDCRGraph
     {
         public int DCRGraphId { get; set; }
