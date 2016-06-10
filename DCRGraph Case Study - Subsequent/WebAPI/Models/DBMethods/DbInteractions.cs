@@ -254,7 +254,7 @@ namespace WebAPI.Models.DBMethods
                     //Execute edit events
                     foreach (var i in data.Item2)
                     {
-                        var status = await this.ExecuteEvent(i, true);
+                        var status = await this.PreExecuteEvent(i, true, db);
                         if (status.Item2 != HttpStatusCode.OK)
                             return status; //Preconditions were not meet
                     }
@@ -438,11 +438,8 @@ namespace WebAPI.Models.DBMethods
                         if (checkLock.Item1 == false)
                             return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
                     }
-                    
 
                     await db.SaveChangesAsync();
-
-                    
 
                     //get the modified order from the database to check whether it has gone into accepting state
                     var order = await (from o in db.Orders
@@ -457,8 +454,12 @@ namespace WebAPI.Models.DBMethods
                         if (order.DCRGraph.AcceptingState)
                         {
                             order.DCRGraph.AcceptingState = false;
-                            db.Entry(order.DCRGraph).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
+                            db.Entry(order).State = EntityState.Modified;
+                            db.SaveChanges();
+                            var order2 = await (from o in db.Orders
+                                       .Include(o => o.DCRGraph.DCREvents)
+                                               where o.DCRGraph.Id == eventToBeExecuted.DCRGraphId
+                                               select o).FirstOrDefaultAsync();
                         }
 
                         if (!preLocked)
@@ -494,7 +495,6 @@ namespace WebAPI.Models.DBMethods
                         if (unlock2.Item1 == false)
                             return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
                     }
-                    
                     return new Tuple<string, HttpStatusCode>("Success and accepting state", HttpStatusCode.OK);
                 }
             }
@@ -665,6 +665,165 @@ namespace WebAPI.Models.DBMethods
 
             return new Tuple<bool, string>(true, "");
             
+        }
+
+        /// <summary>
+        /// Medthod to execute an event in the database. Will only execute the event if its relations allow it.
+        /// If the execution results in the DCRGraph which the event belongs to, entered or exiting acceting state, the state will be updated accordingly.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Tuple<string, HttpStatusCode>> PreExecuteEvent(int id, bool preLocked, Database db)
+        {
+            try
+            {
+
+                var eventToBeExecuted = await db.DCREvents
+                    .Include(e => e.Groups)
+                    .Include(e => e.Roles)
+                    .Include(e => e.Conditions)
+                    .Include(e => e.Excludes)
+                    .Include(e => e.Includes)
+                    .Include(e => e.Responses)
+                    .Include(e => e.Milestones)
+                    .FirstOrDefaultAsync(e => e.Id == id);
+
+
+                //preconditions:
+                //the event must be included
+                if (eventToBeExecuted.Included == false) return new Tuple<string, HttpStatusCode>("Trying to execute excluded event", HttpStatusCode.InternalServerError);
+
+                //check if conditions are executed
+                foreach (var condition in eventToBeExecuted.Conditions)
+                {
+                    if (condition.Executed == false && condition.Included) return new Tuple<string, HttpStatusCode>("A condition is not executed", HttpStatusCode.InternalServerError);
+                }
+
+                //there must not be a pending milestone
+                foreach (var milestone in eventToBeExecuted.Milestones)
+                {
+                    var mEvent = await db.DCREvents.FirstOrDefaultAsync(e => e.Id == milestone.Id);
+
+                    if (milestone.Pending && milestone.Included) return new Tuple<string, HttpStatusCode>("There is a pending milestone", HttpStatusCode.InternalServerError);
+                }
+
+                //Preconditions have succeded!
+
+                //Better see if we can lock before we do anything else.
+                //If we were called by an update order, the order is already locked for us.
+                var guid = Guid.NewGuid();
+                Tuple<bool, string> tryLock = null;
+                if (!preLocked)
+                {
+                    tryLock = await this.LockGraph(guid, eventToBeExecuted.DCRGraphId, db);
+                    if (tryLock.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                }
+
+
+
+
+
+                //Setup postconditions:
+                eventToBeExecuted.Pending = false;
+                eventToBeExecuted.Executed = true;
+
+
+                //exclude related events
+                foreach (var e in eventToBeExecuted.Excludes)
+                {
+                    e.Included = false;
+                }
+
+                //Include related events
+                foreach (var e in eventToBeExecuted.Includes)
+                {
+                    e.Included = true;
+                }
+
+                //set related events pending
+                foreach (var e in eventToBeExecuted.Responses)
+                {
+                    e.Pending = true;
+                }
+
+                //set state to modified and save.
+                db.Entry(eventToBeExecuted).State = EntityState.Modified;
+
+                if (!preLocked)
+                {
+                    var checkLock = await this.CheckLock(guid, eventToBeExecuted.DCRGraphId, db);
+                    if (checkLock.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                }
+
+
+                await db.SaveChangesAsync();
+
+
+
+                //get the modified order from the database to check whether it has gone into accepting state
+                var order = await (from o in db.Orders
+                                   .Include(o => o.DCRGraph.DCREvents)
+                                   where o.DCRGraph.Id == eventToBeExecuted.DCRGraphId
+                                   select o).FirstOrDefaultAsync();
+
+                //remove accepting state if we have left it.
+                if (order.DCRGraph.DCREvents.Any(dcrEvent => dcrEvent.Included && dcrEvent.Pending))
+                {
+
+                    if (order.DCRGraph.AcceptingState)
+                    {
+                        order.DCRGraph.AcceptingState = false;
+                        db.Entry(order).State = EntityState.Modified;
+                        db.SaveChanges();
+                        var order2 = await (from o in db.Orders
+                                   .Include(o => o.DCRGraph.DCREvents)
+                                            where o.DCRGraph.Id == eventToBeExecuted.DCRGraphId
+                                            select o).FirstOrDefaultAsync();
+                    }
+
+                    if (!preLocked)
+                    {
+                        var unlock1 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
+                        if (unlock1.Item1 == false)
+                            return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                    }
+
+                    return new Tuple<string, HttpStatusCode>("Success but not accepting state", HttpStatusCode.OK);
+                }
+
+                //if already accepting, leave it as is. 
+                if (order.DCRGraph.AcceptingState)
+                {
+                    if (!preLocked)
+                    {
+                        var unlock2 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
+                        if (unlock2.Item1 == false)
+                            return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                    }
+
+                    return new Tuple<string, HttpStatusCode>("Success and accepting state", HttpStatusCode.OK);
+                }
+
+                //if not already accepting, set accepting
+                order.DCRGraph.AcceptingState = true;
+                db.Entry(order.DCRGraph).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                if (!preLocked)
+                {
+                    var unlock2 = await this.Unlock(guid, eventToBeExecuted.DCRGraphId, db);
+                    if (unlock2.Item1 == false)
+                        return new Tuple<string, HttpStatusCode>(tryLock.Item2, HttpStatusCode.InternalServerError);
+                }
+
+                return new Tuple<string, HttpStatusCode>("Success and accepting state", HttpStatusCode.OK);
+
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, HttpStatusCode>(ex.Message, HttpStatusCode.InternalServerError);
+            }
         }
 
     }
