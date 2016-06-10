@@ -28,4 +28,4 @@ If you have the correct settings (multiple startup projects) and sufficient upda
 
 You should now be able to play around with the DROM Client application.
 
-If you have questions, you can send them to my email: PeterOeClausen@gmail.com.
+If you have questions, you may send them to our emails: PeterOeClausen@gmail.com and Johan@Arleth.dk.
